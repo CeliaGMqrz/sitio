@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Instalacion de MongoDB y acceso remoto desde un cliente local </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Instalacion de Mongodb sobre debian buster y acceso remoto">
+    
+    <link rel="stylesheet"
+          href="https://1bit1nfo.netlify.app/css/style.min.632053cf9f355189adf9c13322ca0fc44922cb5d98277ed289dff13e3aa7f061.css"
+          integrity="sha256-YyBTz581UYmt&#43;cEzIsoPxEkiy12YJ37Sid/xPjqn8GE="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://1bit1nfo.netlify.app/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://1bit1nfo.netlify.app/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://1bit1nfo.netlify.app/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://1bit1nfo.netlify.app/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://1bit1nfo.netlify.app/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://1bit1nfo.netlify.app/post/mongodb/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://1bit1nfo.netlify.app/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://1bit1nfo.netlify.app/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Instalacion de MongoDB y acceso remoto desde un cliente local"/>
+<meta name="twitter:description" content="Instalacion de Mongodb sobre debian buster y acceso remoto"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://1bit1nfo.netlify.app/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Celia García Márquez</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://1bit1nfo.netlify.app/images/mongodb/mongo.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Instalacion de MongoDB y acceso remoto desde un cliente local</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, Mar 16, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">6-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h1 id="instalación-de-un-servidor-mongodb">Instalación de un servidor MongoDB</h1>
+<p>Instalación de un servidor MongoDB y configuración para permitir el acceso remoto desde la red local.</p>
+<h2 id="instalación-de-mongodb-sobre-debian-buster">Instalación de MongoDB sobre Debian Buster</h2>
+<p>Para instalar MongoDB vamos a utilizar la guía que se encuentra en la <a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/">página oficial de MongoDB</a></p>
+<ul>
+<li>Importar la clave pública</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">wget </span><span class="n">-qO</span> <span class="p">-</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">www</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">static</span><span class="p">/</span><span class="n">pgp</span><span class="p">/</span><span class="n">server</span><span class="p">-</span><span class="n">4</span><span class="p">.</span><span class="n">4</span><span class="p">.</span><span class="n">asc</span> <span class="p">|</span> <span class="n">sudo</span> <span class="n">apt-key</span> <span class="n">add</span> <span class="p">-</span>
+</code></pre></div><ul>
+<li>Agregar el repositorio</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">echo </span><span class="s2">&#34;deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main&#34;</span> <span class="p">|</span> <span class="n">sudo</span> <span class="nb">tee </span><span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">apt</span><span class="p">/</span><span class="n">sources</span><span class="p">.</span><span class="n">list</span><span class="p">.</span><span class="n">d</span><span class="p">/</span><span class="n">mongodb-org</span><span class="p">-</span><span class="n">4</span><span class="p">.</span><span class="n">4</span><span class="p">.</span><span class="n">list</span>
+</code></pre></div><ul>
+<li>Ahora vamos a instalar los paquetes de MongoDB escogiendo la versión más estable.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">apt-get</span> <span class="n">install</span> <span class="n">-y</span> <span class="n">mongodb-org</span>
+</code></pre></div><ul>
+<li>Ponemos en marcha el gestor y vemos que efectivamente está en funcionando</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">systemctl</span> <span class="nb">start </span><span class="n">mongod</span>
+<span class="n">systemctl</span> <span class="n">status</span> <span class="n">mongod</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="err">:</span><span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">apt</span><span class="p">/</span><span class="n">sources</span><span class="p">.</span><span class="n">list</span><span class="p">.</span><span class="n">d</span><span class="c"># systemctl status mongod</span>
+<span class="err">●</span> <span class="n">mongod</span><span class="p">.</span><span class="n">service</span> <span class="p">-</span> <span class="n">MongoDB</span> <span class="n">Database</span> <span class="n">Server</span>
+   <span class="n">Loaded</span><span class="err">:</span> <span class="n">loaded</span> <span class="p">(/</span><span class="n">lib</span><span class="p">/</span><span class="n">systemd</span><span class="p">/</span><span class="n">system</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">service</span><span class="p">;</span> <span class="n">disabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="err">:</span> <span class="n">enabled</span><span class="p">)</span>
+   <span class="n">Active</span><span class="err">:</span> <span class="n">active</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="n">since</span> <span class="n">Tue</span> <span class="n">2020</span><span class="p">-</span><span class="n">12</span><span class="p">-</span><span class="n">08</span> <span class="n">20</span><span class="err">:</span><span class="n">46</span><span class="err">:</span><span class="n">01</span> <span class="n">CET</span><span class="p">;</span> <span class="n">2s</span> <span class="n">ago</span>
+     <span class="n">Docs</span><span class="err">:</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">docs</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">manual</span>
+ <span class="n">Main</span> <span class="n">PID</span><span class="err">:</span> <span class="n">3406</span> <span class="p">(</span><span class="n">mongod</span><span class="p">)</span>
+   <span class="n">Memory</span><span class="err">:</span> <span class="n">59</span><span class="p">.</span><span class="n">2M</span>
+   <span class="n">CGroup</span><span class="err">:</span> <span class="p">/</span><span class="n">system</span><span class="p">.</span><span class="n">slice</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">service</span>
+           <span class="err">└─</span><span class="n">3406</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">mongod</span> <span class="p">-</span><span class="n">-config</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">conf</span>
+
+<span class="n">dic</span> <span class="n">08</span> <span class="n">20</span><span class="err">:</span><span class="n">46</span><span class="err">:</span><span class="n">01</span> <span class="n">debian</span> <span class="n">systemd</span><span class="p">[</span><span class="n">1</span><span class="p">]</span><span class="err">:</span> <span class="n">Started</span> <span class="n">MongoDB</span> <span class="n">Database</span> <span class="n">Server</span><span class="p">.</span>
+
+</code></pre></div><h2 id="creación-de-la-base-de-datos-de-prueba-usuario-administrador-e-introduccir-datos">Creación de la base de datos de prueba, usuario administrador e introduccir datos</h2>
+<p>Para empezar a trabajar con mongodb, una vez se haya instalado solo debemos de ejecutar lo siguiente</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mongo</span>
+</code></pre></div><p>Y estaremos dentro de la shell interactiva de mongo</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">usuario</span><span class="nv">@debian</span><span class="err">:</span><span class="p">~$</span> <span class="n">mongo</span>
+<span class="n">MongoDB</span> <span class="n">shell</span> <span class="n">version</span> <span class="n">v4</span><span class="p">.</span><span class="n">4</span><span class="p">.</span><span class="n">2</span>
+<span class="n">connecting</span> <span class="n">to</span><span class="err">:</span> <span class="n">mongodb</span><span class="err">:</span><span class="p">//</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="err">:</span><span class="n">27017</span><span class="p">/</span><span class="k">?</span><span class="n">compressors</span><span class="p">=</span><span class="n">disabled</span><span class="p">&amp;</span><span class="n">gssapiServiceName</span><span class="p">=</span><span class="n">mongodb</span>
+<span class="n">Implicit</span> <span class="n">session</span><span class="err">:</span> <span class="n">session</span> <span class="p">{</span> <span class="s2">&#34;id&#34;</span> <span class="err">:</span> <span class="n">UUID</span><span class="p">(</span><span class="s2">&#34;caecd2a1-a687-47a8-bf59-69e2a1644e33&#34;</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">MongoDB</span> <span class="n">server</span> <span class="n">version</span><span class="err">:</span> <span class="n">4</span><span class="p">.</span><span class="n">4</span><span class="p">.</span><span class="n">2</span>
+<span class="n">Welcome</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MongoDB</span> <span class="n">shell</span><span class="p">.</span>
+<span class="k">For</span> <span class="n">interactive</span> <span class="n">help</span><span class="p">,</span> <span class="nb">type </span><span class="s2">&#34;help&#34;</span><span class="p">.</span>
+<span class="k">For</span> <span class="n">more</span> <span class="n">comprehensive</span> <span class="n">documentation</span><span class="p">,</span> <span class="n">see</span>
+	<span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">docs</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">com</span><span class="p">/</span>
+<span class="n">Questions</span><span class="p">?</span> <span class="k">Try</span> <span class="n">the</span> <span class="n">MongoDB</span> <span class="n">Developer</span> <span class="n">Community</span> <span class="n">Forums</span>
+	<span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">community</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">com</span>
+<span class="p">---</span>
+<span class="n">The</span> <span class="n">server</span> <span class="n">generated</span> <span class="n">these</span> <span class="n">startup</span> <span class="n">warnings</span> <span class="n">when</span> <span class="n">booting</span><span class="err">:</span>
+        <span class="n">2020</span><span class="p">-</span><span class="n">12</span><span class="p">-</span><span class="n">13T12</span><span class="err">:</span><span class="n">36</span><span class="err">:</span><span class="n">05</span><span class="p">.</span><span class="n">865</span><span class="p">+</span><span class="n">01</span><span class="err">:</span><span class="n">00</span><span class="err">:</span> <span class="n">Using</span> <span class="n">the</span> <span class="n">XFS</span> <span class="n">filesystem</span> <span class="n">is</span> <span class="n">strongly</span> <span class="n">recommended</span> <span class="n">with</span> <span class="n">the</span> <span class="n">WiredTiger</span> <span class="n">storage</span> <span class="n">engine</span><span class="p">.</span> <span class="n">See</span> <span class="n">http</span><span class="err">:</span><span class="p">//</span><span class="n">dochub</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">core</span><span class="p">/</span><span class="n">prodnotes-filesystem</span>
+        <span class="n">2020</span><span class="p">-</span><span class="n">12</span><span class="p">-</span><span class="n">13T12</span><span class="err">:</span><span class="n">36</span><span class="err">:</span><span class="n">06</span><span class="p">.</span><span class="n">531</span><span class="p">+</span><span class="n">01</span><span class="err">:</span><span class="n">00</span><span class="err">:</span> <span class="n">Access</span> <span class="n">control</span> <span class="n">is</span> <span class="n">not</span> <span class="n">enabled</span> <span class="k">for</span> <span class="n">the</span> <span class="n">database</span><span class="p">.</span> <span class="n">Read</span> <span class="n">and</span> <span class="nb">write </span><span class="n">access</span> <span class="n">to</span> <span class="n">data</span> <span class="n">and</span> <span class="n">configuration</span> <span class="n">is</span> <span class="n">unrestricted</span>
+        <span class="n">2020</span><span class="p">-</span><span class="n">12</span><span class="p">-</span><span class="n">13T12</span><span class="err">:</span><span class="n">36</span><span class="err">:</span><span class="n">06</span><span class="p">.</span><span class="n">531</span><span class="p">+</span><span class="n">01</span><span class="err">:</span><span class="n">00</span><span class="err">:</span> <span class="p">/</span><span class="n">sys</span><span class="p">/</span><span class="n">kernel</span><span class="p">/</span><span class="n">mm</span><span class="p">/</span><span class="n">transparent_hugepage</span><span class="p">/</span><span class="n">enabled</span> <span class="n">is</span> <span class="s1">&#39;always&#39;</span><span class="p">.</span> <span class="n">We</span> <span class="n">suggest</span> <span class="n">setting</span> <span class="n">it</span> <span class="n">to</span> <span class="s1">&#39;never&#39;</span>
+<span class="p">---</span>
+<span class="p">---</span>
+        <span class="n">Enable</span> <span class="n">MongoDB</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">free</span> <span class="n">cloud-based</span> <span class="n">monitoring</span> <span class="n">service</span><span class="p">,</span> <span class="n">which</span> <span class="n">will</span> <span class="n">then</span> <span class="n">receive</span> <span class="n">and</span> <span class="n">display</span>
+        <span class="n">metrics</span> <span class="n">about</span> <span class="n">your</span> <span class="n">deployment</span> <span class="p">(</span><span class="n">disk</span> <span class="n">utilization</span><span class="p">,</span> <span class="n">CPU</span><span class="p">,</span> <span class="n">operation</span> <span class="n">statistics</span><span class="p">,</span> <span class="n">etc</span><span class="p">).</span>
+
+        <span class="n">The</span> <span class="n">monitoring</span> <span class="n">data</span> <span class="n">will</span> <span class="n">be</span> <span class="n">available</span> <span class="n">on</span> <span class="n">a</span> <span class="n">MongoDB</span> <span class="n">website</span> <span class="n">with</span> <span class="n">a</span> <span class="n">unique</span> <span class="n">URL</span> <span class="n">accessible</span> <span class="n">to</span> <span class="n">you</span>
+        <span class="n">and</span> <span class="n">anyone</span> <span class="n">you</span> <span class="n">share</span> <span class="n">the</span> <span class="n">URL</span> <span class="n">with</span><span class="p">.</span> <span class="n">MongoDB</span> <span class="n">may</span> <span class="n">use</span> <span class="n">this</span> <span class="n">information</span> <span class="n">to</span> <span class="n">make</span> <span class="n">product</span>
+        <span class="n">improvements</span> <span class="n">and</span> <span class="n">to</span> <span class="n">suggest</span> <span class="n">MongoDB</span> <span class="n">products</span> <span class="n">and</span> <span class="n">deployment</span> <span class="n">options</span> <span class="n">to</span> <span class="n">you</span><span class="p">.</span>
+
+        <span class="n">To</span> <span class="n">enable</span> <span class="n">free</span> <span class="n">monitoring</span><span class="p">,</span> <span class="n">run</span> <span class="n">the</span> <span class="n">following</span> <span class="n">command</span><span class="err">:</span> <span class="n">db</span><span class="p">.</span><span class="n">enableFreeMonitoring</span><span class="p">()</span>
+        <span class="n">To</span> <span class="n">permanently</span> <span class="n">disable</span> <span class="n">this</span> <span class="n">reminder</span><span class="p">,</span> <span class="n">run</span> <span class="n">the</span> <span class="n">following</span> <span class="n">command</span><span class="err">:</span> <span class="n">db</span><span class="p">.</span><span class="n">disableFreeMonitoring</span><span class="p">()</span>
+<span class="p">---</span>
+<span class="p">&gt;</span>
+
+</code></pre></div><p>Con el siguiente comando podemos ver las bases de datos que tenemos actualemente</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">show</span> <span class="n">dbs</span>
+<span class="n">admin</span>   <span class="n">0</span><span class="p">.</span><span class="n">000GB</span>
+<span class="n">config</span>  <span class="n">0</span><span class="p">.</span><span class="n">000GB</span>
+<span class="n">local</span>   <span class="n">0</span><span class="p">.</span><span class="n">000GB</span>
+</code></pre></div><h3 id="crear-la-base-de-datos">Crear la base de datos</h3>
+<p>En mongodb no exite un comando &lsquo;create&rsquo; , ejecutaremos &lsquo;use&rsquo; para cambiar de base de datos y si la misma no existe se crea automáticamente.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">use</span> <span class="n">academia</span>
+<span class="n">switched</span> <span class="n">to</span> <span class="n">db</span> <span class="n">academia</span>
+</code></pre></div><p>Si volvemos a ejecutar &lsquo;show dbs&rsquo; no aparecerá la nueva base de datos que hemos creado ya que está vacía, necesitaremos introducir los datos.</p>
+<h3 id="crear-un-usuario">Crear un usuario</h3>
+<p>Antes de crear un usuario con el que vamos a trabajar tenemos que crear el usuario administrador con el rol de root en la base de datos Admin</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">use</span> <span class="n">admin</span>
+<span class="n">db</span><span class="p">.</span><span class="n">createUser</span><span class="p">({</span>
+  <span class="n">user</span><span class="err">:</span> <span class="s2">&#34;root&#34;</span><span class="p">,</span>
+  <span class="n">pwd</span><span class="err">:</span> <span class="s2">&#34;pass&#34;</span><span class="p">,</span>
+  <span class="n">roles</span> <span class="err">:</span> <span class="p">[</span> <span class="s2">&#34;root&#34;</span> <span class="p">]</span>
+<span class="p">})</span>
+</code></pre></div><p>Una vez creado entramos con el usuario root</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mongo</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="n">pass</span>
+</code></pre></div><p>Ahora para crear un usuario en la nueva base de datos, haremos lo siguiente, que consiste en crear un usuario con su nombre y contraseña y además un rol que será el propietario de la base de datos que esta en uso actualmente, en este caso, &lsquo;academia&rsquo;.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">db</span><span class="p">.</span><span class="n">createUser</span><span class="p">(</span>
+<span class="p">{</span>
+<span class="n">user</span><span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
+<span class="n">pwd</span><span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
+<span class="n">roles</span><span class="err">:</span> <span class="p">[</span><span class="s2">&#34;dbOwner&#34;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div><p>Nos muestra que se ha creado correctamente.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">db</span><span class="p">.</span><span class="n">createUser</span><span class="p">(</span>
+<span class="p">...</span> <span class="p">{</span>
+<span class="p">...</span> <span class="n">user</span><span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
+<span class="p">...</span> <span class="n">pwd</span><span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
+<span class="p">...</span> <span class="n">roles</span><span class="err">:</span> <span class="p">[</span><span class="s2">&#34;dbOwner&#34;</span><span class="p">]</span>
+<span class="p">...</span> <span class="p">}</span>
+<span class="p">...</span> <span class="p">)</span>
+<span class="n">Successfully</span> <span class="n">added</span> <span class="n">user</span><span class="err">:</span> <span class="p">{</span> <span class="s2">&#34;user&#34;</span> <span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span> <span class="s2">&#34;roles&#34;</span> <span class="err">:</span> <span class="p">[</span> <span class="s2">&#34;dbOwner&#34;</span> <span class="p">]</span> <span class="p">}</span>
+
+</code></pre></div><p>Podemos ver los usuarios creados con el comando</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">show</span> <span class="n">users</span><span class="p">;</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="s2">&#34;academia.celia&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;userId&#34;</span> <span class="err">:</span> <span class="n">UUID</span><span class="p">(</span><span class="s2">&#34;d4f97ec7-67a8-487c-b3b8-9ac24d076a3f&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;user&#34;</span> <span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;db&#34;</span> <span class="err">:</span> <span class="s2">&#34;academia&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;roles&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="p">{</span>
+			<span class="s2">&#34;role&#34;</span> <span class="err">:</span> <span class="s2">&#34;dbOwner&#34;</span><span class="p">,</span>
+			<span class="s2">&#34;db&#34;</span> <span class="err">:</span> <span class="s2">&#34;academia&#34;</span>
+		<span class="p">}</span>
+	<span class="p">],</span>
+	<span class="s2">&#34;mechanisms&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;SCRAM-SHA-1&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;SCRAM-SHA-256&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+
+</code></pre></div><p>Ahora podemos cerrar sesión y iniciar con el nuevo usuario</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mongo</span> <span class="n">-u</span> <span class="n">celia</span> <span class="n">-p</span> <span class="p">-</span><span class="n">-authenticationDatabase</span> <span class="n">academia</span>
+</code></pre></div><p>Tambien podemos identificarnos de la siguiente forma</p>
+<p>Ejecutamos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mongo</span>
+</code></pre></div><p>Y después dentro de la shell de mongo</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">use</span> <span class="n">academia</span>
+<span class="n">switched</span> <span class="n">to</span> <span class="n">db</span> <span class="n">academia</span>
+<span class="p">&gt;</span> <span class="n">db</span><span class="p">.</span><span class="n">auth</span><span class="p">(</span><span class="s2">&#34;celia&#34;</span><span class="p">,</span><span class="s2">&#34;celia&#34;</span><span class="p">)</span>
+<span class="n">1</span>
+</code></pre></div><h3 id="introduccir-datos-de-prueba">Introduccir datos de prueba</h3>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">db</span><span class="p">.</span><span class="n">alumns</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span>
+<span class="p">[</span>
+
+            <span class="p">{</span>
+                <span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Manuel&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;apellidos&#34;</span><span class="err">:</span> <span class="s2">&#34;Pérez&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;fecha_nacimiento&#34;</span><span class="err">:</span> <span class="s2">&#34;1998-03-03&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;asignaturas&#34;</span><span class="err">:</span><span class="p">[</span><span class="s2">&#34;lengua castellana&#34;</span><span class="p">,</span><span class="s2">&#34;matemáticas&#34;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Celia&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;apellidos&#34;</span><span class="err">:</span> <span class="s2">&#34;García&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;fecha_nacimiento&#34;</span><span class="err">:</span> <span class="s2">&#34;1995-10-04&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;asignaturas&#34;</span><span class="err">:</span><span class="p">[</span><span class="s2">&#34;física&#34;</span><span class="p">,</span><span class="s2">&#34;matemáticas&#34;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Laura&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;apellidos&#34;</span><span class="err">:</span> <span class="s2">&#34;Hernandez&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;fecha_nacimiento&#34;</span><span class="err">:</span> <span class="s2">&#34;1995-08-04&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;asignaturas&#34;</span><span class="err">:</span><span class="p">[</span><span class="s2">&#34;inglés&#34;</span><span class="p">,</span><span class="s2">&#34;matemáticas&#34;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Miguel&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;apellidos&#34;</span><span class="err">:</span> <span class="s2">&#34;García&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;fecha_nacimiento&#34;</span><span class="err">:</span> <span class="s2">&#34;1995-07-03&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;asignaturas&#34;</span><span class="err">:</span><span class="p">[</span><span class="s2">&#34;inglés&#34;</span><span class="p">,</span><span class="s2">&#34;lengua castellana&#34;</span><span class="p">,</span><span class="s2">&#34;francés&#34;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Aroa&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;apellidos&#34;</span><span class="err">:</span> <span class="s2">&#34;Rodriguez&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;fecha_nacimiento&#34;</span><span class="err">:</span> <span class="s2">&#34;1996-08-10&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;asignaturas&#34;</span><span class="err">:</span><span class="p">[</span><span class="s2">&#34;matemáticas&#34;</span><span class="p">,</span><span class="s2">&#34;francés&#34;</span><span class="p">]</span>
+            <span class="p">}</span>
+<span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div><p>Vemos que se han insertado:</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">db</span><span class="p">.</span><span class="n">alumns</span><span class="p">.</span><span class="n">find</span><span class="p">().</span><span class="n">pretty</span><span class="p">();</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&#34;5fd6568d3bab1b058f9c31a6&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;nombre&#34;</span> <span class="err">:</span> <span class="s2">&#34;Manuel&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;apellidos&#34;</span> <span class="err">:</span> <span class="s2">&#34;Pérez&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> <span class="err">:</span> <span class="s2">&#34;1998-03-03&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;asignaturas&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;lengua castellana&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&#34;5fd6568d3bab1b058f9c31a7&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;nombre&#34;</span> <span class="err">:</span> <span class="s2">&#34;Celia&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;apellidos&#34;</span> <span class="err">:</span> <span class="s2">&#34;García&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> <span class="err">:</span> <span class="s2">&#34;1995-10-04&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;asignaturas&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;física&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&#34;5fd6568d3bab1b058f9c31a8&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;nombre&#34;</span> <span class="err">:</span> <span class="s2">&#34;Laura&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;apellidos&#34;</span> <span class="err">:</span> <span class="s2">&#34;Hernandez&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> <span class="err">:</span> <span class="s2">&#34;1995-08-04&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;asignaturas&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;inglés&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&#34;5fd6568d3bab1b058f9c31a9&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;nombre&#34;</span> <span class="err">:</span> <span class="s2">&#34;Miguel&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;apellidos&#34;</span> <span class="err">:</span> <span class="s2">&#34;García&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> <span class="err">:</span> <span class="s2">&#34;1995-07-03&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;asignaturas&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;inglés&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;lengua castellana&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;francés&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+	<span class="s2">&#34;_id&#34;</span> <span class="err">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="s2">&#34;5fd6568d3bab1b058f9c31aa&#34;</span><span class="p">),</span>
+	<span class="s2">&#34;nombre&#34;</span> <span class="err">:</span> <span class="s2">&#34;Aroa&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;apellidos&#34;</span> <span class="err">:</span> <span class="s2">&#34;Rodriguez&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> <span class="err">:</span> <span class="s2">&#34;1996-08-10&#34;</span><span class="p">,</span>
+	<span class="s2">&#34;asignaturas&#34;</span> <span class="err">:</span> <span class="p">[</span>
+		<span class="s2">&#34;matemáticas&#34;</span><span class="p">,</span>
+		<span class="s2">&#34;francés&#34;</span>
+	<span class="p">]</span>
+<span class="p">}</span>
+
+
+</code></pre></div><p>Otros comandos útiles:</p>
+<ul>
+<li>Eliminar una collección entera</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">db</span><span class="p">.</span><span class="n">alumns</span><span class="p">.</span><span class="n">drop</span><span class="p">();</span>
+</code></pre></div><ul>
+<li>Eliminar un documento</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">db</span><span class="p">.</span><span class="n">alumns</span><span class="p">.</span><span class="n">remove</span><span class="p">({</span><span class="s2">&#34;nombre&#34;</span><span class="err">:</span> <span class="s2">&#34;Celia&#34;</span><span class="p">});</span>
+</code></pre></div><h2 id="acceso-remoto-a-mongo">Acceso remoto a mongo</h2>
+<p>Una vez creado los usuarios, el administrador, la base de datos y la colleción, vamos a hacer que cuando el servidor se encienda se inicie automáticamente el servicio de mongod.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="err">:</span><span class="p">~</span><span class="c"># sudo systemctl enable --now mongod</span>
+<span class="n">Created</span> <span class="n">symlink</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">systemd</span><span class="p">/</span><span class="n">system</span><span class="p">/</span><span class="n">multi-user</span><span class="p">.</span><span class="n">target</span><span class="p">.</span><span class="n">wants</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">service</span> <span class="err">→</span> <span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">systemd</span><span class="p">/</span><span class="n">system</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">service</span><span class="p">.</span>
+</code></pre></div><p>Ahora sí, vamos a utilizar un cliente para que pueda acceder a la base de datos de forma remota. Para eso vamos a editar el siguiente fichero</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">mongod</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div><p>En el parámetro bindIp le pasaremos la dirección 0.0.0.0 la cuál nos permite acceder desde cualquier máquina.</p>
+<p>Además habilitaremos la seguridad para poder autenticarnos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># network interfaces</span>
+<span class="n">network</span><span class="err">:</span>
+  <span class="n">port</span><span class="err">:</span> <span class="n">27017</span>
+  <span class="n">bindIp</span><span class="err">:</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>  
+
+<span class="c">#security:</span>
+<span class="n">security</span><span class="err">:</span>
+    <span class="n">authorization</span><span class="err">:</span> <span class="s1">&#39;enabled&#39;</span>
+
+</code></pre></div><p>Tendremos otra máquina virtual que va a ser nuestro cliente, este cliente estará en la misma red.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">vagrant</span><span class="nv">@cliente</span><span class="err">:</span><span class="p">~$</span> <span class="n">ip</span> <span class="n">a</span>
+<span class="n">1</span><span class="err">:</span> <span class="n">lo</span><span class="err">:</span> <span class="p">&lt;</span><span class="n">LOOPBACK</span><span class="p">,</span><span class="n">UP</span><span class="p">,</span><span class="n">LOWER_UP</span><span class="p">&gt;</span> <span class="n">mtu</span> <span class="n">65536</span> <span class="n">qdisc</span> <span class="n">noqueue</span> <span class="n">state</span> <span class="n">UNKNOWN</span> <span class="nb">group </span><span class="k">default</span> <span class="n">qlen</span> <span class="n">1000</span>
+    <span class="n">link</span><span class="p">/</span><span class="n">loopback</span> <span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span> <span class="n">brd</span> <span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">00</span>
+    <span class="n">inet</span> <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">/</span><span class="n">8</span> <span class="n">scope</span> <span class="n">host</span> <span class="n">lo</span>
+       <span class="n">valid_lft</span> <span class="n">forever</span> <span class="n">preferred_lft</span> <span class="n">forever</span>
+    <span class="n">inet6</span> <span class="p">::</span><span class="n">1</span><span class="p">/</span><span class="n">128</span> <span class="n">scope</span> <span class="n">host</span> 
+       <span class="n">valid_lft</span> <span class="n">forever</span> <span class="n">preferred_lft</span> <span class="n">forever</span>
+<span class="n">2</span><span class="err">:</span> <span class="n">eth0</span><span class="err">:</span> <span class="p">&lt;</span><span class="n">BROADCAST</span><span class="p">,</span><span class="n">MULTICAST</span><span class="p">,</span><span class="n">UP</span><span class="p">,</span><span class="n">LOWER_UP</span><span class="p">&gt;</span> <span class="n">mtu</span> <span class="n">1500</span> <span class="n">qdisc</span> <span class="n">pfifo_fast</span> <span class="n">state</span> <span class="n">UP</span> <span class="nb">group </span><span class="k">default</span> <span class="n">qlen</span> <span class="n">1000</span>
+    <span class="n">link</span><span class="p">/</span><span class="n">ether</span> <span class="n">08</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">27</span><span class="err">:</span><span class="n">8d</span><span class="err">:</span><span class="n">c0</span><span class="err">:</span><span class="n">4d</span> <span class="n">brd</span> <span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span>
+    <span class="n">inet</span> <span class="n">10</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">2</span><span class="p">.</span><span class="n">15</span><span class="p">/</span><span class="n">24</span> <span class="n">brd</span> <span class="n">10</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">2</span><span class="p">.</span><span class="n">255</span> <span class="n">scope</span> <span class="n">global</span> <span class="n">dynamic</span> <span class="n">eth0</span>
+       <span class="n">valid_lft</span> <span class="n">85065sec</span> <span class="n">preferred_lft</span> <span class="n">85065sec</span>
+    <span class="n">inet6</span> <span class="n">fe80</span><span class="p">::</span><span class="n">a00</span><span class="err">:</span><span class="n">27ff</span><span class="err">:</span><span class="n">fe8d</span><span class="err">:</span><span class="n">c04d</span><span class="p">/</span><span class="n">64</span> <span class="n">scope</span> <span class="n">link</span> 
+       <span class="n">valid_lft</span> <span class="n">forever</span> <span class="n">preferred_lft</span> <span class="n">forever</span>
+<span class="n">3</span><span class="err">:</span> <span class="n">eth1</span><span class="err">:</span> <span class="p">&lt;</span><span class="n">BROADCAST</span><span class="p">,</span><span class="n">MULTICAST</span><span class="p">,</span><span class="n">UP</span><span class="p">,</span><span class="n">LOWER_UP</span><span class="p">&gt;</span> <span class="n">mtu</span> <span class="n">1500</span> <span class="n">qdisc</span> <span class="n">pfifo_fast</span> <span class="n">state</span> <span class="n">UP</span> <span class="nb">group </span><span class="k">default</span> <span class="n">qlen</span> <span class="n">1000</span>
+    <span class="n">link</span><span class="p">/</span><span class="n">ether</span> <span class="n">08</span><span class="err">:</span><span class="n">00</span><span class="err">:</span><span class="n">27</span><span class="err">:</span><span class="n">fa</span><span class="err">:</span><span class="n">db</span><span class="err">:</span><span class="n">05</span> <span class="n">brd</span> <span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span><span class="err">:</span><span class="n">ff</span>
+    <span class="n">inet</span> <span class="n">10</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">2</span><span class="p">/</span><span class="n">24</span> <span class="n">brd</span> <span class="n">10</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">255</span> <span class="n">scope</span> <span class="n">global</span> <span class="n">eth1</span>
+       <span class="n">valid_lft</span> <span class="n">forever</span> <span class="n">preferred_lft</span> <span class="n">forever</span>
+    <span class="n">inet6</span> <span class="n">fe80</span><span class="p">::</span><span class="n">a00</span><span class="err">:</span><span class="n">27ff</span><span class="err">:</span><span class="n">fefa</span><span class="err">:</span><span class="n">db05</span><span class="p">/</span><span class="n">64</span> <span class="n">scope</span> <span class="n">link</span> 
+       <span class="n">valid_lft</span> <span class="n">forever</span> <span class="n">preferred_lft</span> <span class="n">forever</span>
+
+</code></pre></div><p>Comprobamos que desde el <strong>cliente</strong> podemos conectarnos de forma remota, especificando el usuario, la contraseña, la dirección ip de nuestro servidor de mongo y a la base de datos a la que nos conectamos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@cliente:~$ mongo <span class="s2">&#34;mongodb://celia:celia@10.0.1.5:27017/academia&#34;</span>
+MongoDB shell version v4.4.4
+connecting to: mongodb://10.0.1.5:27017/academia?compressors<span class="o">=</span>disabled<span class="p">&amp;</span><span class="nv">gssapiServiceName</span><span class="o">=</span>mongodb
+Implicit session: session <span class="o">{</span> <span class="s2">&#34;id&#34;</span> : UUID<span class="o">(</span><span class="s2">&#34;cc6c341c-df2b-4d45-9fba-b94945357754&#34;</span><span class="o">)</span> <span class="o">}</span>
+MongoDB server version: 4.4.4
+&gt; db.alumns.find<span class="o">()</span>.pretty<span class="o">()</span><span class="p">;</span>
+<span class="o">{</span>
+	<span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;605112f7e81270a6e06234b8&#34;</span><span class="o">)</span>,
+	<span class="s2">&#34;nombre&#34;</span> : <span class="s2">&#34;Manuel&#34;</span>,
+	<span class="s2">&#34;apellidos&#34;</span> : <span class="s2">&#34;Pérez&#34;</span>,
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> : <span class="s2">&#34;1998-03-03&#34;</span>,
+	<span class="s2">&#34;asignaturas&#34;</span> : <span class="o">[</span>
+		<span class="s2">&#34;lengua castellana&#34;</span>,
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="o">]</span>
+<span class="o">}</span>
+<span class="o">{</span>
+	<span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;605112f7e81270a6e06234b9&#34;</span><span class="o">)</span>,
+	<span class="s2">&#34;nombre&#34;</span> : <span class="s2">&#34;Celia&#34;</span>,
+	<span class="s2">&#34;apellidos&#34;</span> : <span class="s2">&#34;García&#34;</span>,
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> : <span class="s2">&#34;1995-10-04&#34;</span>,
+	<span class="s2">&#34;asignaturas&#34;</span> : <span class="o">[</span>
+		<span class="s2">&#34;física&#34;</span>,
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="o">]</span>
+<span class="o">}</span>
+<span class="o">{</span>
+	<span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;605112f7e81270a6e06234ba&#34;</span><span class="o">)</span>,
+	<span class="s2">&#34;nombre&#34;</span> : <span class="s2">&#34;Laura&#34;</span>,
+	<span class="s2">&#34;apellidos&#34;</span> : <span class="s2">&#34;Hernandez&#34;</span>,
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> : <span class="s2">&#34;1995-08-04&#34;</span>,
+	<span class="s2">&#34;asignaturas&#34;</span> : <span class="o">[</span>
+		<span class="s2">&#34;inglés&#34;</span>,
+		<span class="s2">&#34;matemáticas&#34;</span>
+	<span class="o">]</span>
+<span class="o">}</span>
+<span class="o">{</span>
+	<span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;605112f7e81270a6e06234bb&#34;</span><span class="o">)</span>,
+	<span class="s2">&#34;nombre&#34;</span> : <span class="s2">&#34;Miguel&#34;</span>,
+	<span class="s2">&#34;apellidos&#34;</span> : <span class="s2">&#34;García&#34;</span>,
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> : <span class="s2">&#34;1995-07-03&#34;</span>,
+	<span class="s2">&#34;asignaturas&#34;</span> : <span class="o">[</span>
+		<span class="s2">&#34;inglés&#34;</span>,
+		<span class="s2">&#34;lengua castellana&#34;</span>,
+		<span class="s2">&#34;francés&#34;</span>
+	<span class="o">]</span>
+<span class="o">}</span>
+<span class="o">{</span>
+	<span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;605112f7e81270a6e06234bc&#34;</span><span class="o">)</span>,
+	<span class="s2">&#34;nombre&#34;</span> : <span class="s2">&#34;Aroa&#34;</span>,
+	<span class="s2">&#34;apellidos&#34;</span> : <span class="s2">&#34;Rodriguez&#34;</span>,
+	<span class="s2">&#34;fecha_nacimiento&#34;</span> : <span class="s2">&#34;1996-08-10&#34;</span>,
+	<span class="s2">&#34;asignaturas&#34;</span> : <span class="o">[</span>
+		<span class="s2">&#34;matemáticas&#34;</span>,
+		<span class="s2">&#34;francés&#34;</span>
+	<span class="o">]</span>
+<span class="o">}</span>
+
+</code></pre></div><p><img src="/images/mongodb/captura1.png" alt="captura1.png"></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/mongodb/">mongodb</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://1bit1nfo.netlify.app/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
