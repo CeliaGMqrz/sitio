@@ -153,8 +153,7 @@
                 
             </div>
 
-            <h1 id="instalación-de-un-servidor-mongodb">Instalación de un servidor MongoDB</h1>
-<p>Instalación de un servidor MongoDB y configuración para permitir el acceso remoto desde la red local.</p>
+            <p>Instalación de un servidor MongoDB y configuración para permitir el acceso remoto desde la red local.</p>
 <h2 id="instalación-de-mongodb-sobre-debian-buster">Instalación de MongoDB sobre Debian Buster</h2>
 <p>Para instalar MongoDB vamos a utilizar la guía que se encuentra en la <a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/">página oficial de MongoDB</a></p>
 <ul>
@@ -230,7 +229,7 @@
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">&gt;</span> <span class="n">use</span> <span class="n">academia</span>
 <span class="n">switched</span> <span class="n">to</span> <span class="n">db</span> <span class="n">academia</span>
 </code></pre></div><p>Si volvemos a ejecutar &lsquo;show dbs&rsquo; no aparecerá la nueva base de datos que hemos creado ya que está vacía, necesitaremos introducir los datos.</p>
-<h3 id="crear-un-usuario">Crear un usuario</h3>
+<h3 id="crear-un-usuario-administrador">Crear un usuario administrador</h3>
 <p>Antes de crear un usuario con el que vamos a trabajar tenemos que crear el usuario administrador con el rol de root en la base de datos Admin</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">use</span> <span class="n">admin</span>
 <span class="n">db</span><span class="p">.</span><span class="n">createUser</span><span class="p">({</span>
@@ -240,7 +239,7 @@
 <span class="p">})</span>
 </code></pre></div><p>Una vez creado entramos con el usuario root</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mongo</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="n">pass</span>
-</code></pre></div><p>Ahora para crear un usuario en la nueva base de datos, haremos lo siguiente, que consiste en crear un usuario con su nombre y contraseña y además un rol que será el propietario de la base de datos que esta en uso actualmente, en este caso, &lsquo;academia&rsquo;.</p>
+</code></pre></div><p>Ahora para <strong>crear un usuario en la nueva base de datos,</strong> haremos lo siguiente, que consiste en crear un usuario con su nombre y contraseña y además un rol que será el propietario de la base de datos que esta en uso actualmente, en este caso, &lsquo;academia&rsquo;.</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">db</span><span class="p">.</span><span class="n">createUser</span><span class="p">(</span>
 <span class="p">{</span>
 <span class="n">user</span><span class="err">:</span> <span class="s2">&#34;celia&#34;</span><span class="p">,</span>
