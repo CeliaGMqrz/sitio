@@ -4,7 +4,7 @@
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <meta name="description" content="Celia García Márquez">
+    <meta name="description" content="Reduccion del kernel linux">
     
     <link rel="stylesheet"
           href="https://1bit1nfo.netlify.app/css/style.min.632053cf9f355189adf9c13322ca0fc44922cb5d98277ed289dff13e3aa7f061.css"
@@ -53,7 +53,7 @@
 <meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
 
 <meta name="twitter:title" content="Compilación de un kernel linux a medida"/>
-<meta name="twitter:description" content="Conceptos previos El kernel linux es el núcleo del sistema operativo."/>
+<meta name="twitter:description" content="Reduccion del kernel linux"/>
 
 
     
@@ -138,12 +138,14 @@
     <div class="post  animated fadeInDown ">
         <div class="post-content">
             
+            <img class="post-thumbnail" src="https://1bit1nfo.netlify.app/images/kernel/kernel.png" alt="Thumbnail image">
+            
             <div class="post-title">
                 <h3>Compilación de un kernel linux a medida</h3>
                 
                     <div class="info">
                         <em class="fas fa-calendar-day"></em>
-                        <span class="date"> Thu, Mar 18, 2021 
+                        <span class="date"> Tue, Mar 16, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
                         <span class="reading-time">11-minute read</span>
@@ -151,8 +153,7 @@
                 
             </div>
 
-            <p><img src="/images/kernel/kernel.jpg" alt="kernel.jpg"></p>
-<h2 id="conceptos-previos">Conceptos previos</h2>
+            <h2 id="conceptos-previos">Conceptos previos</h2>
 <p>El <strong>kernel linux</strong> es el núcleo del <strong>sistema operativo</strong>. Es la parte software más importante del sistema. Su principal función es controlar el hardware del dispositivo o ordenador. Gestiona la memoria del sistema y los procesos, además controla las llamadas del sistema y permite la <strong>conexión del software con el hardware</strong> (entre ellos periféricos) para su uso.</p>
 <p>La mayor parte del kernel está compuesto por <strong>controladores</strong> o &lsquo;drivers&rsquo; para poder adaptarse y ser compatible con cualquier dispositivo, aunque cabe destacar que mientras más controladores cargados tengamos el rendimiento irá bajando.</p>
 <p>Normalmente el usuario de un equipo no suele interactuar con el kernel, pero en algunas distribuciones y con permisos de superusuario podemos gestionarlo, habilitar y deshabilitar módulos del mismo incluso <strong>recompilarlo</strong> si es necesario para situaciones muy puntuales o dispositivos que lo requieran.</p>
