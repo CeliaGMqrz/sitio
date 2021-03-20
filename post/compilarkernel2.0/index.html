@@ -148,7 +148,7 @@
                         <span class="date"> Tue, Mar 16, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">11-minute read</span>
+                        <span class="reading-time">10-minute read</span>
                     </div>
                 
             </div>
@@ -502,16 +502,18 @@ celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;<
 6,6M	linux-image-4.19.171_4.19.171-22_amd64.deb
 
 </code></pre></div><h4 id="9º-reducción">9º REDUCCIÓN</h4>
-<p>ISDN support (ISDN)
-Touchscreens (INPUT_TOUCHSCREEN)
-Joysticks/Gamepads (INPUT_JOYSTICK)
-Tablets (INPUT_TABLET)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ISDN support <span class="o">(</span>ISDN<span class="o">)</span>
+Touchscreens <span class="o">(</span>INPUT_TOUCHSCREEN<span class="o">)</span>
+Joysticks/Gamepads <span class="o">(</span>INPUT_JOYSTICK<span class="o">)</span>
+Tablets <span class="o">(</span>INPUT_TABLET<span class="o">)</span>
+</code></pre></div><p>Elementos:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
 <span class="m">1123</span>
 celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
 <span class="m">122</span>
 
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-23_amd64.deb 
+</code></pre></div><p>Tamaño:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-23_amd64.deb 
 6,6M	linux-image-4.19.171_4.19.171-23_amd64.deb
 
 </code></pre></div><h4 id="10º-reducción">10º REDUCCIÓN</h4>
@@ -528,18 +530,13 @@ SPI support
 
 
 </code></pre></div><p>Número de elementos:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
-<span class="m">1107</span>
-celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
-<span class="m">119</span>
-</code></pre></div><p>Tamaño conseguido:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/debs$ du -hs linux-image-4.19.171_4.19.171-25_amd64.deb 
-6,6M	linux-image-4.19.171_4.19.171-25_amd64.deb
-
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
 <span class="m">117</span>
 celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
 <span class="m">1089</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/debs$ du -hs linux-image-4.19.171_4.19.171-25_amd64.deb 
+6,6M	linux-image-4.19.171_4.19.171-25_amd64.deb
 
 </code></pre></div><p>Anotaciones:</p>
 <ul>
