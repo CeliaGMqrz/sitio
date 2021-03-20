@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Compilación de un kernel linux a medida (I) </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Celia García Márquez">
+    
+    <link rel="stylesheet"
+          href="https://1bit1nfo.netlify.app/css/style.min.632053cf9f355189adf9c13322ca0fc44922cb5d98277ed289dff13e3aa7f061.css"
+          integrity="sha256-YyBTz581UYmt&#43;cEzIsoPxEkiy12YJ37Sid/xPjqn8GE="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://1bit1nfo.netlify.app/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://1bit1nfo.netlify.app/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://1bit1nfo.netlify.app/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://1bit1nfo.netlify.app/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://1bit1nfo.netlify.app/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://1bit1nfo.netlify.app/post/compilarkernel2.0/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://1bit1nfo.netlify.app/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://1bit1nfo.netlify.app/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Compilación de un kernel linux a medida (I)"/>
+<meta name="twitter:description" content="Conceptos previos El kernel linux es el núcleo del sistema operativo."/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://1bit1nfo.netlify.app/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Celia García Márquez</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>Compilación de un kernel linux a medida (I)</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Thu, Mar 18, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">11-minute read</span>
+                    </div>
+                
+            </div>
+
+            <p><img src="/images/kernel/kernel.jpg" alt="kernel.jpg"></p>
+<h2 id="conceptos-previos">Conceptos previos</h2>
+<p>El <strong>kernel linux</strong> es el núcleo del <strong>sistema operativo</strong>. Es la parte software más importante del sistema. Su principal función es controlar el hardware del dispositivo o ordenador. Gestiona la memoria del sistema y los procesos, además controla las llamadas del sistema y permite la <strong>conexión del software con el hardware</strong> (entre ellos periféricos) para su uso.</p>
+<p>La mayor parte del kernel está compuesto por <strong>controladores</strong> o &lsquo;drivers&rsquo; para poder adaptarse y ser compatible con cualquier dispositivo, aunque cabe destacar que mientras más controladores cargados tengamos el rendimiento irá bajando.</p>
+<p>Normalmente el usuario de un equipo no suele interactuar con el kernel, pero en algunas distribuciones y con permisos de superusuario podemos gestionarlo, habilitar y deshabilitar módulos del mismo incluso <strong>recompilarlo</strong> si es necesario para situaciones muy puntuales o dispositivos que lo requieran.</p>
+<p>Es importante tener el kernel actualizado en la versión estable para tener redundancia en cuanto a fallos de seguridad y otros errores. Normalmente podemos actualizarlo simplemente utilizando las actualizaciones de la propia distribución que estemos utlizando.</p>
+<p>Al ser linux un <strong>kérnel libre</strong>, es posible descargar el <strong>código fuente</strong>, configurarlo y comprimirlo. Además, esta tarea a priori compleja, es más sencilla de lo que parece gracias a las <strong>herramientas disponibles</strong>.</p>
+<p>En esta tarea vamos a tratar de compilar un kérnel completamente funcional que reconozca todo el hardware <strong>básico</strong> de nuestro equipo y que sea a la vez lo más pequeño posible, es decir que incluya un <strong>vmlinuz</strong> lo más pequeño posible y que incorpore sólo los módulos imprescindibles.</p>
+<p>El hardware básico incluye como mínimo el teclado, la interfaz de red y la consola gráfica (texto).</p>
+<hr>
+<h2 id="1-obtener-el-código-fuente-del-kernel">1. Obtener el código fuente del kernel</h2>
+<p>¿Qué versión de kernel linux tengo?</p>
+<p>Ejecutamos &lsquo;uname -r&rsquo; para ver la versión que estamos utilizando</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">4.19.0-14-amd64
+</code></pre></div><ul>
+<li>Buscamos las <strong>fuentes</strong> en la paqueteria de Debian</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt search linux-source
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Ordenando... Hecho
+Buscar en todo el texto... Hecho
+linux-source/stable,stable,now 4.19+105+deb10u9 all <span class="o">[</span>instalado<span class="o">]</span>
+  Linux kernel <span class="nb">source</span> <span class="o">(</span>meta-package<span class="o">)</span>
+
+linux-source-4.19/stable,stable,now 4.19.171-2 all <span class="o">[</span>instalado, automático<span class="o">]</span>
+  Linux kernel <span class="nb">source</span> <span class="k">for</span> version 4.19 with Debian patches
+
+</code></pre></div><ul>
+<li>Segun la versión de kernel que tenemos instalado:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt policy linux-source
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">linux-source:
+  Instalados: 4.19+105+deb10u9
+  Candidato:  4.19+105+deb10u9
+  Tabla de versión:
+ *** 4.19+105+deb10u9 <span class="m">500</span>
+        <span class="m">500</span> http://deb.debian.org/debian buster/main amd64 Packages
+        <span class="m">500</span> http://security.debian.org/debian-security buster/updates/main amd64 Packages
+        <span class="m">100</span> /var/lib/dpkg/status
+
+</code></pre></div><ul>
+<li>Entonces descargamos las fuentes de la versión del kernel que nos pertenece. Además del paquete <strong>build-essential</strong> y <strong>qtbase5-dev</strong>, que son esenciales para su compilación.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install linux-source<span class="o">=</span>4.19+105+deb10u9 build-essential qtbase5-dev
+</code></pre></div><h2 id="2-descomprimir-las-fuentes-en-un-directorio-seguro-como-usuario">2. Descomprimir las fuentes en un directorio &lsquo;seguro&rsquo; como usuario.</h2>
+<p>Vamos a trabajar en un directorio de usuario para asegurarnos de no tocar partes importantes del sistema y podamos perder algún archivo necesario.</p>
+<p>Crearemos un directorio de trabajo y descomprimimos el código fuente del kernel.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ mkdir /home/celiagm/compilar
+$ sudo mv /usr/src/linux-source-4.19.tar.xz /home/celiagm/compilar/
+$ <span class="nb">cd</span> /home/celiagm/compilar/
+$ tar -xf linux-source-4.19.tar.xz 
+</code></pre></div><ul>
+<li>Vemos el tamaño que ocupa el directorio</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-source-4.19
+910M	linux-source-4.19
+
+</code></pre></div><ul>
+<li>Vemos el <strong>contenido</strong> de nuestras fuentes</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ <span class="nb">cd</span> linux-source-4.19/
+celiagm@debian:~/compilar/linux-source-4.19$ ls
+arch   COPYING  Documentation  fs       ipc      kernel    MAINTAINERS  net      scripts   tools
+block  CREDITS  drivers        include  Kbuild   lib       Makefile     README   security  usr
+certs  crypto   firmware       init     Kconfig  LICENSES  mm           samples  sound     virt
+
+</code></pre></div><p>Después de haber decomprimido el código fuente de nuestro kernel, vamos a configurarlo, de forma que indicaremos sus características y los dispositivos de nuestro ordenador que va a soportar.</p>
+<p>Vamos a usar la herramienta <strong>make</strong>, que nos va ayudar a compilar nuestro kernel, ya que permite ver los módulos del mismo y las dependencias que necesitamos para compilar.</p>
+<ul>
+<li>Para ver la <strong>ayuda</strong> de make ejecutamos el siguiente comando</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make <span class="nb">help</span>
+</code></pre></div><h2 id="3-copiar-la-configuración-del-kernel-que-tenemos-actualmente">3. Copiar la configuración del kernel que tenemos actualmente</h2>
+<ul>
+<li>Esta es la opción que nos muestra la ayuda</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"> oldconfig	  - Update current config utilising a provided .config as base
+</code></pre></div><ul>
+<li>Ahora copiamos el fichero de configuración que tenemos inicialmente en nuestro kernel a nuestro directorio</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo cp /boot/config-4.19.0-14-amd64 .config
+</code></pre></div><p>Una vez tengamos ya el fichero de configuración vamos a ejecutar <strong>make oldconfig</strong>, que restaura la configuración que teníamos en el fichero que acabamos de copiar de nuestro kernel.</p>
+<ul>
+<li>Ejecutamos <strong>make oldconfig</strong></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make oldconfig
+</code></pre></div><p>El kernel linux es <strong>modular</strong>, permite insertar o eliminar módulos para distintas funcionalidades. Los módulos no son más que fragmentos de código, abierto en este caso que podemos añadir o quitar del kernel.</p>
+<p>Algunas funcionalidades que podemos añadir al kernel son: Registar las temperaturas de componentes de nuestro ordenador, usar los controladores privativos de nuestra tarjeta gráfica (etc)</p>
+<p>Para saber el número de módulos que tenemos disponibles en el kernel ejecutamos el siguiente comando</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ls -R /lib/modules/<span class="k">$(</span>uname -r<span class="k">)</span>
+</code></pre></div><p>Si queremos ver una lista de los módulos que estamos usando podemos ejecutar <code>lsmod</code>. Que nos muestra el nombre del módulo, el tamaño que ocupa cargado en memoria y además si esta siendo usado por otro módulo.</p>
+<p>En el directorio <code>/proc/modules</code> también podemos ver la misma información.</p>
+<p>Por ejemplo, si queremos ver que módulo está usando mi tarjeta gráfica ejecutamos</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">lspci -v
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">...
+
+01:00.0 VGA compatible controller: NVIDIA Corporation TU116M <span class="o">(</span>rev a1<span class="o">)</span> <span class="o">(</span>prog-if <span class="m">00</span> <span class="o">[</span>VGA controller<span class="o">])</span>
+	Subsystem: Micro-Star International Co., Ltd. <span class="o">[</span>MSI<span class="o">]</span> TU116M
+	Flags: fast devsel, IRQ <span class="m">16</span>
+	Memory at a4000000 <span class="o">(</span>32-bit, non-prefetchable<span class="o">)</span> <span class="o">[</span><span class="nv">size</span><span class="o">=</span>16M<span class="o">]</span>
+	Memory at <span class="m">90000000</span> <span class="o">(</span>64-bit, prefetchable<span class="o">)</span> <span class="o">[</span><span class="nv">size</span><span class="o">=</span>256M<span class="o">]</span>
+	Memory at a0000000 <span class="o">(</span>64-bit, prefetchable<span class="o">)</span> <span class="o">[</span><span class="nv">size</span><span class="o">=</span>32M<span class="o">]</span>
+	I/O ports at <span class="m">5000</span> <span class="o">[</span><span class="nv">size</span><span class="o">=</span>128<span class="o">]</span>
+	Expansion ROM at a5000000 <span class="o">[</span>disabled<span class="o">]</span> <span class="o">[</span><span class="nv">size</span><span class="o">=</span>512K<span class="o">]</span>
+	Capabilities: &lt;access denied&gt;
+	Kernel modules: nouveau
+
+...
+
+</code></pre></div><p>Comprobamos que actualmente está usando el &lsquo;nouveau&rsquo; ya que no tenemos instalado los drivers de nuestra tarjeta gráfica NVIDIA.</p>
+<ul>
+<li>Miramos el número de elementos que se van a compilar como modulos y estaticamente.</li>
+</ul>
+<p>Modulos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+</code></pre></div><p>Estatica:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">3381</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">2016</span>
+</code></pre></div><p>Tenemos un total de 3381 módulos y 2016 estáticos.</p>
+<h2 id="4-selección-y-reducción-de-elementos-loadmodconfig">4. Selección y reducción de elementos (loadmodconfig)</h2>
+<p>Ahora vamos a usar una herramienta muy útil que nos reducirá la cantidad de módulos y nos va a facilitar el trabajo, ya que deshabilitará módulos que considere innecesarios.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make localmodconfig
+</code></pre></div><ul>
+<li>Vemos que se ha reducido significativamente.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1469</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">217</span>
+</code></pre></div><h2 id="5-proceso-de-compilación">5. Proceso de compilación</h2>
+<h3 id="primera-compilación">Primera compilación</h3>
+<ul>
+<li>Nos aseguramos que tenemos estos paquetes instalados antes de proceder con la compilación:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install libelf-dev libssl-dev pkg-config
+</code></pre></div><ul>
+<li>Procedemos a la compilación. Con la opción <strong>-j</strong> le pasamos como parámetro el número de núcleos que queremos que utilice nuestro pc. Dependiendo del número de núcleos que use tardaremos más o menos.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make -j <span class="m">12</span> bindeb-pkg
+</code></pre></div><p>Una vez terminada la compilación vamos a ver el peso del fichero deb.</p>
+<ul>
+<li>Comprobar el peso del fichero deb, en el directorio padre que es donde se han generado los ficheros deb</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-1_amd64.deb 
+11M	linux-image-4.19.171_4.19.171-1_amd64.deb
+</code></pre></div><ul>
+<li>Una vez tenemos el fichero deb pasamos a instalar el &lsquo;nuevo&rsquo; kernel</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo dpkg -i linux-image-4.19.171_4.19.171-1_amd64.deb
+</code></pre></div><ul>
+<li>Iniciamos el sistema y en el grub de arranque lo seleccionamos, y podemos ver que funciona correctamente.</li>
+</ul>
+<hr>
+<h4 id="comandos-de-utilidad">Comandos de utilidad</h4>
+<ul>
+<li>Ver los kernel instalados</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dpkg -l <span class="p">|</span> grep linux-image
+</code></pre></div><ul>
+<li>Desinstalar el kernel que <strong>no funciona</strong> cuando sea necesario:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt-get remove --purge linux-image-X.X.X-X
+</code></pre></div><hr>
+<p><strong>Reducir elementos</strong></p>
+<p>Con el siguiente comando se nos abre una ventana y podemos elegir los módulos o elementos que queremos quitar. Hay otras opciones desde la línea de comando en las que se nos despliega un menú pero sin entorno gráfico, pero en este caso lo haremos así.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">make xconfig
+</code></pre></div><p>Hay 3 estados:
+[ ]- No se compilará, no formará parte de su núcleo.
+[•]- Se compilará como un módulo.
+[✓]. Se compilará en el núcleo y estará presente.</p>
+<p>Antes de empezar a quitar módulos hay que tener en cuenta que el fichero .config se va modificando, entonces lo que haremos será una copia de seguidad del fichero en cada reducción por si quitamos un módulo que es esencial y no funciona nuestro kernel; Así poder volver a un punto anterior y volver a probar.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cp .config ../bakcupconfig1
+</code></pre></div><h4 id="1º-reducción">1º REDUCCIÓN</h4>
+<p>Módulos dehabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">RF switch subsystem support <span class="o">(</span>RFKILL<span class="o">)</span>: soporte para interruptor de tarjetas wifi y bluetooh
+Bluetooth subsystem support <span class="o">(</span>BT<span class="o">)</span>: Bluetooth
+QoS and/or fair queueing <span class="o">(</span>NET_SCHED<span class="o">)</span>: elegir paquetes retraso primero o en cola
+Network packet filtering framework <span class="o">(</span>Netfilter<span class="o">)</span> <span class="o">(</span>NETFILTER<span class="o">)</span>: filtrado de paquetes, cortafuegos
+Multimedia support <span class="o">(</span>MEDIA_SUPPORT<span class="o">)</span>: Soporte para multimedia
+Sound card support <span class="o">(</span>SOUND<span class="o">)</span>: Soporte para el sonido
+Linux guest support <span class="o">(</span>HYPERVISOR_GUEST<span class="o">)</span>: Soporte para maquinas virtuales
+Macintosh device drivers <span class="o">(</span>MACINTOSH_DRIVERS<span class="o">)</span>
+Macintosh device drivers <span class="o">(</span>MACINTOSH_DRIVERS<span class="o">)</span>
+Hardware Monitoring support <span class="o">(</span>HWMON<span class="o">)</span>: Monitoreo de hardware
+Hardware crypto devices <span class="o">(</span>CRYPTO_HW<span class="o">)</span>: Encriptación de hardware
+Virtualization <span class="o">(</span>VIRTUALIZATION<span class="o">)</span>
+
+</code></pre></div><p>Numero de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">145</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1319</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-1_amd64.deb 
+9,2M	linux-image-4.19.171_4.19.171-1_amd64.deb
+</code></pre></div><h4 id="2º-reducción">2º REDUCCIÓN</h4>
+<p>Módulos dehabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Network device Support -&gt; Wireless LAN
+Mouse interface <span class="o">(</span>INPUT_MOUSEDEV<span class="o">)</span>
+DMA memory allocation support <span class="o">(</span>ZONE_DMA<span class="o">)</span>
+Symmetric multi-processing support <span class="o">(</span>SMP<span class="o">)</span>
+Memtest <span class="o">(</span>MEMTEST<span class="o">)</span>
+Enable DMI scanning <span class="o">(</span>DMI<span class="o">)</span>
+Platform support <span class="k">for</span> Chrome hardware <span class="o">(</span>CHROME_PLATFORMS<span class="o">)</span>
+IBM Calgary IOMMU support <span class="o">(</span>CALGARY_IOMMU<span class="o">)</span>
+Enable support <span class="k">for</span> 16-bit segments <span class="o">(</span>X86_16BIT<span class="o">)</span>
+Allow <span class="k">for</span> memory hot-add <span class="o">(</span>MEMORY_HOTPLUG<span class="o">)</span>
+Track memory changes <span class="o">(</span>MEM_SOFT_DIRTY<span class="o">)</span>
+Supervisor Mode Access Prevention <span class="o">(</span>X86_SMAP<span class="o">)</span>
+The IPv6 protocol <span class="o">(</span>IPV6<span class="o">)</span>
+Battery <span class="o">(</span>ACPI_BATTERY<span class="o">)</span>
+AMD MCE features <span class="o">(</span>X86_MCE_AMD<span class="o">)</span>
+IP: multicast routing <span class="o">(</span>IP_MROUTE<span class="o">)</span>
+LED Support <span class="o">(</span>NEW_LEDS<span class="o">)</span>
+Accessibility support <span class="o">(</span>ACCESSIBILITY<span class="o">)</span>
+Virtualization drivers <span class="o">(</span>VIRT_DRIVERS<span class="o">)</span>
+Staging drivers <span class="o">(</span>STAGING<span class="o">)</span>
+Network File Systems <span class="o">(</span>NETWORK_FILESYSTEMS<span class="o">)</span>
+
+</code></pre></div><p>Numero de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">136</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1181</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-3_amd64.deb 
+7,4M	linux-image-4.19.171_4.19.171-3_amd64.deb
+
+
+</code></pre></div><h4 id="3º-reducción">3º REDUCCIÓN</h4>
+<p>Módulos dehabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>General Setup<span class="o">]</span>
+Support initial ramdisk/ramfs compressed using bzip2 <span class="o">(</span>RD_BZIP2<span class="o">)</span>
+Support initial ramdisk/ramfs compressed using LZMA <span class="o">(</span>RD_LZMA<span class="o">)</span>
+Support initial ramdisk/ramfs compressed using XZ <span class="o">(</span>RD_XZ<span class="o">)</span>
+Support initial ramdisk/ramfs compressed using LZO <span class="o">(</span>RD_LZO<span class="o">)</span>
+Support initial ramdisk/ramfs compressed using LZ4 <span class="o">(</span>RD_LZ4<span class="o">)</span>
+
+<span class="o">[</span>Procesor Type and Features<span class="o">]</span>
+Intel Low Power Subsystem Support <span class="o">(</span>X86_INTEL_LPSS<span class="o">)</span>
+AMD ACPI2Platform devices support <span class="o">(</span>X86_AMD_PLATFORM_DEVICE<span class="o">)</span>
+Old AMD GART IOMMU support <span class="o">(</span>GART_IOMMU<span class="o">)</span>
+</code></pre></div><p>Número de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">134</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1163</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-9_amd64.deb 
+7,4M	linux-image-4.19.171_4.19.171-9_amd64.deb
+
+</code></pre></div><h4 id="4º-reducción">4º REDUCCIÓN</h4>
+<p>Módulos dehabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Amateur Radio support <span class="o">(</span>HAMRADIO<span class="o">)</span>
+Sony MemoryStick card support <span class="o">(</span>MEMSTICK<span class="o">)</span>
+X86 Platform Specific Device Drivers <span class="o">(</span>X86_PLATFORM_DEVICES<span class="o">)</span>
+Fibre Channel driver support <span class="o">(</span>NET_FC<span class="o">)</span>
+Quota support <span class="o">(</span>QUOTA<span class="o">)</span>
+</code></pre></div><p>Número de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1155</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">128</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-10_amd64.deb 
+7,3M	linux-image-4.19.171_4.19.171-10_amd64.deb
+</code></pre></div><h4 id="5º-reducción">5º REDUCCIÓN</h4>
+<p>Módulos dehabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">IA32 Emulation <span class="o">(</span>IA32_EMULATION<span class="o">)</span>
+Configure standard kernel features <span class="o">(</span>expert users<span class="o">)</span> <span class="o">(</span>EXPERT<span class="o">)</span>
+
+Collect scheduler debugging info <span class="o">(</span>SCHED_DEBUG<span class="o">)</span>
+Collect scheduler statistics <span class="o">(</span>SCHEDSTATS<span class="o">)</span>
+Detect stack corruption on calls to schedule<span class="o">()</span>
+Trigger a BUG when data corruption is detected <span class="o">(</span>BUG_ON_DATA_CORRUPTION<span class="o">)</span>
+Warn on W+X mappings at boot <span class="o">(</span>DEBUG_WX
+</code></pre></div><p>Número de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1154</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">129</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-12_amd64.deb 
+7,3M	linux-image-4.19.171_4.19.171-12_amd64.deb
+</code></pre></div><h4 id="6º-reducción">6º REDUCCIÓN</h4>
+<p>Estos elementos no se pueden quitar :</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Intel 8xx/9xx/G3x/G4x/HD Graphics <span class="o">(</span>DRM_I915<span class="o">)</span>
+Direct Rendering Manager <span class="o">(</span>XFree86 4.1.0 and higher DRI support<span class="o">)</span> <span class="o">(</span>DRM<span class="o">)</span>
+</code></pre></div><p>Motivo: Tenemos la gráfica integrada.</p>
+<p>Estos sí:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">/dev/agpgart <span class="o">(</span>AGP Support<span class="o">)</span> <span class="o">(</span>AGP<span class="o">)</span>
+GHASH digest algorithm <span class="o">(</span>CLMUL-NI accelerated<span class="o">)</span>
+Trace gpio events <span class="o">(</span>TRACING_EVENTS_GPIO<span class="o">)</span>
+Kernel Function Graph Tracer <span class="o">(</span>FUNCTION_GRAPH_TRACER<span class="o">)</span>
+Restrict unprivileged use of performance events <span class="o">(</span>SECURITY_PERF_EVENTS_RESTRICT<span class="o">)</span>
+NSA SELinux Support <span class="o">(</span>SECURITY_SELINUX<span class="o">)</span>
+</code></pre></div><p>Número de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1142</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">129</span>
+
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-20_amd64.deb 
+7,2M	linux-image-4.19.171_4.19.171-20_amd64.deb
+
+</code></pre></div><h4 id="7º-reducción">7º REDUCCIÓN</h4>
+<p>Llegados a este punto vamos a ver si podemos quitar o están ya deshabilitados los siguientes módulos que no creemos que sean necesarios:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">usb 2.0 -&gt; <span class="nv">Driver</span><span class="o">=</span>rtsx_usb
+Realtek USB card reader <span class="o">(</span>MISC_RTSX_USB<span class="o">)</span>
+
+Audio -&gt; snd_hda_intel
+HD Audio PCI <span class="o">(</span>SND_HDA_INTEL<span class="o">)</span>
+
+wifi -&gt; iwlwifi
+Intel Wireless WiFi Next Gen AGN - Wireless-N/Advanced-N/Ultimate-N <span class="o">(</span>iwlwifi<span class="o">)</span> <span class="o">(</span>IWLWIFI<span class="o">)</span>
+
+mouse -&gt; usbhid
+xHCI HCD <span class="o">(</span>USB 3.0<span class="o">)</span> support <span class="o">(</span>USB_XHCI_HCD<span class="o">)</span>
+
+webcam -&gt; uvcvideo
+USB Webcam Gadget <span class="o">(</span>USB_G_WEBCAM<span class="o">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1142</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">124</span>
+
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-21_amd64.deb 
+7,1M	linux-image-4.19.171_4.19.171-21_amd64.deb
+
+</code></pre></div><p>Anotaciones:</p>
+<p>Cuando iniciamos el sistema con este kernel ya no disponemos de los elementos mencionados anteriormente, ni la web cam, ni los puertos usb externos como el ratón, ni la tarjeta wifi. Además tampoco tenemos el sonido.</p>
+<h4 id="8º-reducción">8º REDUCCIÓN</h4>
+<p>Wireless (WIRELESS)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">122</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1128</span>
+
+</code></pre></div><p>Tamaño conseguido</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-22_amd64.deb 
+6,6M	linux-image-4.19.171_4.19.171-22_amd64.deb
+
+</code></pre></div><h4 id="9º-reducción">9º REDUCCIÓN</h4>
+<p>ISDN support (ISDN)
+Touchscreens (INPUT_TOUCHSCREEN)
+Joysticks/Gamepads (INPUT_JOYSTICK)
+Tablets (INPUT_TABLET)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1123</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">122</span>
+
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-23_amd64.deb 
+6,6M	linux-image-4.19.171_4.19.171-23_amd64.deb
+
+</code></pre></div><h4 id="10º-reducción">10º REDUCCIÓN</h4>
+<p>Módulos deshabilitados:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Mice <span class="o">(</span>INPUT_MOUSE<span class="o">)</span>
+Miscellaneous devices <span class="o">(</span>INPUT_MISC<span class="o">)</span>
+DRM DP AUX Interface <span class="o">(</span>DRM_DP_AUX_CHARDEV<span class="o">)</span>
+
+Virtio drivers <span class="o">(</span>VIRTIO_MENU<span class="o">)</span>
+Mailbox Hardware Support <span class="o">(</span>MAILBOX<span class="o">)</span>
+Watchdog Timer Support <span class="o">(</span>WATCHDOG<span class="o">)</span>
+MMC/SD/SDIO card support <span class="o">(</span>MMC<span class="o">)</span>
+SPI support
+
+
+</code></pre></div><p>Número de elementos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1107</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">119</span>
+</code></pre></div><p>Tamaño conseguido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/debs$ du -hs linux-image-4.19.171_4.19.171-25_amd64.deb 
+6,6M	linux-image-4.19.171_4.19.171-25_amd64.deb
+
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=m&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">117</span>
+celiagm@debian:~/compilar/linux-source-4.19$ grep <span class="s2">&#34;=y&#34;</span> .config<span class="p">|</span>wc -l
+<span class="m">1089</span>
+
+</code></pre></div><p>Anotaciones:</p>
+<ul>
+<li>Hemos conseguido quitar el touchpad.</li>
+<li>Tenemos conexión a internet, teclado y podemos acceder a la consola.</li>
+<li>No hemos podido eliminar el entorno gráfico, (tarjeta integrada.)</li>
+</ul>
+<h1 id="conclusión">Conclusión</h1>
+<p>Como podemos ver:</p>
+<p>Vmlinuz</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar/linux-source-4.19$ ls -lh /boot/ <span class="p">|</span> egrep <span class="s1">&#39;vmlinuz&#39;</span>
+-rw-r--r-- <span class="m">1</span> root root 4,1M mar <span class="m">20</span> 20:20 vmlinuz-4.19.171
+</code></pre></div><p>Fichero deb</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~/compilar$ du -hs linux-image-4.19.171_4.19.171-26_amd64.deb 
+6,5M	linux-image-4.19.171_4.19.171-26_amd64.deb
+</code></pre></div><p>Hemos pasado de 5,1 M de peso en Vmlinuz a 4,1M y de 11M a 6,5M en el fichero deb.</p>
+<p>Hemos reducido considerablemente el kernel considerando un uso básico del sistema con lo más esencial.</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/kernel-linux/">kernel linux</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://1bit1nfo.netlify.app/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
