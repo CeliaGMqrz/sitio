@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Virtualización con Libvirt y KVM </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Virtualización con Libvirt y KVM">
+    
+    <link rel="stylesheet"
+          href="https://1bit1nfo.netlify.app/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://1bit1nfo.netlify.app/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://1bit1nfo.netlify.app/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://1bit1nfo.netlify.app/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://1bit1nfo.netlify.app/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://1bit1nfo.netlify.app/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://1bit1nfo.netlify.app/post/migracion_app_mv/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://1bit1nfo.netlify.app/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://1bit1nfo.netlify.app/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Virtualización con Libvirt y KVM"/>
+<meta name="twitter:description" content="Virtualización con Libvirt y KVM"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://1bit1nfo.netlify.app/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Celia García Márquez</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://1bit1nfo.netlify.app/images/kvm/libvirt.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Virtualización con Libvirt y KVM</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Sun, Mar 21, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">4-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="conceptos-previos">Conceptos previos</h2>
+<p><strong>KVM</strong></p>
+<p>KVM es un software de código abierto y significa &lsquo;Máquina Virtual basada en el Kernel&rsquo; en español. Es una solución de virtualización para Linux en el hardware x86. Con KVM podemos convertir a Linux en un hipervisor para que nuestro host ejecute entornos virtuales, cada máquina se implementa como un proceso regular de Linux.</p>
+<p><strong>Libvirt</strong></p>
+<p>Libvirt es una API de código abierto, además de un demonio y una herramienta de administración para administrar la virtualización. Se puede utilizar para administrar KVM, Xen, VMware ESXi, QEMU, entre otras.</p>
+<p><strong>QEMU</strong></p>
+<p>QEMU en sí es, segun Wikipedia, un emulador de procesadores basado en la traducción dinámica de binarios (conversión del código binario de la arquitectura fuente en código entendible por la arquitectura huésped). Pero entrando en materia de virtualización su objetivo principal es emular un sistema operativo dentro de otro sin tener que particionar el disco duro, empleando para su ubicación cualquier directorio dentro de este.</p>
+<p><strong>¿Cuál es la diferencia que hay entre KVM, Libvirt y QEMU?</strong></p>
+<p>QEMU trata desde el nivel más bajo que emula el procesador y los periféricos. KVM es tiene la capacidad de acelerarlo si la CPU tiene el sistema de virtualización habilitado y por último, Libvirt proporciona el demonio y la API por la que el cliente puede gestionar las máquinas virtuales a su gusto.</p>
+<h2 id="libvirt-con-kvm">Libvirt con KVM</h2>
+<p>Para usar libvirt instalaremos los siguientes paquetes</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt install libvrt-daemon-system qemu-kvm
+</code></pre></div><p>Libvirt proporciona mecanismos para conectarse a un hipervisor qemu-kvm (local o remotamente), los mas habituales son:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Acceso local por un usuario sin privilegios</span>
+qemu:///session:
+<span class="c1"># Acceso local privilegiado. (Podemos tambien agregar a un usuario no privilegiado al grupo de libvirt usando &#39;&#39;adduser &lt;user&gt; libvirt&#39;&#39;)</span>
+qemu:///system:
+<span class="c1"># Acceso remoto con privilegios por ssh</span>
+qemu+ssh:///system:
+</code></pre></div><p>Las aplicaciones para usar libvirt como clientes pueden ser: KVM Management Tools, Virsh (cliente oficial del libvirt), virt-manager (Con GUI) y virtinst.</p>
+<h3 id="configuración-inicial">Configuración inicial</h3>
+<h4 id="listar-las-mv-de-la-sesión">Listar las mv de la sesión</h4>
+<p>Como usuario sin privilegios.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///session list --all 
+</code></pre></div><p>Como usuario con privilegios (añadido al grupo libvirt)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system list --all
+</code></pre></div><h4 id="definición-y-creación-de-redes">Definición y creación de redes</h4>
+<p>Tenemos un fichero .xml en el que tenemos la red definida</p>
+<p>Esta red en concreto se crea haciendo nat.</p>
+<p><code>net-default.xml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;network&gt;
+  &lt;name&gt;default&lt;/name&gt;
+  &lt;forward <span class="nv">mode</span><span class="o">=</span><span class="s1">&#39;nat&#39;</span>&gt;
+    &lt;nat&gt;
+      &lt;port <span class="nv">start</span><span class="o">=</span><span class="s1">&#39;1024&#39;</span> <span class="nv">end</span><span class="o">=</span><span class="s1">&#39;65535&#39;</span>/&gt;
+    &lt;/nat&gt;
+  &lt;/forward&gt;
+  &lt;bridge <span class="nv">name</span><span class="o">=</span><span class="s1">&#39;virbr0&#39;</span> <span class="nv">stp</span><span class="o">=</span><span class="s1">&#39;on&#39;</span> <span class="nv">delay</span><span class="o">=</span><span class="s1">&#39;0&#39;</span>/&gt;
+  &lt;ip <span class="nv">address</span><span class="o">=</span><span class="s1">&#39;192.168.122.1&#39;</span> <span class="nv">netmask</span><span class="o">=</span><span class="s1">&#39;255.255.255.0&#39;</span>&gt;
+    &lt;dhcp&gt;
+      &lt;range <span class="nv">start</span><span class="o">=</span><span class="s1">&#39;192.168.122.2&#39;</span> <span class="nv">end</span><span class="o">=</span><span class="s1">&#39;192.168.122.254&#39;</span>/&gt;
+    &lt;/dhcp&gt;
+  &lt;/ip&gt;
+&lt;/network&gt;
+</code></pre></div><hr>
+<p><strong>¡!</strong></p>
+<p>Herramienta útil para comprobar si el xml es válido o no</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virt-xml-validate net-default.xml
+</code></pre></div><hr>
+<ul>
+<li>Obtener ayuda</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu://system <span class="nb">help</span> network
+</code></pre></div><ul>
+<li>Listar las redes</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-list --all
+</code></pre></div><ul>
+<li>Crear la red a partir del fichero .xml (no persistente)</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-create net-default.xml
+</code></pre></div><ul>
+<li>Eliminar esa red creada si lo vieramos necesario</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-destroy default 
+</code></pre></div><ul>
+<li>Definir la red de manera persistente</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-define net-default.xml
+</code></pre></div><p>De forma que si vemos el siguiente directorio comprobamos que la red nueva está fijada como configuración y sea persistente.</p>
+<p><code>tree /etc/libvirt/qemu/networks</code></p>
+<ul>
+<li>Activar la red que hemos definido como persistente</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-start default
+</code></pre></div><ul>
+<li>Si queremos que la red se habilite cuando lanzamos la máquina</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-autostart default
+</code></pre></div><ul>
+<li>Dejar de definir la red // eliminarla</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-undefine default
+</code></pre></div><ul>
+<li>Ver la informacion de la red</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system net-info default
+</code></pre></div><h4 id="definicion-del-pool-por-defecto-con-virsh">Definicion del pool por defecto con virsh</h4>
+<p>Tendremos un directorio donde estarán los distintos volumenes de almacenamiento.</p>
+<p>Tenemos un fichero .xml con la configuracion con el pool por defecto.</p>
+<p><code>default-pool.xml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;pool <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;dir&#39;</span>&gt;
+  &lt;name&gt;default&lt;/name&gt;
+  &lt;target&gt;
+    &lt;path&gt;/var/lib/libvirt/images&lt;/path&gt;
+  &lt;/target&gt;
+&lt;/pool&gt;
+</code></pre></div><ul>
+<li>Listamos los mecanismos de almacenamiento</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system pool-list --all
+</code></pre></div><ul>
+<li>Si lo queremos &lsquo;eliminar&rsquo; o dejar de definir</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system pool-undefine
+</code></pre></div><ul>
+<li>Para definirlo y activarlo</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system pool-define default-pool.xml
+virsh -c qemu:///system pool-start default
+</code></pre></div><h4 id="manejo-de-volumenes">Manejo de volumenes</h4>
+<p>Para crear un fichero de hasta 10 GiB de capacidad en un fichero en formato qcow2, definimos el fichero vol1.xml:</p>
+<p><code>vol1.xml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;volume <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;file&#39;</span>&gt;
+  &lt;name&gt;vol1.img&lt;/name&gt;
+  &lt;key&gt;/var/lib/libvirt/images/vol1.img&lt;/key&gt;
+  &lt;source&gt;
+  &lt;/source&gt;
+  &lt;allocation&gt;0&lt;/allocation&gt;
+  &lt;capacity <span class="nv">unit</span><span class="o">=</span><span class="s2">&#34;G&#34;</span>&gt;10&lt;/capacity&gt;
+  &lt;target&gt;
+    &lt;path&gt;/var/lib/libvirt/images/vol1.img&lt;/path&gt;
+    &lt;format <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;qcow2&#39;</span>/&gt;
+  &lt;/target&gt;
+&lt;/volume&gt;
+</code></pre></div><ul>
+<li>Crear el volumen.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system vol-create default vol1.xml
+</code></pre></div><ul>
+<li>Saber la informacion del volumen creado</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">qemu-img info vol1 
+</code></pre></div><p>Nos dará una salida similar a esta, en la que nos dice el tamaño virtual del disco y el real que está usando.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">qemu-img info debian-10-openstack-amd64.qcow2 
+image: debian-10-openstack-amd64.qcow2
+file format: qcow2
+virtual size: 2.0G <span class="o">(</span><span class="m">2147483648</span> bytes<span class="o">)</span>
+disk size: 517M
+cluster_size: <span class="m">65536</span>
+Format specific information:
+    compat: 0.10
+    refcount bits: <span class="m">16</span>
+</code></pre></div><ul>
+<li>Borrar los volumenes</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system vol-delete vol1 --pool default
+</code></pre></div><h4 id="creación-de-un-dominio">Creación de un dominio</h4>
+<p>Dominio (Máquinas Virtuales).</p>
+<p><code>dominio1.xml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;domain <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;kvm&#34;</span>&gt;
+  &lt;name&gt;dominio1&lt;/name&gt;
+  &lt;memory <span class="nv">unit</span><span class="o">=</span><span class="s2">&#34;G&#34;</span>&gt;1&lt;/memory&gt;
+  &lt;vcpu&gt;1&lt;/vcpu&gt;
+  &lt;os&gt;
+    &lt;<span class="nb">type</span> <span class="nv">arch</span><span class="o">=</span><span class="s2">&#34;x86_64&#34;</span>&gt;hvm&lt;/type&gt;
+  &lt;/os&gt;
+  &lt;devices&gt;
+    &lt;emulator&gt;/usr/bin/kvm&lt;/emulator&gt;
+    &lt;disk <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;file&#39;</span> <span class="nv">device</span><span class="o">=</span><span class="s1">&#39;disk&#39;</span>&gt;
+      &lt;driver <span class="nv">name</span><span class="o">=</span><span class="s1">&#39;qemu&#39;</span> <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;qcow2&#39;</span>/&gt;
+      &lt;<span class="nb">source</span> <span class="nv">file</span><span class="o">=</span><span class="s1">&#39;/var/lib/libvirt/images/buster&#39;</span>/&gt;
+      &lt;target <span class="nv">dev</span><span class="o">=</span><span class="s1">&#39;vda&#39;</span>/&gt;
+    &lt;/disk&gt;
+    &lt;interface <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;network&#34;</span>&gt;
+      &lt;<span class="nb">source</span> <span class="nv">network</span><span class="o">=</span><span class="s2">&#34;default&#34;</span>/&gt;
+      &lt;mac <span class="nv">address</span><span class="o">=</span><span class="s2">&#34;52:54:00:86:c6:a9&#34;</span>/&gt;
+    &lt;/interface&gt;
+    &lt;graphics <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;vnc&#39;</span> <span class="nv">port</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span> <span class="nv">autoport</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span> <span class="nv">listen</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span> /&gt;
+  &lt;/devices&gt;
+&lt;/domain&gt;
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system define dominio1.xml
+</code></pre></div><ul>
+<li>Ver que esta creada pero no iniciada</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">tree /etc/libvirt/qemu 
+</code></pre></div><ul>
+<li>La iniciamos</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virsh -c qemu:///system start dominio1.xml
+</code></pre></div><ul>
+<li>Comprobamos que ya está  iniciada</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Vemos las caracteristicas que kvm le otorga a la mv</span>
+ps aux <span class="p">|</span> grep kvm
+</code></pre></div><p>Podremos acceder a través de ssh si conocemos la contraseña o a una consola mediante VNC.</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/libvirt/">libvirt</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://1bit1nfo.netlify.app/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
