@@ -164,7 +164,7 @@
 <p>QEMU trata desde el nivel más bajo que emula el procesador y los periféricos. KVM es tiene la capacidad de acelerarlo si la CPU tiene el sistema de virtualización habilitado y por último, Libvirt proporciona el demonio y la API por la que el cliente puede gestionar las máquinas virtuales a su gusto.</p>
 <h2 id="libvirt-con-kvm">Libvirt con KVM</h2>
 <p>Para usar libvirt instalaremos los siguientes paquetes</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt install libvrt-daemon-system qemu-kvm
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt install libvirt-daemon-system qemu-kvm
 </code></pre></div><p>Libvirt proporciona mecanismos para conectarse a un hipervisor qemu-kvm (local o remotamente), los mas habituales son:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Acceso local por un usuario sin privilegios</span>
 qemu:///session:
