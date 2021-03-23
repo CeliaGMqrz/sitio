@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Cliente remoto usando el interprete de un servidor MySQL </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="MySQL: Cliente remoto">
+    
+    <link rel="stylesheet"
+          href="https://1bit1nfo.netlify.app/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://1bit1nfo.netlify.app/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://1bit1nfo.netlify.app/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://1bit1nfo.netlify.app/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://1bit1nfo.netlify.app/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://1bit1nfo.netlify.app/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://1bit1nfo.netlify.app/post/mysql_clienteremoto/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://1bit1nfo.netlify.app/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://1bit1nfo.netlify.app/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Cliente remoto usando el interprete de un servidor MySQL"/>
+<meta name="twitter:description" content="MySQL: Cliente remoto"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://1bit1nfo.netlify.app/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Celia García Márquez</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://1bit1nfo.netlify.app/images/mysql/mysql.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Cliente remoto usando el interprete de un servidor MySQL</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, Mar 16, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">5-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="objetivo">Objetivo</h2>
+<p>Conectar un cliente remoto a la base de datos insertada en el servidor MySQL</p>
+<h2 id="creación-de-la-base-de-datos-y-usuario-de-prueba">Creación de la base de datos y usuario de prueba</h2>
+<p>En anteriores posts se ha explicado como llevar a cabo la instalación y creación de bases de datos y usuarios en mysql así que no voy a explicarlo como tal. Sólo indicaré los comandos a ejecutar.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Nos conectamos a mysql como root</span>
+mysql -u root -p
+<span class="c1"># Crearemos la nueva base de datos</span>
+CREATE DATABASE academia<span class="p">;</span>
+<span class="c1"># Creamos el usuario que se va conectar a la base de datos</span>
+CREATE USER <span class="s1">&#39;celia&#39;</span>@<span class="s1">&#39;%&#39;</span> IDENTIFIED BY <span class="s1">&#39;celia&#39;</span><span class="p">;</span>
+<span class="c1"># Le damos los privilegios oportunos al usuario para usar la base de datos nueva</span>
+GRANT ALL PRIVILEGES ON academia.* TO <span class="s1">&#39;celia&#39;</span>@<span class="s1">&#39;%&#39;</span><span class="p">;</span>
+<span class="c1"># Actualizamos los permisos</span>
+FLUSH PRIVILEGES<span class="p">;</span>
+<span class="c1"># Salimos</span>
+exit<span class="p">;</span>
+</code></pre></div><p>Comprobamos que podemos conectarnos con el usuario celia a la base de datos academia</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@servermysql:~/.ssh$ mysql -u celia -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span>.
+Your MariaDB connection id is <span class="m">58</span>
+Server version: 10.3.27-MariaDB-0+deb10u1 Debian <span class="m">10</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
+
+MariaDB <span class="o">[(</span>none<span class="o">)]</span>&gt; use academia<span class="p">;</span>
+Reading table information <span class="k">for</span> completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+</code></pre></div><p>Ahora vamos a poblar la base de datos con datos de prueba, podrás encontrarlo en el siguiente <a href="https://github.com/CeliaGMqrz/proyecto_escuela_sql/blob/main/fase2_mysql.sql">repositorio</a>.</p>
+<p>Comprobamos que están las tablas creadas:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">MariaDB <span class="o">[</span>academia<span class="o">]</span>&gt; show tables<span class="p">;</span>
++--------------------+
+<span class="p">|</span> Tables_in_academia <span class="p">|</span>
++--------------------+
+<span class="p">|</span> aulas              <span class="p">|</span>
+<span class="p">|</span> ausencias          <span class="p">|</span>
+<span class="p">|</span> complementos       <span class="p">|</span>
+<span class="p">|</span> detalle_recibos    <span class="p">|</span>
+<span class="p">|</span> ejemplares         <span class="p">|</span>
+<span class="p">|</span> horarios           <span class="p">|</span>
+<span class="p">|</span> materiales         <span class="p">|</span>
+<span class="p">|</span> ninos              <span class="p">|</span>
+<span class="p">|</span> personal           <span class="p">|</span>
+<span class="p">|</span> recibos            <span class="p">|</span>
+<span class="p">|</span> relaciones         <span class="p">|</span>
+<span class="p">|</span> responsables       <span class="p">|</span>
++--------------------+
+<span class="m">12</span> rows in <span class="nb">set</span> <span class="o">(</span>0.000 sec<span class="o">)</span>
+
+</code></pre></div><h2 id="habilitar-el-acceso-remoto">Habilitar el acceso remoto</h2>
+<p>Comprobaremos el direccionamiento de ambas máquinas (servidor y cliente), ambas comparten una red y es por donde el cliente se va a conectar remotamente a la base de datos del servidor. Cabe decir que lógicamente hay que instalar el cliente mysql en la máquina cliente.</p>
+<p>Para habilitar el acceso remoto tendremos que editar el siguiente fichero</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+</code></pre></div><p>Buscaremos la siguiente línea y la dejaremos de la siguiente forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">bind-address            <span class="o">=</span> 0.0.0.0
+</code></pre></div><p>Reiniciamos el servicio y comprobamos que está en funcionamiento</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl restart mariadb
+sudo systemctl status mariadb
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@servermysql:~$ sudo systemctl restart mariadb
+vagrant@servermysql:~$ sudo systemctl status mariadb.service 
+● mariadb.service - MariaDB 10.3.27 database server
+   Loaded: loaded <span class="o">(</span>/lib/systemd/system/mariadb.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+   Active: active <span class="o">(</span>running<span class="o">)</span> since Tue 2021-03-23 08:10:28 GMT<span class="p">;</span> 5s ago
+     Docs: man:mysqld<span class="o">(</span>8<span class="o">)</span>
+           https://mariadb.com/kb/en/library/systemd/
+  Process: <span class="m">21364</span> <span class="nv">ExecStartPre</span><span class="o">=</span>/usr/bin/install -m <span class="m">755</span> -o mysql -g root -d /var/run/mysqld <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, s
+  Process: <span class="m">21365</span> <span class="nv">ExecStartPre</span><span class="o">=</span>/bin/sh -c systemctl unset-environment _WSREP_START_POSITION <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, 
+  Process: <span class="m">21368</span> <span class="nv">ExecStartPre</span><span class="o">=</span>/bin/sh -c <span class="o">[</span> ! -e /usr/bin/galera_recovery <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nv">VAR</span><span class="o">=</span> <span class="o">||</span>   <span class="nv">VAR</span><span class="o">=</span><span class="sb">`</span><span class="nb">cd</span> /usr/bin/
+  Process: <span class="m">21446</span> <span class="nv">ExecStartPost</span><span class="o">=</span>/bin/sh -c systemctl unset-environment _WSREP_START_POSITION <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited,
+  Process: <span class="m">21448</span> <span class="nv">ExecStartPost</span><span class="o">=</span>/etc/mysql/debian-start <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span>0/SUCCESS<span class="o">)</span>
+ Main PID: <span class="m">21415</span> <span class="o">(</span>mysqld<span class="o">)</span>
+   Status: <span class="s2">&#34;Taking your SQL requests now...&#34;</span>
+    Tasks: <span class="m">31</span> <span class="o">(</span>limit: 544<span class="o">)</span>
+   Memory: 69.9M
+   CGroup: /system.slice/mariadb.service
+           └─21415 /usr/sbin/mysqld
+
+Mar <span class="m">23</span> 08:10:28 servermysql systemd<span class="o">[</span>1<span class="o">]</span>: Starting MariaDB 10.3.27 database server...
+Mar <span class="m">23</span> 08:10:28 servermysql mysqld<span class="o">[</span>21415<span class="o">]</span>: 2021-03-23  8:10:28 <span class="m">0</span> <span class="o">[</span>Note<span class="o">]</span> /usr/sbin/mysqld <span class="o">(</span>mysqld 10.3.27-
+Mar <span class="m">23</span> 08:10:28 servermysql mysqld<span class="o">[</span>21415<span class="o">]</span>: 2021-03-23  8:10:28 <span class="m">0</span> <span class="o">[</span>Warning<span class="o">]</span> Could not increase number of m
+Mar <span class="m">23</span> 08:10:28 servermysql systemd<span class="o">[</span>1<span class="o">]</span>: Started MariaDB 10.3.27 database server.
+Mar <span class="m">23</span> 08:10:28 servermysql /etc/mysql/debian-start<span class="o">[</span>21450<span class="o">]</span>: Upgrading MySQL tables <span class="k">if</span> necessary.
+Mar <span class="m">23</span> 08:10:28 servermysql /etc/mysql/debian-start<span class="o">[</span>21453<span class="o">]</span>: /usr/bin/mysql_upgrade: the <span class="s1">&#39;--basedir&#39;</span> optio
+Mar <span class="m">23</span> 08:10:28 servermysql /etc/mysql/debian-start<span class="o">[</span>21453<span class="o">]</span>: Looking <span class="k">for</span> <span class="s1">&#39;mysql&#39;</span> as: /usr/bin/mysql
+Mar <span class="m">23</span> 08:10:28 servermysql /etc/mysql/debian-start<span class="o">[</span>21453<span class="o">]</span>: Looking <span class="k">for</span> <span class="s1">&#39;mysqlcheck&#39;</span> as: /usr/bin/mysqlch
+lines 1-25
+
+</code></pre></div><p>Es importante saber que el puerto por el que está escuchando mysql por defecto es el 3306, lo podemos comprobar con el siguiente comando</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">netstat -tlpn
+</code></pre></div><p>Comprobamos así que está escuchando en el puerto indicado.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@servermysql</span><span class="err">:</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">vagrant</span><span class="c"># netstat -tlpn</span>
+<span class="n">Active</span> <span class="n">Internet</span> <span class="n">connections</span> <span class="p">(</span><span class="n">only</span> <span class="n">servers</span><span class="p">)</span>
+<span class="n">Proto</span> <span class="n">Recv-Q</span> <span class="nb">Send-Q</span> <span class="n">Local</span> <span class="n">Address</span>           <span class="n">Foreign</span> <span class="n">Address</span>         <span class="n">State</span>       <span class="n">PID</span><span class="p">/</span><span class="n">Program</span> <span class="n">name</span>    
+<span class="n">tcp</span>        <span class="n">0</span>      <span class="n">0</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="err">:</span><span class="n">22</span>              <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="err">:</span><span class="p">*</span>               <span class="n">LISTEN</span>      <span class="n">381</span><span class="p">/</span><span class="n">sshd</span>            
+<span class="n">tcp</span>        <span class="n">0</span>      <span class="n">0</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="err">:</span><span class="n">3306</span>            <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="err">:</span><span class="p">*</span>               <span class="n">LISTEN</span>      <span class="n">21415</span><span class="p">/</span><span class="n">mysqld</span>        
+<span class="n">tcp6</span>       <span class="n">0</span>      <span class="n">0</span> <span class="p">::</span><span class="err">:</span><span class="n">22</span>                   <span class="p">::</span><span class="err">:</span><span class="p">*</span>                    <span class="n">LISTEN</span>      <span class="n">381</span><span class="p">/</span><span class="n">sshd</span>  
+</code></pre></div><h2 id="conexión-remota-desde-el-cliente">Conexión remota desde el cliente</h2>
+<p>Como hemos dicho anteriormente tendremos ya instalado mariadb-client en la máquina cliente. Ahora podemos probar la conexión remota de la siguiente forma.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mysql -u celia -p -h ip 
+</code></pre></div><p>Comprobamos que podemos ver las tablas de la base de datos en cuestión</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@clientmysql:~$ mysql -u celia -p -h 10.0.1.2
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span>.
+Your MariaDB connection id is <span class="m">36</span>
+Server version: 10.3.27-MariaDB-0+deb10u1 Debian <span class="m">10</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
+
+MariaDB <span class="o">[(</span>none<span class="o">)]</span>&gt; use academia<span class="p">;</span>
+Reading table information <span class="k">for</span> completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB <span class="o">[</span>academia<span class="o">]</span>&gt; show tables<span class="p">;</span>
++--------------------+
+<span class="p">|</span> Tables_in_academia <span class="p">|</span>
++--------------------+
+<span class="p">|</span> aulas              <span class="p">|</span>
+<span class="p">|</span> ausencias          <span class="p">|</span>
+<span class="p">|</span> complementos       <span class="p">|</span>
+<span class="p">|</span> detalle_recibos    <span class="p">|</span>
+<span class="p">|</span> ejemplares         <span class="p">|</span>
+<span class="p">|</span> horarios           <span class="p">|</span>
+<span class="p">|</span> materiales         <span class="p">|</span>
+<span class="p">|</span> ninos              <span class="p">|</span>
+<span class="p">|</span> personal           <span class="p">|</span>
+<span class="p">|</span> recibos            <span class="p">|</span>
+<span class="p">|</span> relaciones         <span class="p">|</span>
+<span class="p">|</span> responsables       <span class="p">|</span>
++--------------------+
+<span class="m">12</span> rows in <span class="nb">set</span> <span class="o">(</span>0.002 sec<span class="o">)</span>
+
+</code></pre></div><p>Como podemos ver podemos ver los registros sin problemas.</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/mongodb/">mongodb</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://1bit1nfo.netlify.app/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
