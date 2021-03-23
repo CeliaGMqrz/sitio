@@ -155,7 +155,20 @@
 
             <h2 id="objetivo">Objetivo</h2>
 <p>Conectar un cliente remoto a la base de datos insertada en el servidor MySQL</p>
-<h2 id="creación-de-la-base-de-datos-y-usuario-de-prueba">Creación de la base de datos y usuario de prueba</h2>
+<h2 id="requisitos-previos">Requisitos previos</h2>
+<ul>
+<li>Una máquina virtual con Debian Buster (paquetería actualizada). En mi caso usaré una máquina alzada con vagrant y virtualbox</li>
+<li>Un servidor MySQL instalado. Instalaremos MariaDB.</li>
+<li>Otra máquina virtual que actuará como cliente remoto con una red compartida con el servidor.</li>
+</ul>
+<p>Hemos ejecutado los siguientes comandos para hacer todo lo mencionado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Actualizamos la máquina</span>
+$ sudo apt update <span class="o">&amp;&amp;</span> apt upgrade
+<span class="c1"># Instalamos mariadb desde los repositorios de debian</span>
+$ sudo apt install mariadb-server
+<span class="c1"># Ejecutamos el script de seguridad de mariadb (opcional)</span>
+$ sudo mysql_secure_installation
+</code></pre></div><h2 id="creación-de-la-base-de-datos-y-usuario-de-prueba">Creación de la base de datos y usuario de prueba</h2>
 <p>En anteriores posts se ha explicado como llevar a cabo la instalación y creación de bases de datos y usuarios en mysql así que no voy a explicarlo como tal. Sólo indicaré los comandos a ejecutar.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Nos conectamos a mysql como root</span>
 mysql -u root -p
