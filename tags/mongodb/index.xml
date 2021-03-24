@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>mongodb on 1bit1nfo</title>
-    <link>https://www.celiagm.es/tags/mongodb/</link>
+    <link>http://www.celiagm.es/tags/mongodb/</link>
     <description>Recent content in mongodb on 1bit1nfo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/mongodb/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://www.celiagm.es/tags/mongodb/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Instalacion de MongoDB y acceso remoto desde un cliente local</title>
-      <link>https://www.celiagm.es/post/mongodb/</link>
+      <link>http://www.celiagm.es/post/mongodb/</link>
       <pubDate>Tue, 16 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://www.celiagm.es/post/mongodb/</guid>
+      <guid>http://www.celiagm.es/post/mongodb/</guid>
       <description>Instalación de un servidor MongoDB y configuración para permitir el acceso remoto desde la red local.</description>
     </item>
     
