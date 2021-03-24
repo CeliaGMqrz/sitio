@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Phpmyadming para administrar MySQL </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="MySQL: phpmyadmin, cliente remoto">
+    
+    <link rel="stylesheet"
+          href="https://1bit1nfo.netlify.app/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://1bit1nfo.netlify.app/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://1bit1nfo.netlify.app/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://1bit1nfo.netlify.app/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://1bit1nfo.netlify.app/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://1bit1nfo.netlify.app/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://1bit1nfo.netlify.app/post/phpmyadmin/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://1bit1nfo.netlify.app/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://1bit1nfo.netlify.app/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://1bit1nfo.netlify.app/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Phpmyadming para administrar MySQL"/>
+<meta name="twitter:description" content="MySQL: phpmyadmin, cliente remoto"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://1bit1nfo.netlify.app/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://1bit1nfo.netlify.app/images/mysql/banner.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Phpmyadming para administrar MySQL</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Wed, Mar 24, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">8-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="descripción">Descripción</h2>
+<p>Instalación de una herramienta de administración web para MySQL y prueba desde un cliente remoto</p>
+<h2 id="requisitos-previos">Requisitos previos</h2>
+<ul>
+<li>Una máquina virtual con Debian Buster (paquetería actualizada). En mi caso usaré una máquina alzada con vagrant y virtualbox</li>
+<li>Un servidor MySQL instalado. Instalaremos MariaDB.</li>
+<li>Otra máquina virtual que actuará como cliente remoto con una red compartida con el servidor.</li>
+</ul>
+<p>Hemos ejecutado los siguientes comandos para hacer todo lo mencionado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Actualizamos la máquina</span>
+$ sudo apt update <span class="o">&amp;&amp;</span> apt upgrade
+<span class="c1"># Instalamos mariadb desde los repositorios de debian</span>
+$ sudo apt install mariadb-server
+<span class="c1"># Ejecutamos el script de seguridad de mariadb (opcional)</span>
+$ sudo mysql_secure_installation
+</code></pre></div><h2 id="creación-de-la-base-de-datos-y-usuario-de-prueba">Creación de la base de datos y usuario de prueba</h2>
+<p>En este <a href="https://1bit1nfo.netlify.app/post/mysql_clienteremoto/">post</a>, está la creación de la base de datos, usuario, datos de prueba y además la conexión de un cliente remoto.</p>
+<p>Una vez ya hemos comprobado que tenemos los requisitos mencionados en el post podemos continuar con lo siguiente.</p>
+<h2 id="herramienta-de-administración-web-phpmyadmin">Herramienta de administración web. phpMyAdmin.</h2>
+<p><strong>phpMyAdmin</strong> es una herramienta escrita en <strong>php</strong> con la intención de manejar la administración de <strong>MySQL</strong> a través un navegador web. Actualmente puede crear y eliminar bases de datos, modificar tablas, añadir registros, hacer consultas, administrar privilegios etc&hellip;</p>
+<p>Para utilizar esta herramienta necesitaremos un servidor web, en nuestro caso será <strong>apache2</strong> y <strong>soporte php</strong>.</p>
+<p>Utilizaremos el mismo servidor en el que se aloja la base de datos para ofrecer también el servicio web. Aunque lo más parecido a la realidad es que en una máquina tengamos el servidor de base de datos y en otro el servidor web.</p>
+<p><strong>Instalación del servidor web apache2 y soporte php</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install apache2 php php-mysql php-zip php-bz2 php-mbstring php-gd libapache2-mod-php 
+</code></pre></div><p>Comprobamos que el servicio está funcionando y que podemos acceder acceder al sitio web por defecto en este caso.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">vagrant</span><span class="nv">@servermysql</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">status</span> <span class="n">apache2</span>
+<span class="err">●</span> <span class="n">apache2</span><span class="p">.</span><span class="n">service</span> <span class="p">-</span> <span class="n">The</span> <span class="n">Apache</span> <span class="n">HTTP</span> <span class="n">Server</span>
+   <span class="n">Loaded</span><span class="err">:</span> <span class="n">loaded</span> <span class="p">(/</span><span class="n">lib</span><span class="p">/</span><span class="n">systemd</span><span class="p">/</span><span class="n">system</span><span class="p">/</span><span class="n">apache2</span><span class="p">.</span><span class="n">service</span><span class="p">;</span> <span class="n">enabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="err">:</span> <span class="n">enabled</span><span class="p">)</span>
+   <span class="n">Active</span><span class="err">:</span> <span class="n">active</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="n">since</span> <span class="n">Tue</span> <span class="n">2021</span><span class="p">-</span><span class="n">03</span><span class="p">-</span><span class="n">23</span> <span class="n">09</span><span class="err">:</span><span class="n">07</span><span class="err">:</span><span class="n">56</span> <span class="n">GMT</span><span class="p">;</span> <span class="n">24s</span> <span class="n">ago</span>
+     <span class="n">Docs</span><span class="err">:</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">httpd</span><span class="p">.</span><span class="n">apache</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">docs</span><span class="p">/</span><span class="n">2</span><span class="p">.</span><span class="n">4</span><span class="p">/</span>
+ <span class="n">Main</span> <span class="n">PID</span><span class="err">:</span> <span class="n">10008</span> <span class="p">(</span><span class="n">apache2</span><span class="p">)</span>
+    <span class="n">Tasks</span><span class="err">:</span> <span class="n">6</span> <span class="p">(</span><span class="n">limit</span><span class="err">:</span> <span class="n">544</span><span class="p">)</span>
+   <span class="n">Memory</span><span class="err">:</span> <span class="n">12</span><span class="p">.</span><span class="n">9M</span>
+   <span class="n">CGroup</span><span class="err">:</span> <span class="p">/</span><span class="n">system</span><span class="p">.</span><span class="n">slice</span><span class="p">/</span><span class="n">apache2</span><span class="p">.</span><span class="n">service</span>
+           <span class="err">├─</span><span class="n">10008</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>           <span class="err">├─</span><span class="n">10012</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>           <span class="err">├─</span><span class="n">10013</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>           <span class="err">├─</span><span class="n">10014</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>           <span class="err">├─</span><span class="n">10015</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>           <span class="err">└─</span><span class="n">10016</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">sbin</span><span class="p">/</span><span class="n">apache2</span> <span class="n">-k</span> <span class="nb">start
+</span><span class="nb"></span>
+<span class="n">Mar</span> <span class="n">23</span> <span class="n">09</span><span class="err">:</span><span class="n">07</span><span class="err">:</span><span class="n">56</span> <span class="n">servermysql</span> <span class="n">systemd</span><span class="p">[</span><span class="n">1</span><span class="p">]</span><span class="err">:</span> <span class="n">Starting</span> <span class="n">The</span> <span class="n">Apache</span> <span class="n">HTTP</span> <span class="n">Server</span><span class="p">...</span>
+<span class="n">Mar</span> <span class="n">23</span> <span class="n">09</span><span class="err">:</span><span class="n">07</span><span class="err">:</span><span class="n">56</span> <span class="n">servermysql</span> <span class="n">apachectl</span><span class="p">[</span><span class="n">10004</span><span class="p">]</span><span class="err">:</span> <span class="n">AH00558</span><span class="err">:</span> <span class="n">apache2</span><span class="err">:</span> <span class="n">Could</span> <span class="n">not</span> <span class="n">reliably</span> <span class="n">determine</span> <span class="n">the</span> <span class="n">server</span><span class="err">&#39;</span><span class="n">s</span>
+<span class="n">Mar</span> <span class="n">23</span> <span class="n">09</span><span class="err">:</span><span class="n">07</span><span class="err">:</span><span class="n">56</span> <span class="n">servermysql</span> <span class="n">systemd</span><span class="p">[</span><span class="n">1</span><span class="p">]</span><span class="err">:</span> <span class="n">Started</span> <span class="n">The</span> <span class="n">Apache</span> <span class="n">HTTP</span> <span class="n">Server</span><span class="p">.</span>
+
+</code></pre></div><p><img src="/images/mysql/apache.png" alt="apache.png"></p>
+<p>Ahora vamos a modificar el fichero de configuracion del virtualhost que viene por defecto. Podriamos crear un fichero de configuración nuevo y agregar la configuración en el mismo pero vamos a usar el que viene para facilitar la configuracion con phpMyAdmin.</p>
+<p><code>sudo nano /etc/apache2/sites-available/000-default.conf</code></p>
+<p>Añadiremos la configuración necesaria así como los alias que necesita phpMyAdmin para que el sitio funcione.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;VirtualHost *:80&gt;
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+
+        ErrorLog <span class="si">${</span><span class="nv">APACHE_LOG_DIR</span><span class="si">}</span>/error.log
+        CustomLog <span class="si">${</span><span class="nv">APACHE_LOG_DIR</span><span class="si">}</span>/access.log combined
+
+        Alias /phpmyadmin /usr/share/phpmyadmin
+
+        &lt;Directory /usr/share/phpmyadmin&gt;
+            Options SymLinksIfOwnerMatch
+            DirectoryIndex index.php
+
+            &lt;IfModule mod_php5.c&gt;
+                &lt;IfModule mod_mime.c&gt;
+                    AddType application/x-httpd-php .php
+                &lt;/IfModule&gt;
+                &lt;FilesMatch <span class="s2">&#34;.+\.php</span>$<span class="s2">&#34;</span>&gt;
+                    SetHandler application/x-httpd-php
+                &lt;/FilesMatch&gt;
+
+                php_value include_path .
+                php_admin_value upload_tmp_dir /var/lib/phpmyadmin/tmp
+                php_admin_value open_basedir /usr/share/phpmyadmin/:/etc/phpmyadmin/:/var/lib/phpmyadmin/:/usr/share/php/php-gettext/:/usr/share/php/php-php-gettext/:/usr/share/javascript/:/usr/share/php/tcpdf/:/usr/share/doc/phpmyadmin/:/usr/share/php/phpseclib/
+                php_admin_value mbstring.func_overload <span class="m">0</span>
+            &lt;/IfModule&gt;
+            &lt;IfModule mod_php.c&gt;
+                &lt;IfModule mod_mime.c&gt;
+                    AddType application/x-httpd-php .php
+                &lt;/IfModule&gt;
+                &lt;FilesMatch <span class="s2">&#34;.+\.php</span>$<span class="s2">&#34;</span>&gt;
+                    SetHandler application/x-httpd-php
+                &lt;/FilesMatch&gt;
+
+                php_value include_path .
+                php_admin_value upload_tmp_dir /var/lib/phpmyadmin/tmp
+                php_admin_value open_basedir /usr/share/phpmyadmin/:/etc/phpmyadmin/:/var/lib/phpmyadmin/:/usr/share/php/php-gettext/:/usr/share/php/php-php-gettext/:/usr/share/javascript/:/usr/share/php/tcpdf/:/usr/share/doc/phpmyadmin/:/usr/share/php/phpseclib/
+                php_admin_value mbstring.func_overload <span class="m">0</span>
+            &lt;/IfModule&gt;
+        &lt;/Directory&gt;
+
+        &lt;Directory /usr/share/phpmyadmin/templates&gt;
+            Require all denied
+        &lt;/Directory&gt;
+        &lt;Directory /usr/share/phpmyadmin/libraries&gt;
+            Require all denied
+        &lt;/Directory&gt;
+        &lt;Directory /usr/share/phpmyadmin/setup/lib&gt;
+            Require all denied
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+</code></pre></div><h3 id="instalación-de-phpmyadmin">Instalación de phpmyadmin</h3>
+<p>Para instalar esta herramienta vamos a ir a su página oficial para encontrar el enlace a la versión mas actual y lo descargaremos en la máquina virtual y lo descomprimimos de la siguiente forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Obtener el paquete</span>
+wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-languages.tar.gz
+
+
+<span class="c1"># Lo descomprimimos y lo movemos al directorio /usr/share</span>
+sudo tar xzvf phpMyAdmin-5.1.0-all-languages.tar.gz
+sudo mv  phpMyAdmin-5.1.0-all-languages /usr/share/
+</code></pre></div><p>Le cambiamos el nombre al directorio para que sea mas legible</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@servermysql:/usr/share# mv phpMyAdmin-5.1.0-all-languages/ phpmyadmin
+root@servermysql:/usr/share# <span class="nb">cd</span> phpmyadmin/
+
+<span class="c1"># Vemos el contenido del directorio</span>
+root@servermysql:/usr/share/phpmyadmin# ls -l
+total <span class="m">672</span>
+-rw-r--r--  <span class="m">1</span> root root     <span class="m">41</span> Feb <span class="m">24</span> 06:05 babel.config.json
+-rw-r--r--  <span class="m">1</span> root root  <span class="m">41123</span> Feb <span class="m">24</span> 06:05 ChangeLog
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">4106</span> Feb <span class="m">24</span> 06:05 composer.json
+-rw-r--r--  <span class="m">1</span> root root <span class="m">201246</span> Feb <span class="m">24</span> 06:05 composer.lock
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">4474</span> Feb <span class="m">24</span> 06:05 config.sample.inc.php
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">2587</span> Feb <span class="m">24</span> 06:05 CONTRIBUTING.md
+drwxr-xr-x  <span class="m">3</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 doc
+drwxr-xr-x  <span class="m">2</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 examples
+-rw-r--r--  <span class="m">1</span> root root  <span class="m">22486</span> Feb <span class="m">24</span> 06:05 favicon.ico
+-rw-r--r--  <span class="m">1</span> root root    <span class="m">413</span> Feb <span class="m">24</span> 06:05 index.php
+drwxr-xr-x  <span class="m">5</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 js
+drwxr-xr-x  <span class="m">5</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 libraries
+-rw-r--r--  <span class="m">1</span> root root  <span class="m">18092</span> Feb <span class="m">24</span> 06:05 LICENSE
+drwxr-xr-x <span class="m">45</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 locale
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">2285</span> Feb <span class="m">24</span> 06:05 package.json
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">1034</span> Feb <span class="m">24</span> 06:05 print.css
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">1520</span> Feb <span class="m">24</span> 06:05 README
+-rw-r--r--  <span class="m">1</span> root root     <span class="m">29</span> Feb <span class="m">24</span> 06:05 RELEASE-DATE-5.1.0
+-rw-r--r--  <span class="m">1</span> root root     <span class="m">26</span> Feb <span class="m">24</span> 06:05 robots.txt
+drwxr-xr-x  <span class="m">3</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 setup
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">1354</span> Feb <span class="m">24</span> 06:05 show_config_errors.php
+drwxr-xr-x  <span class="m">2</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 sql
+drwxr-xr-x <span class="m">25</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 templates
+drwxr-xr-x  <span class="m">5</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 themes
+-rw-r--r--  <span class="m">1</span> root root   <span class="m">1613</span> Feb <span class="m">24</span> 06:05 url.php
+drwxr-xr-x <span class="m">17</span> root root   <span class="m">4096</span> Feb <span class="m">24</span> 06:05 vendor
+-rw-r--r--  <span class="m">1</span> root root <span class="m">293093</span> Feb <span class="m">24</span> 06:05 yarn.lock
+
+</code></pre></div><p>Una vez que hemos descomprimido vamos a crear un directorio para alojar los archivos <strong>temporales</strong> de phpmyadmin.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /var/lib/phpmyadmin/tmp
+</code></pre></div><p>Ahora vamos a darle <strong>permisos</strong> para que apache pueda utilizar los directorio</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo chown -R www-data:www-data /var/lib/phpmyadmin
+sudo chown -R www-data:www-data /usr/share/phpmyadmin
+</code></pre></div><p>Phpmyadmin tiene un <strong>fichero de configuación</strong> por defecto que vamos a copiar para usarlo y modificarlo.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cp config.sample.inc.php config.inc.php
+</code></pre></div><p>Una vez copiado lo vamos a modificar de la siguiente forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@mysql:/usr/share/phpmyadmin# nano config.inc.php
+</code></pre></div><p>Buscaremos la siguiente línea, en la que especificaremos una cadena de texto de 32 caracteres aleatorios que sirve para cifrar las cookies de la sesión. Esta cadena se puede generar a mano o usando cualquier paquete que haga esta función.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;blowfish_secret&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+</code></pre></div><p>También buscaremos las siguientes líneas que sirven para habilitar la directiva en la que se da lugar a usar una base de datos de phpmyadmin a un usuario con una contraseña, la dejaremos por defecto, pero es recomendable usar una contraseña más segura.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;controluser&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;controlpass&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pmapass&#39;</span><span class="p">;</span>
+</code></pre></div><p>También activaremos todas las variables de la sección <strong>Storage and tables</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;pmadb&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;phpmyadmin&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;bookmarktable&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__bookmark&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;relation&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__relation&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;table_info&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__table_info&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;table_coords&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__table_coords&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;pdf_pages&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__pdf_pages&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;column_info&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__column_info&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;history&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__history&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;table_uiprefs&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__table_uiprefs&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;tracking&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__tracking&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;userconfig&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__userconfig&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;recent&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__recent&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;favorite&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__favorite&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;users&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__users&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;usergroups&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__usergroups&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;navigationhiding&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__navigationhiding&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;savedsearches&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__savedsearches&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;central_columns&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__central_columns&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;designer_settings&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__designer_settings&#39;</span><span class="p">;</span>
+<span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;Servers&#39;</span><span class="o">][</span><span class="nv">$i</span><span class="o">][</span><span class="s1">&#39;export_templates&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;pma__export_templates&#39;</span><span class="p">;</span>
+</code></pre></div><p>Indicaremos el path de los archivos temporales</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">$cfg</span><span class="o">[</span><span class="s1">&#39;TempDir&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;/var/lib/phpmyadmin/tmp&#39;</span><span class="p">;</span>
+</code></pre></div><p>Una vez modificado el fichero de configuración vamos a crear la base de datos para phpmyadmin, de modo que vamos al directorio &lsquo;sql&rsquo; y ahí ejecutamos el siguiente comando para pasarle los datos a mysql</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@servermysql:/usr/share/phpmyadmin/sql# mariadb &lt; create_tables.sql 
+</code></pre></div><p>Comprobamos que se ha creado la base de datos y las tablas correspondientes.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@servermysql:/usr/share/phpmyadmin/sql# mysql -u root -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span>.
+Your MariaDB connection id is <span class="m">38</span>
+Server version: 10.3.27-MariaDB-0+deb10u1 Debian <span class="m">10</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
+
+MariaDB <span class="o">[(</span>none<span class="o">)]</span>&gt; show databases<span class="p">;</span>
++--------------------+
+<span class="p">|</span> Database           <span class="p">|</span>
++--------------------+
+<span class="p">|</span> academia           <span class="p">|</span>
+<span class="p">|</span> information_schema <span class="p">|</span>
+<span class="p">|</span> mysql              <span class="p">|</span>
+<span class="p">|</span> performance_schema <span class="p">|</span>
+<span class="p">|</span> phpmyadmin         <span class="p">|</span>
++--------------------+
+<span class="m">5</span> rows in <span class="nb">set</span> <span class="o">(</span>0.001 sec<span class="o">)</span>
+
+MariaDB <span class="o">[(</span>none<span class="o">)]</span>&gt; use phpmyadmin
+Reading table information <span class="k">for</span> completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB <span class="o">[</span>phpmyadmin<span class="o">]</span>&gt; show tables<span class="p">;</span>
++------------------------+
+<span class="p">|</span> Tables_in_phpmyadmin   <span class="p">|</span>
++------------------------+
+<span class="p">|</span> pma__bookmark          <span class="p">|</span>
+<span class="p">|</span> pma__central_columns   <span class="p">|</span>
+<span class="p">|</span> pma__column_info       <span class="p">|</span>
+<span class="p">|</span> pma__designer_settings <span class="p">|</span>
+<span class="p">|</span> pma__export_templates  <span class="p">|</span>
+<span class="p">|</span> pma__favorite          <span class="p">|</span>
+<span class="p">|</span> pma__history           <span class="p">|</span>
+<span class="p">|</span> pma__navigationhiding  <span class="p">|</span>
+<span class="p">|</span> pma__pdf_pages         <span class="p">|</span>
+<span class="p">|</span> pma__recent            <span class="p">|</span>
+<span class="p">|</span> pma__relation          <span class="p">|</span>
+<span class="p">|</span> pma__savedsearches     <span class="p">|</span>
+<span class="p">|</span> pma__table_coords      <span class="p">|</span>
+<span class="p">|</span> pma__table_info        <span class="p">|</span>
+<span class="p">|</span> pma__table_uiprefs     <span class="p">|</span>
+<span class="p">|</span> pma__tracking          <span class="p">|</span>
+<span class="p">|</span> pma__userconfig        <span class="p">|</span>
+<span class="p">|</span> pma__usergroups        <span class="p">|</span>
+<span class="p">|</span> pma__users             <span class="p">|</span>
++------------------------+
+<span class="m">19</span> rows in <span class="nb">set</span> <span class="o">(</span>0.001 sec<span class="o">)</span>
+
+</code></pre></div><p>Ahora crearemos el usuario pma con la correspondiente contraseña, recuerda que puedes ponerle el nombre de usuario y contraseña que quieras pero lo hemos dejado por defecto ya que este es un escenario de prueba para el post.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">MariaDB <span class="o">[</span>phpmyadmin<span class="o">]</span>&gt; GRANT SELECT, INSERT, UPDATE, DELETE ON phpmyadmin.* TO <span class="s1">&#39;pma&#39;</span>@<span class="s1">&#39;localhost&#39;</span> IDENTIFIED BY <span class="s1">&#39;pmapass&#39;</span><span class="p">;</span>
+Query OK, <span class="m">0</span> rows affected <span class="o">(</span>0.075 sec<span class="o">)</span>
+
+MariaDB <span class="o">[</span>phpmyadmin<span class="o">]</span>&gt; FLUSH PRIVILEGES<span class="p">;</span>
+Query OK, <span class="m">0</span> rows affected <span class="o">(</span>0.001 sec<span class="o">)</span>
+
+</code></pre></div><p>Por último vamos a reiniciar los servicios tanto mariadb como apache2 y comprobamos que están en correcto funcionamiento.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">systemctl reload mariadb
+systemctl reload apache2
+systemctl status mariadb
+systemctl status apache2
+</code></pre></div><p>Ahora sí podemos comenzar con la configuración desde el navegador. Accedemos a la dirección de nuestro servidor con la url.</p>
+<p>Nota: Nos ha surgido un error:</p>
+<p>Composer detected issues in your platform: Your Composer dependencies require the following PHP extensions to be installed: xml.</p>
+<p>Simplemente no teníamos instalada la extensión xml para php, asi que la instalamos y reiniciamos el servicio.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt install php-xml
+systemctl restart apache2
+</code></pre></div><p>Como podemos ver ya se puede ver en el navegador el formulario para introducir nuestras credenciales.</p>
+<p><img src="/images/mysql/credenciales.png" alt="credenciales.png"></p>
+<p>Introducimos el usuario y la contraseña que anteriormente usamos para la base de datos de prueba &lsquo;academia&rsquo; y entramos.</p>
+<p><img src="/images/mysql/captura1.png" alt="captura1.png"></p>
+<p>Como podemos ver nos muestra todas las opciones que tenemos para gestionar nuestra base de datos, vamos a hacer click en nuestra base de datos &lsquo;academia&rsquo; y veremos las tablas de la misma.</p>
+<p><img src="/images/mysql/captura1.png" alt="captura2.png"></p>
+<p>Vamos a pinchar sobre una tabla en concreto y podremos ver los registros de la tabla.</p>
+<p><img src="/images/mysql/registrosninos.png" alt="registrosninos.png"></p>
+<p>Desde esta herramienta podemos ver que podemos administrar la base de datos de forma gráfica ademas podemos hacer consultas de linea de comando en la pestaña de SQL.</p>
+<p><img src="/images/mysql/consulta.png" alt="consulta.png"></p>
+<p>Fuentes:</p>
+<p><a href="https://chachocool.com/como-instalar-phpmyadmin-en-debian-10-buster/">https://chachocool.com/como-instalar-phpmyadmin-en-debian-10-buster/</a></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/mysql/">mysql</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://1bit1nfo.netlify.app/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
