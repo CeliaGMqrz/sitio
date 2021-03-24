@@ -299,7 +299,7 @@ drwxr-xr-x <span class="m">17</span> root root   <span class="m">4096</span> Feb
 
 </code></pre></div><p>Una vez que hemos descomprimido vamos a crear un directorio para alojar los archivos <strong>temporales</strong> de phpmyadmin.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /var/lib/phpmyadmin/tmp
-</code></pre></div><p>Ahora vamos a darle <strong>permisos</strong> para que apache pueda utilizar los directorio</p>
+</code></pre></div><p>Ahora vamos a darle <strong>permisos</strong> para que apache pueda utilizar los directorios.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo chown -R www-data:www-data /var/lib/phpmyadmin
 sudo chown -R www-data:www-data /usr/share/phpmyadmin
 </code></pre></div><p>Phpmyadmin tiene un <strong>fichero de configuación</strong> por defecto que vamos a copiar para usarlo y modificarlo.</p>
@@ -421,6 +421,8 @@ systemctl restart apache2
 <p>Nota:</p>
 <p>La máquina virtual servidor en la que hemos configurado phpmyadmin y mysql está conectada a dos redes, una conectada modo puente con la anfitriona desde la que nos hemos conectado desde el navegador y otra que comparte con el cliente. Desde el cliente si tuviesemos entorno gráfico podriamos entrar con la siguiente url <strong>10.0.1.2/phpmyadmin</strong>. Aunque podemos instalar lynx y probar su funcionamiento de esta forma:</p>
 <p><img src="/images/mysql/clientephp.png" alt="clientephp.png"></p>
+<h2 id="conclusión">Conclusión</h2>
+<p>Phpmyadmin es una herramienta muy intuitiva y fácil de manejar para gestionar las bases de datos además es muy útil ya que podemos acceder desde un navegador.</p>
 <p>Fuentes:</p>
 <p><a href="https://chachocool.com/como-instalar-phpmyadmin-en-debian-10-buster/">https://chachocool.com/como-instalar-phpmyadmin-en-debian-10-buster/</a></p>
 </div>
