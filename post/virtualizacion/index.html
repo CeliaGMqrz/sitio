@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Celia García Márquez </title>
+    <title> Celia García Márquez | Virtualización con Libvirt </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -52,7 +52,7 @@
     <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
 
-<meta name="twitter:title" content=""/>
+<meta name="twitter:title" content="Virtualización con Libvirt"/>
 <meta name="twitter:description" content="Crea con virt-install una imagen de Debian Buster con formato qcow2 y un tamaño máximo de 3GiB."/>
 
 
@@ -139,14 +139,14 @@
         <div class="post-content">
             
             <div class="post-title">
-                <h3></h3>
+                <h3>Virtualización con Libvirt</h3>
                 
                     <div class="info">
                         <em class="fas fa-calendar-day"></em>
                         <span class="date"> Mon, Jan 1, 0001 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">8-minute read</span>
+                        <span class="reading-time">13-minute read</span>
                     </div>
                 
             </div>
@@ -196,7 +196,7 @@ poder usar hasta dos interfaces de red por dhcp. El usuario <code>debian</code> 
 </code></pre></div><ul>
 <li>Definimos la nueva red virbr2</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define red2.xml 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define red2.xml
 Network red2 defined from red2.xml
 </code></pre></div><ul>
 <li>Listamos las redes que tenemos</li>
@@ -227,14 +227,14 @@ Network red2 defined from red2.xml
 </code></pre></div><p>Hacemos la instalación, teniendo en cuenta el sistema de archivos con formato XFS.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ lsblk -f
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
-sr0                                                                     
-vda                                                                     
+sr0
+vda
 └─vda1 xfs          30a9cfb1-0b31-4368-8b7a-c6779804e450      2G    35% /
 
 </code></pre></div><p>Cuando se haya finalizado la instalación vamos a descargar sudo.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">su -
-apt install sudo 
-adduser debian sudo 
+apt install sudo
+adduser debian sudo
 nano /etc/sudoers
 </code></pre></div><ul>
 <li>Editar y poner lo siguiente</li>
@@ -247,7 +247,7 @@ debian <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o
 %debian <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
 debian <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> NOPASSWD:ALL
 </code></pre></div><p>Comprobamos que se ha creado el archivo buster-base.xml</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:/etc/libvirt/qemu$ sudo cat buster-base.xml 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:/etc/libvirt/qemu$ sudo cat buster-base.xml
 &lt;!--
 WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
 OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
@@ -425,19 +425,19 @@ buster-base.qcow2  compilar_default.img  debian-VAGRANTSLASH-buster64_vagrant_bo
 <p>Creamos el par de claves indicado</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span>
 </code></pre></div><p>En la mv creamos el fichero &lsquo;authorized_keys&rsquo;</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~/.ssh$ cat authorized_keys 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~/.ssh$ cat authorized_keys
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAF5SCIOXoPk1sXDH43L1r4YqoP15DHGxRfCvat01stXT0YEIeXujgFalyETMu3WqlIjLtca/b5JV4Gk//rk0IdfVQAXhQFgruXQ6e7EYSru0D9XCaTuiJ4oMzoFu/+caYUT+o5HeOSHTWj1EfOqqbJDsuACJ5vvjubPrQ54P6orN3D1dQ<span class="o">==</span> celiagm@debian
 </code></pre></div><ul>
 <li>Utiliza la herramienta virt-sparsify para reducir al máximo el tamaño de la imagen</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virt-sparsify --compress buster-base.qcow2 buster-base_red.qcow2 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virt-sparsify --compress buster-base.qcow2 buster-base_red.qcow2
 <span class="o">[</span>   0.0<span class="o">]</span> Create overlay file in /tmp to protect <span class="nb">source</span> disk
 <span class="o">[</span>   0.0<span class="o">]</span> Examine <span class="nb">source</span> disk
  100% ⟦▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒⟧ --:--
 <span class="o">[</span>   7,1<span class="o">]</span> Fill free space in /dev/sda1 with zero
 <span class="o">[</span>   8,7<span class="o">]</span> Copy to destination and make sparse
 <span class="o">[</span>  64,8<span class="o">]</span> Sparsify operation completed with no errors.
-virt-sparsify: Before deleting the old disk, carefully check that the 
+virt-sparsify: Before deleting the old disk, carefully check that the
 target disk boots and works correctly.
 
 </code></pre></div><ul>
@@ -472,7 +472,7 @@ total 5,8G
 </ol>
 <p>Creamos el nuevo fichero .xml.</p>
 <p>Le proporcionamos un identificador y le proporcionamos una mac respetando los tres primeros octetos.</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cat /proc/sys/kernel/random/uuid 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cat /proc/sys/kernel/random/uuid
 </code></pre></div><p><code>intra.xml</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;network&gt;
   &lt;name&gt;intra&lt;/name&gt;
@@ -491,7 +491,7 @@ total 5,8G
   &lt;/ip&gt;
 &lt;/network&gt;
 </code></pre></div><p>La definimos, la iniciamos y comprobamos que esta activo</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define intra.xml 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define intra.xml
 Network intra defined from intra.xml
 
 root@debian:/etc/libvirt/qemu/networks# virsh net-start intra
@@ -538,7 +538,7 @@ root@debian:/home/celiagm/isos# virsh net-list --all
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virt-xml-validate maquina1.xml
 maquina1.xml validates
 </code></pre></div><p>Definimos y arrancamos la máquina</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virsh define maquina1.xml 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virsh define maquina1.xml
 Domain maquina1 defined from maquina1.xml
 
 root@debian:/etc/libvirt/qemu# virsh start maquina1
@@ -571,7 +571,7 @@ Domain maquina1 started
   &lt;/target&gt;
 &lt;/volume&gt;
 </code></pre></div><p>Creamos el volumen en el pool por defecto</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-create default vol.xml 
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-create default vol.xml
 Vol vol1.img created from vol.xml
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-list default
  Name                                                        Path
@@ -583,11 +583,218 @@ Vol vol1.img created from vol.xml
 </code></pre></div><ol start="5">
 <li>Una vez iniciada la MV maquina1, conecta el volumen a la máquina, crea un sistema de ficheros XFS en el volumen y móntalo en el directorio /var/lib/pgsql. Ten cuidado con los propietarios y grupos que pongas, para que funcione adecuadamente el siguiente punto.</li>
 </ol>
+<p>Conectamos el volumen creado de 1Gb a la máquina</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"> <span class="n">root</span><span class="nv">@debian</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">libvirt</span><span class="p">/</span><span class="n">images</span><span class="c"># virsh attach-disk maquina1 --source /var/lib/libvirt/images/vol1.img --target vdc --persistent</span>
+<span class="n">Disk</span> <span class="n">attached</span> <span class="n">successfully</span>
+
+</code></pre></div><p>Le damos formato XFS , para ello tenemos que intalar los siguientes paquetes</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">apt-get</span> <span class="n">install</span> <span class="n">xfsprogs</span> <span class="n">dosfstools</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">debian</span><span class="c"># mkfs</span>
+<span class="n">mkfs</span>         <span class="n">mkfs</span><span class="p">.</span><span class="n">cramfs</span>  <span class="n">mkfs</span><span class="p">.</span><span class="n">ext3</span>    <span class="n">mkfs</span><span class="p">.</span><span class="n">fat</span>     <span class="n">mkfs</span><span class="p">.</span><span class="n">msdos</span>   <span class="n">mkfs</span><span class="p">.</span><span class="n">xfs</span>
+<span class="n">mkfs</span><span class="p">.</span><span class="n">bfs</span>     <span class="n">mkfs</span><span class="p">.</span><span class="n">ext2</span>    <span class="n">mkfs</span><span class="p">.</span><span class="n">ext4</span>    <span class="n">mkfs</span><span class="p">.</span><span class="n">minix</span>   <span class="n">mkfs</span><span class="p">.</span><span class="n">vfat</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">debian</span><span class="c"># lsblk -l</span>
+<span class="n">NAME</span> <span class="n">MAJ</span><span class="err">:</span><span class="n">MIN</span> <span class="nb">RM </span><span class="n">SIZE</span> <span class="n">RO</span> <span class="nb">TYPE </span><span class="n">MOUNTPOINT</span>
+<span class="n">vda</span>  <span class="n">254</span><span class="err">:</span><span class="n">0</span>    <span class="n">0</span>   <span class="n">5G</span>  <span class="n">0</span> <span class="n">disk</span>
+<span class="n">vda1</span> <span class="n">254</span><span class="err">:</span><span class="n">1</span>    <span class="n">0</span>   <span class="n">3G</span>  <span class="n">0</span> <span class="n">part</span> <span class="p">/</span>
+<span class="n">vdb</span>  <span class="n">254</span><span class="err">:</span><span class="n">16</span>   <span class="n">0</span>   <span class="n">1G</span>  <span class="n">0</span> <span class="n">disk</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">debian</span><span class="c"># mkfs.xfs /dev/vdb</span>
+<span class="n">meta-data</span><span class="p">=/</span><span class="n">dev</span><span class="p">/</span><span class="n">vdb</span>               <span class="n">isize</span><span class="p">=</span><span class="n">512</span>    <span class="n">agcount</span><span class="p">=</span><span class="n">4</span><span class="p">,</span> <span class="n">agsize</span><span class="p">=</span><span class="n">65536</span> <span class="n">blks</span>
+         <span class="p">=</span>                       <span class="n">sectsz</span><span class="p">=</span><span class="n">512</span>   <span class="n">attr</span><span class="p">=</span><span class="n">2</span><span class="p">,</span> <span class="n">projid32bit</span><span class="p">=</span><span class="n">1</span>
+         <span class="p">=</span>                       <span class="n">crc</span><span class="p">=</span><span class="n">1</span>        <span class="n">finobt</span><span class="p">=</span><span class="n">1</span><span class="p">,</span> <span class="n">sparse</span><span class="p">=</span><span class="n">1</span><span class="p">,</span> <span class="n">rmapbt</span><span class="p">=</span><span class="n">0</span>
+         <span class="p">=</span>                       <span class="n">reflink</span><span class="p">=</span><span class="n">0</span>
+<span class="n">data</span>     <span class="p">=</span>                       <span class="n">bsize</span><span class="p">=</span><span class="n">4096</span>   <span class="n">blocks</span><span class="p">=</span><span class="n">262144</span><span class="p">,</span> <span class="n">imaxpct</span><span class="p">=</span><span class="n">25</span>
+         <span class="p">=</span>                       <span class="n">sunit</span><span class="p">=</span><span class="n">0</span>      <span class="n">swidth</span><span class="p">=</span><span class="n">0</span> <span class="n">blks</span>
+<span class="n">naming</span>   <span class="p">=</span><span class="n">version</span> <span class="n">2</span>              <span class="n">bsize</span><span class="p">=</span><span class="n">4096</span>   <span class="n">ascii-ci</span><span class="p">=</span><span class="n">0</span><span class="p">,</span> <span class="n">ftype</span><span class="p">=</span><span class="n">1</span>
+<span class="n">log</span>      <span class="p">=</span><span class="n">internal</span> <span class="n">log</span>           <span class="n">bsize</span><span class="p">=</span><span class="n">4096</span>   <span class="n">blocks</span><span class="p">=</span><span class="n">2560</span><span class="p">,</span> <span class="n">version</span><span class="p">=</span><span class="n">2</span>
+         <span class="p">=</span>                       <span class="n">sectsz</span><span class="p">=</span><span class="n">512</span>   <span class="n">sunit</span><span class="p">=</span><span class="n">0</span> <span class="n">blks</span><span class="p">,</span> <span class="n">lazy-count</span><span class="p">=</span><span class="n">1</span>
+<span class="n">realtime</span> <span class="p">=</span><span class="n">none</span>                   <span class="n">extsz</span><span class="p">=</span><span class="n">4096</span>   <span class="n">blocks</span><span class="p">=</span><span class="n">0</span><span class="p">,</span> <span class="n">rtextents</span><span class="p">=</span><span class="n">0</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">home</span><span class="p">/</span><span class="n">debian</span><span class="c"># lsblk -f</span>
+<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
+<span class="n">vda</span>
+<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>      <span class="n">2G</span>    <span class="n">35</span><span class="p">%</span> <span class="p">/</span>
+<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>
+</code></pre></div><p>Antes de montarlo en el directorio <code>/var/lib/pgsql.</code> vamos a ver qué permisos tenemos que darle y que usuarios tenemos que crear para la base de datos en postgresql.</p>
+<p>Creamos el grupo postgres</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">groupadd</span> <span class="n">postgres</span>
+
+<span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">useradd</span> <span class="n">postgres</span> <span class="n">-m</span> <span class="n">-g</span> <span class="n">postgres</span>
+</code></pre></div><p>Creamos el directorio y le damos los permisos adecuados</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">chown</span> <span class="n">-R</span> <span class="n">postgres</span><span class="err">:</span><span class="n">postgres</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">pgsql</span>
+</code></pre></div><p>Comprobamos que se han modificado los propietarios</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># ls -l | grep &#39;pgsql&#39;</span>
+<span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>   <span class="n">6</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">18</span> <span class="n">pgsql</span>
+
+</code></pre></div><p>Montamos el disco en el directorio requerido</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mount -t xfs /dev/vdb /var/lib/pgsql/</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
+<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
+<span class="n">vda</span>
+<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>      <span class="n">2G</span>    <span class="n">35</span><span class="p">%</span> <span class="p">/</span>
+<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>  <span class="n">980</span><span class="p">,</span><span class="n">8M</span>     <span class="n">3</span><span class="p">%</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">pgsql</span>
+
+</code></pre></div><ol start="6">
+<li>Instala en maquina1 el sistema de BBDD PostgreSQL que ubicará sus ficheros con las bases de datos en /var/lib/pgsql utilizando una conexión ssh.</li>
+</ol>
+<p>Instalamos PostgreSQL</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># apt-get install postgresql</span>
+</code></pre></div><p>Nos dice que lo ha alojado todo en el directorio <code>/var/lib/postgresql</code></p>
+<p>Por lo que desmontaremos el disco , y cambiamos el nombre del directorio</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># Desmontamos y vemos que se ha desmontado correctamente</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># umount /var/lib/pgsql/</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
+<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
+<span class="n">vda</span>
+<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>    <span class="n">1</span><span class="p">,</span><span class="n">8G</span>    <span class="n">41</span><span class="p">%</span> <span class="p">/</span>
+<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>
+
+<span class="c">#Cambiamos el nombre del directorio</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mv /var/lib/pgsql/ /var/lib/postgresql/</span>
+
+<span class="c">#Listamos para ver los permisos</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># ls -l /var/lib/postgresql/</span>
+<span class="n">total</span> <span class="n">0</span>
+<span class="n">drwxr-xr-x</span> <span class="n">3</span> <span class="n">postgres</span> <span class="n">postgres</span> <span class="n">18</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">28</span> <span class="n">11</span>
+<span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>  <span class="n">6</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">18</span> <span class="n">pgsql</span>
+
+<span class="c"># Lo volvemos a montar</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mount -t xfs /dev/vdb /var/lib/postgresql/</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
+<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
+<span class="n">vda</span>
+<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>    <span class="n">1</span><span class="p">,</span><span class="n">8G</span>    <span class="n">41</span><span class="p">%</span> <span class="p">/</span>
+<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>  <span class="n">980</span><span class="p">,</span><span class="n">8M</span>     <span class="n">3</span><span class="p">%</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">postgresql</span>
+
+</code></pre></div><p>Vamos a darle una contraseña al usuario postgres</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># passwd postgres</span>
+<span class="n">Nueva</span> <span class="n">contraseña</span><span class="err">:</span>
+<span class="n">Vuelva</span> <span class="n">a</span> <span class="n">escribir</span> <span class="n">la</span> <span class="n">nueva</span> <span class="n">contraseña</span><span class="err">:</span>
+<span class="n">passwd</span><span class="err">:</span> <span class="n">contraseña</span> <span class="n">actualizada</span> <span class="n">correctamente</span>
+
+</code></pre></div><ol start="7">
+<li>(Opcional) Puebla la base de datos con una BBDD de prueba (escribe en la tarea el nombre de usuario y contraseña para acceder a la BBDD).</li>
+</ol>
+<p>Primero vamos a crear de forma interactiva, para no tener que usar el usuario postgres, el usuario &lsquo;debian&rsquo; con la base de datos &lsquo;debian&rsquo;</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ sudo -u postgres createuser --interactive
+Ingrese el nombre del rol a agregar: debian
+¿Será el nuevo rol un superusuario? <span class="o">(</span>s/n<span class="o">)</span> s
+
+debian@debian-kvm:~$ createdb debian
+
+debian@debian-kvm:~$ psql
+psql <span class="o">(</span>11.10 <span class="o">(</span>Debian 11.10-0+deb10u1<span class="o">))</span>
+Digite «help» para obtener ayuda.
+
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># \password</span>
+Ingrese la nueva contraseña:
+Ingrésela nuevamente:
+
+</code></pre></div><p>Agregamos una tabla de prueba con sus registros</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">-- Creamos la tabla
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># CREATE TABLE equipos</span>
+debian-# <span class="o">(</span>
+debian<span class="o">(</span><span class="c1">#     codigo              VARCHAR(10),</span>
+debian<span class="o">(</span><span class="c1">#     nombre              VARCHAR(20),</span>
+debian<span class="o">(</span><span class="c1">#     year_fundacion      NUMERIC(4),</span>
+debian<span class="o">(</span><span class="c1">#     CONSTRAINT pk_equipos PRIMARY KEY (codigo)</span>
+debian<span class="o">(</span><span class="c1"># );</span>
+CREATE TABLE
+
+-- Añadimos registros 
+
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># ALTER TABLE equipos ADD numtitulos NUMERIC(3);</span>
+ALTER TABLE
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;ABC123&#39;,&#39;Real Madrid&#39;,&#39;1902&#39;,&#39;116&#39;);</span>
+INSERT <span class="m">0</span> <span class="m">1</span>
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;ABC456&#39;,&#39;Real Betis Balompie&#39;,&#39;1907&#39;,&#39;116&#39;);</span>
+INSERT <span class="m">0</span> <span class="m">1</span>
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;AVC783&#39;,&#39;Sevilla Fútbol Club&#39;,&#39;1890&#39;,&#39;116&#39;);</span>
+INSERT <span class="m">0</span> <span class="m">1</span>
+
+-- Mostramos resultados 
+
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># \d</span>
+       Listado de relaciones
+ Esquema <span class="p">|</span> Nombre  <span class="p">|</span> Tipo  <span class="p">|</span> Dueño  
+---------+---------+-------+--------
+ public  <span class="p">|</span> equipos <span class="p">|</span> tabla <span class="p">|</span> debian
+<span class="o">(</span><span class="m">1</span> fila<span class="o">)</span>
+
+
+</code></pre></div><ol start="8">
+<li>Crea una regla de NAT para que la base de datos sea accesible desde el exterior</li>
+</ol>
+<p>El usuario debian va ser el que se conecte de forma remota</p>
+<p>El usuario de prueba será &lsquo;debian&rsquo; con la contraseña &lsquo;debian&rsquo;.</p>
+<p>Ahora vamos a editar el fichero de configuracion de postgres para hacer que sea accesible desde otras maquinas</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">postgresql</span><span class="p">/</span><span class="n">11</span><span class="p">/</span><span class="n">main</span><span class="p">/</span><span class="n">postgresql</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div><p>Buscamos las líneas siguientes y las modificamos así</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">listen_addresses</span> <span class="p">=</span> <span class="s1">&#39;*&#39;</span>          <span class="c"># what IP address(es) to listen on;</span>
+
+<span class="c">#unix_socket_group = &#39;&#39;                 # (change requires restart)</span>
+<span class="n">unix_socket_permissions</span> <span class="p">=</span> <span class="n">0700</span>          <span class="c"># begin with 0 to use octal notation</span>
+
+</code></pre></div><p>Editamos el siguiente fichero también y cambiamos lo siguiente</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell">
+<span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">postgresql</span><span class="p">/</span><span class="n">11</span><span class="p">/</span><span class="n">main</span><span class="p">/</span><span class="n">pg_hba</span><span class="p">.</span><span class="n">conf</span>
+
+</code></pre></div><p>Cambiamos</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># IPv4 local connections:</span>
+<span class="n">host</span>    <span class="n">all</span>             <span class="n">all</span>             <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">/</span><span class="n">32</span>            <span class="n">md5</span>
+
+<span class="c"># lo cambiamos por</span>
+
+<span class="n">host</span>    <span class="n">all</span>             <span class="n">all</span>             <span class="n">all</span>                   <span class="n">md5</span>
+</code></pre></div><p>Para permitir las conexiones desde cualquier dirección ip con cualquier usuario y base de datos (si éste tiene permiso para ello).</p>
+<p>Ahora reiniciamos el servicio de postgres</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">postgresql</span>
+</code></pre></div><p>Comprobamos que está funcionando</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/# sudo systemctl status postgresql
+● postgresql.service - PostgreSQL RDBMS
+   Loaded: loaded <span class="o">(</span>/lib/systemd/system/postgresql.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+   Active: active <span class="o">(</span>exited<span class="o">)</span> since Wed 2021-03-31 22:18:03 CEST<span class="p">;</span> 5s ago
+  Process: <span class="m">3249</span> <span class="nv">ExecStart</span><span class="o">=</span>/bin/true <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span>0/SUCCESS<span class="o">)</span>
+ Main PID: <span class="m">3249</span> <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span>0/SUCCESS<span class="o">)</span>
+
+mar <span class="m">31</span> 22:18:03 debian-kvm systemd<span class="o">[</span>1<span class="o">]</span>: Starting PostgreSQL RDBMS...
+mar <span class="m">31</span> 22:18:03 debian-kvm systemd<span class="o">[</span>1<span class="o">]</span>: Started PostgreSQL RDBMS.
+
+</code></pre></div><p>Ahora que está accesible solo tenemos que crear la regla NAT</p>
+<p>Primero miramos por donde está escuchando postgres</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/# netstat -tlpn
+Active Internet connections <span class="o">(</span>only servers<span class="o">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      290/sshd
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:5432            0.0.0.0:*               LISTEN      3231/postgres
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::22                   :::*                    LISTEN      290/sshd
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::5432                 :::*                    LISTEN      3231/postgres
+</code></pre></div><p>Comprobamos que es el puerto <strong>5434</strong>, por lo tanto</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo iptables -A INPUT -p tcp -s 10.10.20.158/24 --dport <span class="m">5432</span> -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport <span class="m">5432</span> -m state --state ESTABLISHED -j ACCEPT
+</code></pre></div><p>Comprobamos que podemos acceder desde la máquina anfitriona y podemos ver la tabla creada. Le pasaremos el parámetro -h (host) &ndash;port (puerto ) -U (usuario) -W (contraseña de forma forzada)</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~$ psql -h 10.10.20.158 --port <span class="m">5432</span> -U debian -W
+Contraseña: 
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">)</span>, servidor 11.10 <span class="o">(</span>Debian 11.10-0+deb10u1<span class="o">))</span>
+conexión SSL <span class="o">(</span>protocolo: TLSv1.3, cifrado: TLS_AES_256_GCM_SHA384, bits: 256, compresión: desactivado<span class="o">)</span>
+Digite «help» para obtener ayuda.
+
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># \d</span>
+       Listado de relaciones
+ Esquema <span class="p">|</span> Nombre  <span class="p">|</span> Tipo  <span class="p">|</span> Dueño  
+---------+---------+-------+--------
+ public  <span class="p">|</span> equipos <span class="p">|</span> tabla <span class="p">|</span> debian
+<span class="o">(</span><span class="m">1</span> fila<span class="o">)</span>
+
+<span class="nv">debian</span><span class="o">=</span><span class="c1"># </span>
+
+</code></pre></div><ol start="9">
+<li>Pausa la ejecución para comprobar los pasos hasta este punto</li>
+</ol>
 </div>
         <div class="post-footer">
             <div class="info">
                 
-                
+                <span class="separator"><a class="tag" href="/tags/virsh/">virsh</a></span>
+
             </div>
         </div>
 

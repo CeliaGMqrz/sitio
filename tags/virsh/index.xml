@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>virsh on 1bit1nfo</title>
+    <link>https://www.celiagm.es/tags/virsh/</link>
+    <description>Recent content in virsh on 1bit1nfo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://www.celiagm.es/tags/virsh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Virtualización con Libvirt</title>
+      <link>https://www.celiagm.es/post/virtualizacion/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/virtualizacion/</guid>
+      <description>Crea con virt-install una imagen de Debian Buster con formato qcow2 y un tamaño máximo de 3GiB.</description>
+    </item>
+    
+  </channel>
+</rss>
