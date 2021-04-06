@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Interconexión de Servidores de Bases de Datos. </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Enlaces entre distintos servidores de bases de datos.">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/intrconexion/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Interconexión de Servidores de Bases de Datos."/>
+<meta name="twitter:description" content="Enlaces entre distintos servidores de bases de datos."/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <div class="post-title">
+                <h3>Interconexión de Servidores de Bases de Datos.</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, Apr 6, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">5-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="descripción-de-la-tarea">Descripción de la tarea</h2>
+<p>Las interconexiones de servidores de bases de datos son operaciones que pueden ser muy útiles en diferentes contextos. Básicamente, se trata de acceder a datos que no están almacenados en nuestra base de datos, pudiendo combinarlos con los que ya tenemos.</p>
+<p>En esta práctica veremos varias formas de crear un enlace entre distintos servidores de bases de datos.</p>
+<p>Se pide:</p>
+<pre><code>* Realizar un enlace entre dos servidores de bases de datos ORACLE, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
+  
+*  Realizar un enlace entre dos servidores de bases de datos Postgres, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
+  
+*  Realizar un enlace entre un servidor ORACLE y otro Postgres o MySQL empleando Heterogeneus Services, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
+</code></pre>
+<h2 id="enlace-entre-bases-de-datos-oracle">Enlace entre bases de datos ORACLE.</h2>
+<h2 id="enlace-entre-bases-de-datos-postgres">Enlace entre bases de datos Postgres.</h2>
+<h3 id="entorno-de-trabajo">Entorno de trabajo</h3>
+<p>Vamos a tener 2 máquinas virtuales con vagrant y virtualbox.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># -*- mode: ruby -*-</span>
+<span class="c1"># vi: set ft=ruby :</span>
+
+Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
+
+  config.vm.define :nodo1 <span class="k">do</span> <span class="p">|</span>nodo1<span class="p">|</span>
+    nodo1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo1.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres1&#34;</span>
+    nodo1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
+    nodo1.vm.network <span class="s2">&#34;private_network&#34;</span>, ip: <span class="s2">&#34;10.0.0.2&#34;</span>,
+      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>,
+      auto_config: <span class="nb">false</span>
+  end
+  config.vm.define :nodo2 <span class="k">do</span> <span class="p">|</span>nodo2<span class="p">|</span>
+    nodo2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo2.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres2&#34;</span>
+    nodo2.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
+    nodo2.vm.network <span class="s2">&#34;private_network&#34;</span>,
+      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>, ip: <span class="s2">&#34;10.0.0.3&#34;</span>,
+      auto_config: <span class="nb">false</span>
+  end
+end
+</code></pre></div><h2 id="instalación-de-postgresql">Instalación de postgresql</h2>
+<ul>
+<li>Añadimos la clave y el repositorio.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install -y vim wget
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc <span class="p">|</span> sudo apt-key add -
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">RELEASE</span><span class="o">=</span><span class="k">$(</span>lsb_release -cs<span class="k">)</span>
+<span class="nb">echo</span> <span class="s2">&#34;deb http://apt.postgresql.org/pub/repos/apt/ </span><span class="si">${</span><span class="nv">RELEASE</span><span class="si">}</span><span class="s2">&#34;</span>-pgdg main <span class="p">|</span> sudo tee  /etc/apt/sources.list.d/pgdg.list
+</code></pre></div><ul>
+<li>Actualizamos e instalamos el paquete de postgresql-11</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt update
+sudo apt -y install postgresql-11
+</code></pre></div><ul>
+<li>Comprobamos que está funcionando.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ systemctl status postgresql
+● postgresql.service - PostgreSQL RDBMS
+   Loaded: loaded <span class="o">(</span>/lib/systemd/system/postgresql.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+   Active: active <span class="o">(</span>exited<span class="o">)</span> since Tue 2021-04-06 07:29:19 GMT<span class="p">;</span> 7s ago
+ Main PID: <span class="m">3172</span> <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span>0/SUCCESS<span class="o">)</span>
+    Tasks: <span class="m">0</span> <span class="o">(</span>limit: 544<span class="o">)</span>
+   Memory: 0B
+   CGroup: /system.slice/postgresql.service
+
+</code></pre></div><ul>
+<li>Le cambiamos la contraseña al usuario postgres</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">passwd postgres
+</code></pre></div><ul>
+<li>Vemos que está escuchando en el puerto 5432</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ ss -tunelp <span class="p">|</span> grep <span class="m">5432</span>
+tcp     LISTEN   <span class="m">0</span>        <span class="m">128</span>            127.0.0.1:5432          0.0.0.0:*       uid:106 ino:22460 sk:4 &lt;-&gt;                                                     
+tcp     LISTEN   <span class="m">0</span>        <span class="m">128</span>                <span class="o">[</span>::1<span class="o">]</span>:5432             <span class="o">[</span>::<span class="o">]</span>:*       uid:106 ino:22459 sk:6 v6only:1 &lt;-&gt;    
+</code></pre></div><ul>
+<li>Creamos el usuario en mi caso &lsquo;vagrant&rsquo; y la base de datos &lsquo;vagrant&rsquo;</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ sudo -u postgres createuser --interactive vagrant
+Shall the new role be a superuser? <span class="o">(</span>y/n<span class="o">)</span> y
+vagrant@postgres1:~$ createdb debian
+
+vagrant@postgres1:~$ createdb vagrant
+
+vagrant@postgres1:~$ psql
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
+Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
+
+<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># </span>
+
+</code></pre></div><ul>
+<li>Introducimos datos de prueba</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table depart<span class="o">(</span>
+dept_no integer,
+dnombre varchar<span class="o">(</span>20<span class="o">)</span>,
+loc varchar<span class="o">(</span>20<span class="o">)</span>,
+primary key <span class="o">(</span>dept_no<span class="o">)</span>
+<span class="o">)</span><span class="p">;</span>
+
+insert into depart
+values <span class="o">(</span><span class="s1">&#39;10&#39;</span>,<span class="s1">&#39;CONTABILIDAD&#39;</span>,<span class="s1">&#39;SEVILLA&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into depart
+values <span class="o">(</span><span class="s1">&#39;20&#39;</span>,<span class="s1">&#39;INVESTIGACION&#39;</span>,<span class="s1">&#39;MADRID&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into depart
+values <span class="o">(</span><span class="s1">&#39;30&#39;</span>,<span class="s1">&#39;VENTAS&#39;</span>,<span class="s1">&#39;BARCELONA&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into depart
+values <span class="o">(</span><span class="s1">&#39;40&#39;</span>,<span class="s1">&#39;PRODUCCION&#39;</span>,<span class="s1">&#39;BILBAO&#39;</span><span class="o">)</span><span class="p">;</span>
+
+
+create table emple<span class="o">(</span>
+emp_no integer,
+apellidos varchar<span class="o">(</span>20<span class="o">)</span>,
+oficio varchar<span class="o">(</span>20<span class="o">)</span>,
+dir integer,
+fecha_alt date,
+salario integer,
+comision integer,
+dept_no integer,
+primary key <span class="o">(</span>emp_no<span class="o">))</span><span class="p">;</span>
+foreign key <span class="o">(</span>dept_no<span class="o">)</span> references depart <span class="o">(</span>dept_no<span class="o">)</span>
+<span class="o">)</span><span class="p">;</span>
+
+insert into emple <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7369&#39;</span>,<span class="s1">&#39;SANCHEZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;104000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple
+values <span class="o">(</span><span class="s1">&#39;7499&#39;</span>,<span class="s1">&#39;ARROYO&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;208000&#39;</span>,<span class="s1">&#39;39000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple
+values <span class="o">(</span><span class="s1">&#39;7521&#39;</span>,<span class="s1">&#39;SALA&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;JIMENEZ&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;386750&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple
+values <span class="o">(</span><span class="s1">&#39;7654&#39;</span>,<span class="s1">&#39;MARTIN&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;182000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;NEGRO&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;370500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;GIL&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;REY&#39;</span>,<span class="s1">&#39;PRESIDENTE&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;650000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple
+values <span class="o">(</span><span class="s1">&#39;7844&#39;</span>,<span class="s1">&#39;TOVAR&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;195000&#39;</span>,<span class="s1">&#39;0&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7876&#39;</span>,<span class="s1">&#39;ALONSO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;143000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7900&#39;</span>,<span class="s1">&#39;JIMENO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;1235000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;FERNANDEZ&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7934&#39;</span>,<span class="s1">&#39;MUÑOZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7782&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;169000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
+
+
+</code></pre></div><ul>
+<li>Miramos que se han creado las tablas con los registros.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">vagrant</span><span class="o">=</span><span class="c1"># \d</span>
+         List of relations
+ Schema <span class="p">|</span>  Name  <span class="p">|</span> Type  <span class="p">|</span>  Owner  
+--------+--------+-------+---------
+ public <span class="p">|</span> depart <span class="p">|</span> table <span class="p">|</span> vagrant
+ public <span class="p">|</span> emple  <span class="p">|</span> table <span class="p">|</span> vagrant
+<span class="o">(</span><span class="m">2</span> rows<span class="o">)</span>
+
+
+<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># select * from depart;</span>
+ dept_no <span class="p">|</span>    dnombre    <span class="p">|</span>    loc    
+---------+---------------+-----------
+      <span class="m">10</span> <span class="p">|</span> CONTABILIDAD  <span class="p">|</span> SEVILLA
+      <span class="m">20</span> <span class="p">|</span> INVESTIGACION <span class="p">|</span> MADRID
+      <span class="m">30</span> <span class="p">|</span> VENTAS        <span class="p">|</span> BARCELONA
+      <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
+<span class="o">(</span><span class="m">4</span> rows<span class="o">)</span>
+
+<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># select * from emple;</span>
+ emp_no <span class="p">|</span> apellidos <span class="p">|</span>   oficio   <span class="p">|</span> dir  <span class="p">|</span> fecha_alt  <span class="p">|</span> salario <span class="p">|</span> comision <span class="p">|</span> dept_no 
+--------+-----------+------------+------+------------+---------+----------+---------
+   <span class="m">7566</span> <span class="p">|</span> JIMENEZ   <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1981-02-04 <span class="p">|</span>  <span class="m">386750</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7698</span> <span class="p">|</span> NEGRO     <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1981-01-05 <span class="p">|</span>  <span class="m">370500</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7788</span> <span class="p">|</span> GIL       <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1981-09-11 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7844</span> <span class="p">|</span> TOVAR     <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1981-08-09 <span class="p">|</span>  <span class="m">195000</span> <span class="p">|</span>        <span class="m">0</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7900</span> <span class="p">|</span> JIMENO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1981-03-12 <span class="p">|</span> <span class="m">1235000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7902</span> <span class="p">|</span> FERNANDEZ <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1981-03-12 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7369</span> <span class="p">|</span> SANCHEZ   <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7902</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">104000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7499</span> <span class="p">|</span> ARROYO    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">208000</span> <span class="p">|</span>    <span class="m">39000</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7521</span> <span class="p">|</span> SALA      <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">162500</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7654</span> <span class="p">|</span> MARTIN    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">182000</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7839</span> <span class="p">|</span> REY       <span class="p">|</span> PRESIDENTE <span class="p">|</span>      <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">650000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
+   <span class="m">7876</span> <span class="p">|</span> ALONSO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7788</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">143000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7934</span> <span class="p">|</span> MUÑOZ     <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7782</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">169000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
+<span class="o">(</span><span class="m">13</span> rows<span class="o">)</span>
+
+</code></pre></div><p>prueba1=&gt; select * from dblink(&lsquo;dbname=prueba2 host=172.22.6.141 user=celia2 password=celia2&rsquo;, &lsquo;select * from emple&rsquo;);</p>
+<h2 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql.</h2>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>

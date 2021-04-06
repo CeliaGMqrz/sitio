@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Aplicación web python, flask y Oracle </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Crear una aplicación web que interactúe con la base de datos Oracle">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/appweboracle/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Aplicación web python, flask y Oracle"/>
+<meta name="twitter:description" content="Crear una aplicación web que interactúe con la base de datos Oracle"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/mysql/ora.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Aplicación web python, flask y Oracle</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, Mar 16, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">3-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="objetivo">Objetivo</h2>
+<p>Realización de una aplicación web en cualquier lenguaje que conecte con el servidor ORACLE tras autenticarse y muestre alguna información almacenada en el mismo.</p>
+<h2 id="requisitos">Requisitos</h2>
+<ul>
+<li>
+<p>Máquina virtual con Centos8. En este caso he usado virt-manager para la virtualización del Centos8 desde esta <a href="https://ftp.rediris.es/mirror/CentOS/8/BaseOS/x86_64/os/images/boot.iso">imagen</a>. Esta máquina cuenta con una interfaz de red puente a la máquina anfitriona.</p>
+</li>
+<li>
+<p>Una segunda máquina virtual. Puedes usar una clonación de la primera despues de la instalación de Oracle para amenizar el trabajo.</p>
+</li>
+</ul>
+<h2 id="primeros-pasos">Primeros pasos</h2>
+<p>Para acortar un poco la documetación he dividido este post en varios, así que antes de comenzar a hacer la aplicación web se han seguido estos pasos:</p>
+<ol>
+<li>
+<p><a href="">Instalacion de Oracle sobre CentOS8</a></p>
+</li>
+<li>
+<p><a href="">Habilitar el acceso remoto a la base de datos</a></p>
+</li>
+</ol>
+<h2 id="aplicacion-web-que-conecte-con-oracle">Aplicacion web que conecte con ORACLE</h2>
+<p>Vamos a usar la máquina servidor con CentOS 8 para crear la aplicación.</p>
+<h3 id="entorno-de-trabajo-con-python">Entorno de trabajo con python</h3>
+<ul>
+<li>Tenemos que tener instalado python3</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dnf install python3 -y
+python3 -V
+
+<span class="c1">#Salida:</span>
+Python 3.6.8
+
+</code></pre></div><ul>
+<li>Instalamos las herramientas de desarrollo en CentOS</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dnf -y groupinstall development
+</code></pre></div><ul>
+<li>Configuramos un entorno virtual</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mkdir entornos
+<span class="nb">cd</span> entornos
+python3 -m venv mientorno
+</code></pre></div><ul>
+<li>Actualizamos e instalamos el paquete para interactuar con oracle con python</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ <span class="nb">source</span> mientorno/bin/activate
+
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ pip install --upgrade pip
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/fe/ef/60d7ba03b5c442309ef42e7d69959f73aacccd0d86008362a681c4698e83/pip-21.0.1-py3-none-any.whl <span class="o">(</span>1.5MB<span class="o">)</span>
+    100% <span class="p">|</span>████████████████████████████████<span class="p">|</span> 1.5MB 1.0MB/s 
+Installing collected packages: pip
+  Found existing installation: pip 9.0.3
+    Uninstalling pip-9.0.3:
+      Successfully uninstalled pip-9.0.3
+Successfully installed pip-21.0.1
+
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ pip freeze
+
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ deactivate
+
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ pip install cx_Oracle
+Collecting cx_Oracle
+  Using cached cx_Oracle-8.1.0-cp36-cp36m-manylinux1_x86_64.whl <span class="o">(</span><span class="m">803</span> kB<span class="o">)</span>
+Installing collected packages: cx-Oracle
+Successfully installed cx-Oracle-8.1.0
+
+</code></pre></div><h2 id="aplicación-simple-en-python">Aplicación simple en python</h2>
+<ul>
+<li>Creamos una carpeta de trabajo y creamos el <a href="">fichero.py</a></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ mkdir app_oracle
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost entornos<span class="o">]</span>$ <span class="nb">cd</span> app_oracle/
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost app_oracle<span class="o">]</span>$ nano app.py
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>centos@localhost app_oracle<span class="o">]</span>$ 
+</code></pre></div><p><code>app.py</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">import cx_Oracle
+
+<span class="nv">connection</span> <span class="o">=</span> cx_Oracle.connect<span class="o">(</span>
+    <span class="nv">user</span><span class="o">=</span><span class="s2">&#34;c##celia&#34;</span>,
+    <span class="nv">password</span><span class="o">=</span><span class="s2">&#34;celia&#34;</span>,
+    <span class="nv">dsn</span><span class="o">=</span><span class="s2">&#34;localhost/ORCLCDB&#34;</span><span class="o">)</span>
+
+
+print<span class="o">(</span><span class="s2">&#34;\n Enhorabuena estás conectad@ a la base de datos!!!!&#34;</span><span class="o">)</span>
+
+<span class="nv">cursor</span> <span class="o">=</span> connection.cursor<span class="o">()</span>
+
+<span class="c1"># Consultas</span>
+
+<span class="c1"># Mostrar todas las tablas</span>
+
+print<span class="o">(</span><span class="s2">&#34;\n TABLAS DISPONIBLES&#34;</span><span class="o">)</span>
+
+print<span class="o">(</span><span class="s2">&#34; &#34;</span><span class="o">)</span>
+cursor.execute<span class="o">(</span><span class="s2">&#34;select * from cat&#34;</span><span class="o">)</span>
+<span class="nv">res</span> <span class="o">=</span> cursor.fetchall<span class="o">()</span>
+
+<span class="k">for</span> linea in res:
+    <span class="nv">linea</span> <span class="o">=</span> list<span class="o">(</span>linea<span class="o">)</span>
+    print<span class="o">(</span>linea<span class="o">[</span>0<span class="o">])</span>
+
+<span class="c1"># Mostrar los registros de una tabla en concreto </span>
+
+print<span class="o">(</span><span class="s2">&#34;Mostrar registros &#34;</span><span class="o">)</span>
+
+print<span class="o">(</span><span class="s2">&#34; &#34;</span><span class="o">)</span>
+
+<span class="nv">tabla</span><span class="o">=</span>str<span class="o">(</span>input<span class="o">(</span><span class="s2">&#34;¿De qué tablas quieres mostrar los registros?&#34;</span><span class="o">))</span>
+
+<span class="k">if</span> tabla.upper<span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;ALUMNOS&#39;</span>:
+
+    cursor.execute<span class="o">(</span><span class="s2">&#34;select * from alumnos&#34;</span><span class="o">)</span>
+    <span class="nv">res</span> <span class="o">=</span> cursor.fetchall<span class="o">()</span>
+
+    <span class="k">for</span> linea in res:
+        print<span class="o">(</span>linea<span class="o">)</span>
+
+<span class="k">elif</span> tabla.upper<span class="o">()</span> <span class="o">==</span> <span class="s2">&#34;CURSOS&#34;</span>:
+
+    cursor.execute<span class="o">(</span><span class="s2">&#34;select * from cursos&#34;</span><span class="o">)</span>
+    <span class="nv">res</span> <span class="o">=</span> cursor.fetchall<span class="o">()</span>
+
+    <span class="k">for</span> linea in res:
+        print<span class="o">(</span>linea<span class="o">)</span>
+
+<span class="k">elif</span> tabla.upper<span class="o">()</span> <span class="o">==</span> <span class="s2">&#34;MATRICULAS&#34;</span>:
+
+    cursor.execute<span class="o">(</span><span class="s2">&#34;select * from matriculas&#34;</span><span class="o">)</span>
+    <span class="nv">res</span> <span class="o">=</span> cursor.fetchall<span class="o">()</span>
+
+    <span class="k">for</span> linea in res:
+        print<span class="o">(</span>linea<span class="o">)</span>
+
+<span class="k">else</span>:
+    print<span class="o">(</span><span class="s2">&#34;tabla no registrada&#34;</span><span class="o">)</span>
+
+</code></pre></div><p>Este código es un código muy simple que si se ejecuta hace lo siguiente:</p>
+<p><img src="app.png" alt="app.py"></p>
+<h2 id="aplicación-web-con-flask-python-y-oracle">Aplicación web con flask, python y Oracle</h2>
+<p>Ahora vamos hacer una aplicación parecida pero sirviendola en internet con una plantilla.</p>
+<ul>
+<li>Exportamos las variables pertinentes</li>
+</ul>
+<p>[oracle@bd ~]$ export PYTHON_CONNECTSTRING=localhost/ORCLCDB
+[oracle@bd ~]$ export PYTHON_PASSWORD=celia
+[oracle@bd ~]$ export PYTHON_USERNAME=c##celia</p>
+<ul>
+<li>El código lo puedes encontrar en el siguiente <a href="">repositorio</a></li>
+</ul>
+<p>Siendo propiamente el mismo este -&gt; <a href="">demo.py</a></p>
+<ul>
+<li>Ejecutamos la app web</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>oracle@bd app_oracle_flask<span class="o">]</span>$ ls
+demo.py  Procfile  README.md  requirements.txt  static  templates
+<span class="o">(</span>mientorno<span class="o">)</span> <span class="o">[</span>oracle@bd app_oracle_flask<span class="o">]</span>$ python3 demo.py 
+Connecting to localhost/ORCLCDB
+ * Serving Flask app <span class="s2">&#34;demo&#34;</span> <span class="o">(</span>lazy loading<span class="o">)</span>
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://127.0.0.1:8080/ <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+</code></pre></div><ul>
+<li>Vamos al navegador y comprobamos que funciona</li>
+</ul>
+<p>captura de pantalla de la pagina funcionando</p>
+<p><img src="" alt=""></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/oracle/">oracle</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>

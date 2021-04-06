@@ -146,7 +146,7 @@
                         <span class="date"> Mon, Jan 1, 0001 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">13-minute read</span>
+                        <span class="reading-time">12-minute read</span>
                     </div>
                 
             </div>
@@ -209,11 +209,12 @@ Network red2 defined from red2.xml
  vagrant-libvirt   inactive   no          yes
 
 </code></pre></div><ul>
-<li>Iniciamos las redes oportunas, las marcamos como autostart</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">https://1bit1nfo.netlify.app/post/migracion_app_mv/
-</code></pre></div><ul>
-<li>Listamos las redes y comprobamos que estan activas</li>
+<li>
+<p>Iniciamos las redes oportunas, las marcamos como autostart</p>
+</li>
+<li>
+<p>Listamos las redes y comprobamos que estan activas</p>
+</li>
 </ul>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-list --all
  Name              State      Autostart   Persistent
@@ -613,64 +614,32 @@ Vol vol1.img created from vol.xml
 <span class="n">vda</span>
 <span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>      <span class="n">2G</span>    <span class="n">35</span><span class="p">%</span> <span class="p">/</span>
 <span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>
-</code></pre></div><p>Antes de montarlo en el directorio <code>/var/lib/pgsql.</code> vamos a ver qué permisos tenemos que darle y que usuarios tenemos que crear para la base de datos en postgresql.</p>
-<p>Creamos el grupo postgres</p>
+</code></pre></div><p>Antes de montarlo en el directorio <code>/var/lib/postgresql.</code> vamos a ver qué permisos tenemos que darle y que usuarios tenemos que crear para la base de datos en postgresql.</p>
+<ul>
+<li>Creamos el grupo postgres</li>
+</ul>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">groupadd</span> <span class="n">postgres</span>
 
 <span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">useradd</span> <span class="n">postgres</span> <span class="n">-m</span> <span class="n">-g</span> <span class="n">postgres</span>
 </code></pre></div><p>Creamos el directorio y le damos los permisos adecuados</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">chown</span> <span class="n">-R</span> <span class="n">postgres</span><span class="err">:</span><span class="n">postgres</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">pgsql</span>
-</code></pre></div><p>Comprobamos que se han modificado los propietarios</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># ls -l | grep &#39;pgsql&#39;</span>
-<span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>   <span class="n">6</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">18</span> <span class="n">pgsql</span>
-
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># mkdir postgresql</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># chown -R postgres:postgres postgresql/</span>
+<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># ls -l | grep &#39;post&#39;</span>
+<span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>   <span class="n">6</span> <span class="n">abr</span>  <span class="n">5</span> <span class="n">19</span><span class="err">:</span><span class="n">50</span> <span class="n">postgresql</span>
 </code></pre></div><p>Montamos el disco en el directorio requerido</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mount -t xfs /dev/vdb /var/lib/pgsql/</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
-<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
-<span class="n">vda</span>
-<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>      <span class="n">2G</span>    <span class="n">35</span><span class="p">%</span> <span class="p">/</span>
-<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>  <span class="n">980</span><span class="p">,</span><span class="n">8M</span>     <span class="n">3</span><span class="p">%</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">pgsql</span>
-
-</code></pre></div><ol start="6">
-<li>Instala en maquina1 el sistema de BBDD PostgreSQL que ubicará sus ficheros con las bases de datos en /var/lib/pgsql utilizando una conexión ssh.</li>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># mount -t xfs /dev/vdb /var/lib/postgresql/</span>
+</code></pre></div><ol start="5">
+<li>Instala en maquina1 el sistema de BBDD PostgreSQL que ubicará sus ficheros con las bases de datos en /var/lib/postgresql utilizando una conexión ssh.</li>
 </ol>
-<p>Instalamos PostgreSQL</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># apt-get install postgresql</span>
-</code></pre></div><p>Nos dice que lo ha alojado todo en el directorio <code>/var/lib/postgresql</code></p>
-<p>Por lo que desmontaremos el disco , y cambiamos el nombre del directorio</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># Desmontamos y vemos que se ha desmontado correctamente</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># umount /var/lib/pgsql/</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
-<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
-<span class="n">vda</span>
-<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>    <span class="n">1</span><span class="p">,</span><span class="n">8G</span>    <span class="n">41</span><span class="p">%</span> <span class="p">/</span>
-<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>
-
-<span class="c">#Cambiamos el nombre del directorio</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mv /var/lib/pgsql/ /var/lib/postgresql/</span>
-
-<span class="c">#Listamos para ver los permisos</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># ls -l /var/lib/postgresql/</span>
-<span class="n">total</span> <span class="n">0</span>
-<span class="n">drwxr-xr-x</span> <span class="n">3</span> <span class="n">postgres</span> <span class="n">postgres</span> <span class="n">18</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">28</span> <span class="n">11</span>
-<span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>  <span class="n">6</span> <span class="n">mar</span> <span class="n">31</span> <span class="n">21</span><span class="err">:</span><span class="n">18</span> <span class="n">pgsql</span>
-
-<span class="c"># Lo volvemos a montar</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># mount -t xfs /dev/vdb /var/lib/postgresql/</span>
-<span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># lsblk -f</span>
-<span class="n">NAME</span>   <span class="n">FSTYPE</span> <span class="n">LABEL</span> <span class="n">UUID</span>                                 <span class="n">FSAVAIL</span> <span class="n">FSUSE</span><span class="p">%</span> <span class="n">MOUNTPOINT</span>
-<span class="n">vda</span>
-<span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>    <span class="n">1</span><span class="p">,</span><span class="n">8G</span>    <span class="n">41</span><span class="p">%</span> <span class="p">/</span>
-<span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>  <span class="n">980</span><span class="p">,</span><span class="n">8M</span>     <span class="n">3</span><span class="p">%</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">postgresql</span>
-
+<p>Lo instalamos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt-get install postgresql
+</code></pre></div><p>Comprobamos que se ha creado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/var/lib/postgresql# ls -lh
+total <span class="m">0</span>
+drwxr-xr-x <span class="m">3</span> postgres postgres <span class="m">18</span> mar <span class="m">31</span> 21:48 <span class="m">11</span>
 </code></pre></div><p>Vamos a darle una contraseña al usuario postgres</p>
-<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~</span><span class="c"># passwd postgres</span>
-<span class="n">Nueva</span> <span class="n">contraseña</span><span class="err">:</span>
-<span class="n">Vuelva</span> <span class="n">a</span> <span class="n">escribir</span> <span class="n">la</span> <span class="n">nueva</span> <span class="n">contraseña</span><span class="err">:</span>
-<span class="n">passwd</span><span class="err">:</span> <span class="n">contraseña</span> <span class="n">actualizada</span> <span class="n">correctamente</span>
-
-</code></pre></div><ol start="7">
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">passwd</span> <span class="n">postgres</span>
+</code></pre></div><ol>
 <li>(Opcional) Puebla la base de datos con una BBDD de prueba (escribe en la tarea el nombre de usuario y contraseña para acceder a la BBDD).</li>
 </ol>
 <p>Primero vamos a crear de forma interactiva, para no tener que usar el usuario postgres, el usuario &lsquo;debian&rsquo; con la base de datos &lsquo;debian&rsquo;</p>
@@ -787,9 +756,27 @@ Digite «help» para obtener ayuda.
 <span class="nv">debian</span><span class="o">=</span><span class="c1"># </span>
 
 </code></pre></div><ol start="9">
-<li>Pausa la ejecución para comprobar los pasos hasta este punto</li>
+<li>
+<p>Pausa la ejecución para comprobar los pasos hasta este punto</p>
+</li>
+<li>
+<p>Continúa la ejecución cuando el usuario pulse &lsquo;C&rsquo;</p>
+</li>
+<li>
+<p>Crea una imagen que utilice buster-base.qcow2 como imagen base y que tenga un tamaño de 4 GiB. Esta imagen se llamará maquina2.qcow2</p>
+</li>
 </ol>
-</div>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina2.qcow2 4G
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina2.qcow2 4G
+Formatting <span class="s1">&#39;maquina2.qcow2&#39;</span>, <span class="nv">fmt</span><span class="o">=</span>qcow2 <span class="nv">size</span><span class="o">=</span><span class="m">4294967296</span> <span class="nv">backing_file</span><span class="o">=</span>buster-base_red.qcow2 <span class="nv">cluster_size</span><span class="o">=</span><span class="m">65536</span> <span class="nv">lazy_refcounts</span><span class="o">=</span>off <span class="nv">refcount_bits</span><span class="o">=</span><span class="m">16</span>
+</code></pre></div><ul>
+<li>Comprobamos que se ha creado también la máquina2.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# ls -lh <span class="p">|</span> grep <span class="s1">&#39;maquina&#39;</span>
+-rw-r--r-- <span class="m">1</span> libvirt-qemu libvirt-qemu 347M abr  <span class="m">5</span> 19:32 maquina1.qcow2
+-rw-r--r-- <span class="m">1</span> root         root         193K abr  <span class="m">5</span> 19:33 maquina2.qcow2
+
+</code></pre></div></div>
         <div class="post-footer">
             <div class="info">
                 

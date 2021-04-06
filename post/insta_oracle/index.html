@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Instalación de Oracle sobre CentOS8 </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Instalacion de Oracle">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/insta_oracle/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Instalación de Oracle sobre CentOS8"/>
+<meta name="twitter:description" content="Instalacion de Oracle"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/mysql/oracle1.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Instalación de Oracle sobre CentOS8</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, Apr 6, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">6-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="instalación-de-oracle-en-centos8">Instalación de oracle en Centos8</h2>
+<p>Vamos a instalar oracle de la siguiente forma:</p>
+<ol>
+<li>Descargamos la siguiente versión de oracle en la página oficial, en este caso vamos a usar:</li>
+</ol>
+<p><a href="https://www.oracle.com/es/database/technologies/oracle19c-linux-downloads.html">Oracle-database-ee-19c-1.0-1.x86_64</a></p>
+<blockquote>
+<p>Necesitaremos registrarnos para descargarlo y aceptar los términos y condiciones.</p>
+</blockquote>
+<ol start="2">
+<li>Enviamos el paquete .rpm ya descargado por scp a nuestro CentOS.</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">scp oracle-database-ee-19c-1.0-1.x86_64.rpm user@192.168.100.167:/home/user/oracle
+</code></pre></div><ol start="3">
+<li>Ahora vamos a descargar las dependencias, o prerrequisistos que necesita el sistema para soportar el gestor de base de datos oracle.</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">dnf</span> <span class="n">install</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">yum</span><span class="p">.</span><span class="n">oracle</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">repo</span><span class="p">/</span><span class="n">OracleLinux</span><span class="p">/</span><span class="n">OL8</span><span class="p">/</span><span class="n">baseos</span><span class="p">/</span><span class="n">latest</span><span class="p">/</span><span class="n">x86_64</span><span class="p">/</span><span class="n">getPackage</span><span class="p">/</span><span class="n">oracle-database-preinstall</span><span class="p">-</span><span class="n">19c</span><span class="p">-</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">-</span><span class="n">1</span><span class="p">.</span><span class="n">el8</span><span class="p">.</span><span class="n">x86_64</span><span class="p">.</span><span class="n">rpm</span>
+</code></pre></div><p>Como vemos carga las dependencias correctamente.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>centos@localhost ~<span class="o">]</span>$ sudo dnf install https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el8.x86_64.rpm
+Última comprobación de caducidad de metadatos hecha hace 0:22:22, el mié <span class="m">31</span> mar <span class="m">2021</span> 16:20:42 CEST.
+oracle-database-preinstall-19c-1.0-1.el8.x86_64.rpm                      <span class="m">288</span> kB/s <span class="p">|</span>  <span class="m">24</span> kB     00:00    
+Dependencias resueltas.
+<span class="o">=========================================================================================================</span>
+ Paquete                           Arq.      Versión                               Repositorio      Tam.
+<span class="o">=========================================================================================================</span>
+Instalando:
+ oracle-database-preinstall-19c    x86_64    1.0-1.el8                             @commandline     <span class="m">24</span> k
+Instalando dependencias:
+ glibc-devel                       x86_64    2.28-127.el8                          baseos          1.0 M
+ glibc-headers                     x86_64    2.28-127.el8                          baseos          <span class="m">475</span> k
+ kernel-headers                    x86_64    4.18.0-240.15.1.el8_3                 baseos          5.6 M
+ ksh                               x86_64    20120801-254.el8                      appstream       <span class="m">926</span> k
+ libaio-devel                      x86_64    0.3.112-1.el8                         baseos           <span class="m">19</span> k
+ libnsl                            x86_64    2.28-127.el8                          baseos           <span class="m">99</span> k
+ libstdc++-devel                   x86_64    8.3.1-5.1.el8                         appstream       2.0 M
+ libxcrypt-devel                   x86_64    4.1.1-4.el8                           baseos           <span class="m">25</span> k
+ lm_sensors-libs                   x86_64    3.4.0-21.20180522git70f7e08.el8       baseos           <span class="m">59</span> k
+ make                              x86_64    1:4.2.1-10.el8                        baseos          <span class="m">498</span> k
+ sysstat                           x86_64    11.7.3-5.el8                          appstream       <span class="m">425</span> k
+
+Resumen de la <span class="nv">transacción</span>
+<span class="o">=========================================================================================================</span>
+Instalar  <span class="m">12</span> Paquetes
+
+Tamaño total: <span class="m">11</span> M
+Tamaño total de la descarga: <span class="m">11</span> M
+Tamaño instalado: <span class="m">26</span> M
+¿Está de acuerdo <span class="o">[</span>s/N<span class="o">]</span>?: s
+
+</code></pre></div><ol start="4">
+<li>Instalamos el paquete .rpm de esta forma</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">rpm</span> <span class="n">-Uhv</span> <span class="n">oracle-database-ee</span><span class="p">-</span><span class="n">19c</span><span class="p">-</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">-</span><span class="n">1</span><span class="p">.</span><span class="n">x86_64</span><span class="p">.</span><span class="n">rpm</span>
+</code></pre></div><p>Una vez terminada la Instalación, vamos a comprobar que efectivamente se ha creado el usuario oracle con el que vamos a trabajar y que pertenece a los grupos siguientes.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">centos</span><span class="nv">@localhost</span> <span class="n">oracle</span><span class="p">]$</span> <span class="n">grep</span> <span class="s1">&#39;oracle&#39;</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">passwd</span>
+<span class="n">oracle</span><span class="err">❌</span><span class="n">54321</span><span class="err">:</span><span class="n">54321</span><span class="p">::/</span><span class="n">home</span><span class="p">/</span><span class="n">oracle</span><span class="err">:</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">bash</span>
+<span class="p">[</span><span class="n">centos</span><span class="nv">@localhost</span> <span class="n">oracle</span><span class="p">]$</span> <span class="n">grep</span> <span class="s1">&#39;oracle&#39;</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="nb">group
+</span><span class="nb"></span><span class="n">oinstall</span><span class="err">❌</span><span class="n">54321</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">dba</span><span class="err">❌</span><span class="n">54322</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">oper</span><span class="err">❌</span><span class="n">54323</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">backupdba</span><span class="err">❌</span><span class="n">54324</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">dgdba</span><span class="err">❌</span><span class="n">54325</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">kmdba</span><span class="err">❌</span><span class="n">54326</span><span class="err">:</span><span class="n">oracle</span>
+<span class="n">racdba</span><span class="err">❌</span><span class="n">54330</span><span class="err">:</span><span class="n">oracle</span>
+
+
+
+<span class="p">[</span><span class="n">root</span><span class="nv">@localhost</span> <span class="p">~]</span><span class="c"># su - oracle</span>
+<span class="p">[</span><span class="n">oracle</span><span class="nv">@localhost</span> <span class="p">~]$</span> <span class="n">groups</span>
+<span class="n">oinstall</span> <span class="n">dba</span> <span class="n">oper</span> <span class="n">backupdba</span> <span class="n">dgdba</span> <span class="n">kmdba</span> <span class="n">racdba</span>
+
+</code></pre></div><p>Cambiamos la contraseña de oracle</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">passwd oracle
+</code></pre></div><p>En principio vamos a ejecutar un script que viene por defecto al instalar oracle que crea una base de datos de prueba, lo hacemos de la siguiente forma.</p>
+<blockquote>
+<p>Este proceso se demora unos minutos, hay que ser paciente ;)</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">root</span><span class="nv">@localhost</span> <span class="p">~]</span><span class="c"># /etc/init.d/oracledb_ORCLCDB-19c configure</span>
+<span class="n">Configuring</span> <span class="n">Oracle</span> <span class="n">Database</span> <span class="n">ORCLCDB</span><span class="p">.</span>
+<span class="n">Preparar</span> <span class="n">para</span> <span class="n">funcionamiento</span> <span class="n">de</span> <span class="n">base</span> <span class="n">de</span> <span class="n">datos</span>
+<span class="n">8</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Copiando</span> <span class="n">archivos</span> <span class="n">de</span> <span class="n">base</span> <span class="n">de</span> <span class="n">datos</span>
+<span class="n">31</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Creando</span> <span class="n">e</span> <span class="n">iniciando</span> <span class="n">instancia</span> <span class="n">Oracle</span>
+<span class="n">32</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">36</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">40</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">43</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">46</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Terminando</span> <span class="n">creación</span> <span class="n">de</span> <span class="n">base</span> <span class="n">de</span> <span class="n">datos</span>
+<span class="n">51</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">54</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Creando</span> <span class="n">Bases</span> <span class="n">de</span> <span class="n">Datos</span> <span class="n">de</span> <span class="n">Conexión</span>
+<span class="n">58</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">77</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Ejecutando</span> <span class="n">acciones</span> <span class="n">posteriores</span> <span class="n">a</span> <span class="n">la</span> <span class="n">configuración</span>
+<span class="n">100</span><span class="p">%</span> <span class="n">finalizado</span>
+<span class="n">Creación</span> <span class="n">de</span> <span class="n">la</span> <span class="n">base</span> <span class="n">de</span> <span class="n">datos</span> <span class="n">terminada</span><span class="p">.</span> <span class="n">Consulte</span> <span class="n">los</span> <span class="n">archivos</span> <span class="n">log</span> <span class="n">de</span> <span class="p">/</span><span class="n">opt</span><span class="p">/</span><span class="n">oracle</span><span class="p">/</span><span class="n">cfgtoollogs</span><span class="p">/</span><span class="n">dbca</span><span class="p">/</span><span class="n">ORCLCDB</span>
+ <span class="n">para</span> <span class="n">obtener</span> <span class="n">más</span> <span class="n">información</span><span class="p">.</span>
+<span class="n">Información</span> <span class="n">de</span> <span class="n">Base</span> <span class="n">de</span> <span class="n">Datos</span><span class="err">:</span>
+<span class="n">Nombre</span> <span class="n">de</span> <span class="n">la</span> <span class="n">Base</span> <span class="n">de</span> <span class="n">Datos</span> <span class="k">Global:</span><span class="n">ORCLCDB</span>
+<span class="n">Identificador</span> <span class="nb">del </span><span class="n">Sistema</span> <span class="p">(</span><span class="n">SID</span><span class="p">)</span><span class="err">:</span><span class="n">ORCLCDB</span>
+<span class="n">Para</span> <span class="n">obtener</span> <span class="n">información</span> <span class="n">detallada</span><span class="p">,</span> <span class="n">consulte</span> <span class="n">el</span> <span class="n">archivo</span> <span class="n">log</span> <span class="s2">&#34;/opt/oracle/cfgtoollogs/dbca/ORCLCDB/ORCLCDB.log&#34;</span><span class="p">.</span>
+
+<span class="n">Database</span> <span class="n">configuration</span> <span class="n">completed</span> <span class="n">successfully</span><span class="p">.</span> <span class="n">The</span> <span class="n">passwords</span> <span class="n">were</span> <span class="n">auto</span> <span class="n">generated</span><span class="p">,</span> <span class="n">you</span> <span class="n">must</span> <span class="n">change</span> <span class="n">them</span> <span class="n">by</span> <span class="n">connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span> <span class="n">using</span> <span class="s1">&#39;sqlplus / as sysdba&#39;</span> <span class="n">as</span> <span class="n">the</span> <span class="n">oracle</span> <span class="n">user</span><span class="p">.</span>
+
+</code></pre></div><p>Para usar el intérprete de comandos mysqlplus necesitaremos tener configuradas las variables de entorno pertinentes para que su ejecución sea más fácil y rápida. Para ello modificamos el fichero de configuración <code>.bash_profile</code> desde el usuario &lsquo;oracle&rsquo;.</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">oracle</span><span class="nv">@localhost</span> <span class="p">~]$</span> <span class="n">nano</span> <span class="p">.</span><span class="n">bash_profile</span> 
+
+<span class="c"># Añadimos la siguiente información</span>
+
+<span class="n">umask</span> <span class="n">022</span>
+<span class="n">export</span> <span class="n">ORACLE_SID</span><span class="p">=</span><span class="n">ORCLCDB</span>
+<span class="n">export</span> <span class="n">ORACLE_BASE</span><span class="p">=/</span><span class="n">opt</span><span class="p">/</span><span class="n">oracle</span><span class="p">/</span><span class="n">oradata</span>
+<span class="n">export</span> <span class="n">ORACLE_HOME</span><span class="p">=/</span><span class="n">opt</span><span class="p">/</span><span class="n">oracle</span><span class="p">/</span><span class="n">product</span><span class="p">/</span><span class="n">19c</span><span class="p">/</span><span class="n">dbhome_1</span>
+<span class="n">export</span> <span class="n">PATH</span><span class="p">=</span><span class="nv">$PATH</span><span class="err">:</span><span class="nv">$ORACLE_HOME</span><span class="p">/</span><span class="n">bin</span>
+
+</code></pre></div><p>La activamos</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">oracle</span><span class="nv">@localhost</span> <span class="p">~]$</span> <span class="n">source</span> <span class="p">.</span><span class="n">bash_profile</span> 
+</code></pre></div><p>Ahora sí podemos acceder al intérprete</p>
+<div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">oracle</span><span class="nv">@localhost</span> <span class="p">~]$</span> <span class="n">sqlplus</span> <span class="p">/</span> <span class="n">as</span> <span class="n">sysdba</span>
+
+<span class="n">SQL</span><span class="p">*</span><span class="n">Plus</span><span class="err">:</span> <span class="n">Release</span> <span class="n">19</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">-</span> <span class="n">Production</span> <span class="n">on</span> <span class="n">Thu</span> <span class="n">Apr</span> <span class="n">1</span> <span class="n">18</span><span class="err">:</span><span class="n">36</span><span class="err">:</span><span class="n">20</span> <span class="n">2021</span>
+<span class="n">Version</span> <span class="n">19</span><span class="p">.</span><span class="n">3</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
+
+<span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="n">1982</span><span class="p">,</span> <span class="n">2019</span><span class="p">,</span> <span class="n">Oracle</span><span class="p">.</span>  <span class="n">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="p">.</span>
+
+
+<span class="n">Conectado</span> <span class="n">a:</span>
+<span class="n">Oracle</span> <span class="n">Database</span> <span class="n">19c</span> <span class="n">Enterprise</span> <span class="n">Edition</span> <span class="n">Release</span> <span class="n">19</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">-</span> <span class="n">Production</span>
+<span class="n">Version</span> <span class="n">19</span><span class="p">.</span><span class="n">3</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
+
+<span class="n">SQL</span><span class="p">&gt;</span> 
+
+</code></pre></div><h3 id="crear-usuario-con-contraseña">Crear usuario con contraseña</h3>
+<p>Se debe saber que desde la versión de Oracle 12c, hay un modo de instalación en el que se crea un <strong>CDB</strong> (contenedor) y varias <strong>PDB</strong> (Bases de datos conectables). Para crear un usuario en el contenedor tiene que tener la estructura <em>&lsquo;c##xxxxx&rsquo;,</em> estos usuarios no se suelen crear para tratar con la aplicación que vamos a desarrollar, son para gestionar el contenedor como tal, entre otras cosas.</p>
+<hr>
+<p>Para crear una <strong>base de datos conectable</strong> podemos seguir los siguientes pasos:</p>
+<ul>
+<li>Primero consultamos de esta forma el path de la base de datos conectable que tenemos.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> FILE_NAME from dba_data_files<span class="p">;</span>
+
+FILE_NAME
+--------------------------------------------------------------------------------
+/opt/oracle/oradata/ORCLCDB/system01.dbf
+/opt/oracle/oradata/ORCLCDB/sysaux01.dbf
+/opt/oracle/oradata/ORCLCDB/undotbs01.dbf
+/opt/oracle/oradata/ORCLCDB/users01.dbf
+
+</code></pre></div><ul>
+<li>Ahora creamos con el siguiente comando una base de datos conectable de forma que le indicamos la ruta donde vamos a crearla/convertirla.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; CREATE PLUGGABLE DATABASE academia ADMIN USER oracle IDENTIFIED BY oracle <span class="nv">FILE_NAME_CONVERT</span><span class="o">=(</span><span class="s1">&#39;/opt/oracle/oradata/ORCLCDB/&#39;</span>,<span class="s1">&#39;/opt/oracle/oradata/academia/&#39;</span><span class="o">)</span><span class="p">;</span>
+
+Base de datos de conexion creada.
+</code></pre></div><p>Una vez creada vamos conectarnos a ella de la siguiente forma, alterando la sesión entrando como administrador.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oracle@localhost ~<span class="o">]</span>$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Thu Apr <span class="m">1</span> 19:30:28 <span class="m">2021</span>
+Version 19.3.0.0.0
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1982, 2019, Oracle.  All rights reserved.
+
+
+Conectado a:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL&gt; show con_name<span class="p">;</span>
+
+CON_NAME
+------------------------------
+CDB<span class="nv">$ROOT</span>
+SQL&gt; ALTER SESSION SET <span class="nv">CONTAINER</span><span class="o">=</span>academia
+  <span class="m">2</span>  <span class="p">;</span>
+
+Sesion modificada.
+
+SQL&gt; show con_name<span class="p">;</span>
+
+CON_NAME
+------------------------------
+ACADEMIA
+SQL&gt; <span class="k">select</span> * from cat<span class="p">;</span>
+<span class="k">select</span> * from cat
+              *
+ERROR en linea 1:
+ORA-01219: base de datos o base de datos de conexion no abierta: solo se
+permiten consultas en tablas o vistas fijas
+
+</code></pre></div><p>Como podemos ver no tenemos los permisos necesarios para crear tablas o hacer consultas. Pero en esta entrada no vamos hablar de ello.</p>
+<hr>
+<p>Ahora si vamos a crear el usuario &lsquo;celia&rsquo; con la contraseña &lsquo;celia&rsquo;. Con la estructura antes mencionada de forma que será un usuario que podamos usar de forma general. También le vamos a dar los privilegios necesarios.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; CREATE USER c##celia IDENTIFIED BY celia<span class="p">;</span>
+
+Usuario creado.
+
+SQL&gt; GRANT ALL PRIVILEGES TO c##celia<span class="p">;</span>
+
+Concesion terminada correctamente.
+</code></pre></div><p>Nos desconectamos y conectamos con nuestro usuario nuevo</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; connect c##celia      
+Introduzca la contrase?a: 
+Conectado.
+
+</code></pre></div><p>Creamos unas tablas de prueba</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="n">nombre</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">pk_alumnos</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">dni</span><span class="p">));</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">nombre</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;1111&#39;</span><span class="p">,</span><span class="s1">&#39;Carlos&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">nombre</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;2222&#39;</span><span class="p">,</span><span class="s1">&#39;Celia&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">nombre</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;3333&#39;</span><span class="p">,</span><span class="s1">&#39;Lucía&#39;</span><span class="p">);</span>
+
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">cursos</span> <span class="p">(</span><span class="n">codigocurso</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">nombrecurso</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">pk_cursos</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">));</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">cursos</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">,</span> <span class="n">nombrecurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;11&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">cursos</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">,</span> <span class="n">nombrecurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;22&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">cursos</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">,</span> <span class="n">nombrecurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;33&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">matriculas</span> <span class="p">(</span><span class="n">codigo</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="n">dni</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">codigocurso</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">pk_mat</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">codigo</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">fk_mat</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">dni</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">fk_matcurso</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">cursos</span> <span class="p">(</span><span class="n">codigocurso</span><span class="p">));</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span>  <span class="n">matriculas</span> <span class="p">(</span><span class="n">codigo</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">codigocurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;1234&#39;</span><span class="p">,</span><span class="s1">&#39;1111&#39;</span><span class="p">,</span><span class="s1">&#39;11&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span>  <span class="n">matriculas</span> <span class="p">(</span><span class="n">codigo</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">codigocurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;167&#39;</span><span class="p">,</span><span class="s1">&#39;2222&#39;</span><span class="p">,</span><span class="s1">&#39;22&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span>  <span class="n">matriculas</span> <span class="p">(</span><span class="n">codigo</span><span class="p">,</span> <span class="n">dni</span><span class="p">,</span> <span class="n">codigocurso</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;891&#39;</span><span class="p">,</span><span class="s1">&#39;3333&#39;</span><span class="p">,</span><span class="s1">&#39;33&#39;</span><span class="p">);</span>
+</code></pre></div><p>Comprobamos que se han creado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> * from cat<span class="p">;</span>
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLE_TYPE
+-----------
+ALUMNOS
+TABLE
+
+CURSOS
+TABLE
+
+MATRICULAS
+TABLE
+
+
+SQL&gt; <span class="k">select</span> * from alumnos<span class="p">;</span>
+
+DNI		NOMBRE
+--------------- ----------
+1111		Carlos
+2222		Celia
+3333		Luc??a
+
+</code></pre></div></div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/oracle/">oracle</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
