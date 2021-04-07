@@ -359,7 +359,8 @@ Concesion terminada correctamente.
 Introduzca la contrase?a: 
 Conectado.
 
-</code></pre></div><p>Creamos unas tablas de prueba</p>
+</code></pre></div><h2 id="poblar-la-base-de-datos">Poblar la base de datos</h2>
+<p>Creamos unas tablas de prueba</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="n">nombre</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="k">CONSTRAINT</span> <span class="n">pk_alumnos</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">dni</span><span class="p">));</span>
 
 <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="p">(</span><span class="n">dni</span><span class="p">,</span> <span class="n">nombre</span><span class="p">)</span> <span class="k">VALUES</span><span class="p">(</span><span class="s1">&#39;1111&#39;</span><span class="p">,</span><span class="s1">&#39;Carlos&#39;</span><span class="p">);</span>
