@@ -148,7 +148,7 @@
                         <span class="date"> Wed, Apr 7, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">5-minute read</span>
+                        <span class="reading-time">6-minute read</span>
                     </div>
                 
             </div>
@@ -164,102 +164,73 @@
 *  Realizar un enlace entre un servidor ORACLE y otro Postgres o MySQL empleando Heterogeneus Services, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
 </code></pre>
 <h2 id="enlace-entre-bases-de-datos-oracle">Enlace entre bases de datos ORACLE.</h2>
-<h2 id="enlace-entre-bases-de-datos-postgres">Enlace entre bases de datos Postgres.</h2>
-<h3 id="entorno-de-trabajo">Entorno de trabajo</h3>
-<p>Vamos a tener 2 máquinas virtuales con vagrant y virtualbox.</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># -*- mode: ruby -*-</span>
-<span class="c1"># vi: set ft=ruby :</span>
+<h2 id="enlace-entre-bases-de-datos-postgresql---postgresql">Enlace entre bases de datos PostgreSQL - PostgreSQL.</h2>
+<p>Primero tenemos que crear el entorno de trabajo, en este caso he usado dos máquinas virtuales con Debian Buster, sobre las que está instalado postgresql. Para ver el entorno de trabajo vaya este post <a href="https://www.celiagm.es/post/postgresql_debian/">Instalación de postgresql sobre Debian Buster</a></p>
+<p>El <strong>objetivo</strong> de este post se trata de lo siguiente:</p>
+<p>Teniendo en cuenta el entorno de trabajo ya creado, los datos de prueba para poblar la base de datos serán los mismos, pero introduciremos una tabla en un servidor y la otra tabla en otro servidor de manera que vamos a <strong>construir un enlace</strong> entre ambos. Así cuando hagamos una consulta desde un servidor haciendo referencia al otro podamos obtener información conjunta de los dos servidores.</p>
+<h3 id="permitir-conexiones-remotas">Permitir conexiones remotas</h3>
+<p>Vamos a permitir conexiones remotas en ambos servidores, seguimos los siguientes pasos para las dos máquinas.</p>
+<p>Editamos el fichero de configuracion de postgresql.</p>
+<blockquote>
+<p>Según la versión de postgresql que hemos instalado el directorio dentro de postgres será diferente.</p>
+</blockquote>
+<p>Buscamos las siguientes directivas y las cambiamos así:</p>
+<p><code>/etc/postgresql/11/main/postgresql.conf </code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Esta directiva es para que escuche no solo desde local sino que puedan acceder desde todas las direcciones.</span>
+<span class="nv">listen_addresses</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+</code></pre></div><p>Editamos también el siguiente fichero para indicar también que permita la conexión remota desde cualquier direción.</p>
+<p><code>nano /etc/postgresql/11/main/pg_hba.conf </code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">host all all 0.0.0.0/0 md5
+</code></pre></div><p>Ahora reiniciamos el servicio</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo systecmtl restart postgresql
+</code></pre></div><h3 id="crear-la-base-de-datos-y-usuarios-de-prueba">Crear la base de datos y usuarios de prueba.</h3>
+<p>Si has poblado la base de datos con el post de la instalación anterior, puedes borrar en la máquina una de las tablas, la de &lsquo;emple&rsquo; por ejemplo.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">drop table emple cascade
+</code></pre></div><p>Ahora podemos continuar con la tarea.</p>
+<h3 id="máquina-1">Máquina 1</h3>
+<p>Accedemos a postgresql como usuario &lsquo;postgres&rsquo; y creamos el usuario, la base de datos y le damos permisos al usuario sobre esa misma base de datos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">postgres</span><span class="o">=</span><span class="c1"># create user celia1 with password &#39;celia1&#39;;</span>
+CREATE ROLE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># create database prueba1;</span>
+CREATE DATABASE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># grant all privileges on database prueba1 to celia1;</span>
+GRANT
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># exit</span>
 
-Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
-
-  config.vm.define :nodo1 <span class="k">do</span> <span class="p">|</span>nodo1<span class="p">|</span>
-    nodo1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
-    nodo1.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres1&#34;</span>
-    nodo1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
-    nodo1.vm.network <span class="s2">&#34;private_network&#34;</span>, ip: <span class="s2">&#34;10.0.0.2&#34;</span>,
-      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>,
-      auto_config: <span class="nb">false</span>
-  end
-  config.vm.define :nodo2 <span class="k">do</span> <span class="p">|</span>nodo2<span class="p">|</span>
-    nodo2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
-    nodo2.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres2&#34;</span>
-    nodo2.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
-    nodo2.vm.network <span class="s2">&#34;private_network&#34;</span>,
-      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>, ip: <span class="s2">&#34;10.0.0.3&#34;</span>,
-      auto_config: <span class="nb">false</span>
-  end
-end
-</code></pre></div><h2 id="instalación-de-postgresql">Instalación de postgresql</h2>
-<ul>
-<li>Añadimos la clave y el repositorio.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt install -y vim wget
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc <span class="p">|</span> sudo apt-key add -
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">RELEASE</span><span class="o">=</span><span class="k">$(</span>lsb_release -cs<span class="k">)</span>
-<span class="nb">echo</span> <span class="s2">&#34;deb http://apt.postgresql.org/pub/repos/apt/ </span><span class="si">${</span><span class="nv">RELEASE</span><span class="si">}</span><span class="s2">&#34;</span>-pgdg main <span class="p">|</span> sudo tee  /etc/apt/sources.list.d/pgdg.list
-</code></pre></div><ul>
-<li>Actualizamos e instalamos el paquete de postgresql-11</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt update
-sudo apt -y install postgresql-11
-</code></pre></div><ul>
-<li>Comprobamos que está funcionando.</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ systemctl status postgresql
-● postgresql.service - PostgreSQL RDBMS
-   Loaded: loaded <span class="o">(</span>/lib/systemd/system/postgresql.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
-   Active: active <span class="o">(</span>exited<span class="o">)</span> since Tue 2021-04-06 07:29:19 GMT<span class="p">;</span> 7s ago
- Main PID: <span class="m">3172</span> <span class="o">(</span><span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span>0/SUCCESS<span class="o">)</span>
-    Tasks: <span class="m">0</span> <span class="o">(</span>limit: 544<span class="o">)</span>
-   Memory: 0B
-   CGroup: /system.slice/postgresql.service
-
-</code></pre></div><ul>
-<li>Le cambiamos la contraseña al usuario postgres</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">passwd postgres
-</code></pre></div><ul>
-<li>Vemos que está escuchando en el puerto 5432</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ ss -tunelp <span class="p">|</span> grep <span class="m">5432</span>
-tcp     LISTEN   <span class="m">0</span>        <span class="m">128</span>            127.0.0.1:5432          0.0.0.0:*       uid:106 ino:22460 sk:4 &lt;-&gt;                                                     
-tcp     LISTEN   <span class="m">0</span>        <span class="m">128</span>                <span class="o">[</span>::1<span class="o">]</span>:5432             <span class="o">[</span>::<span class="o">]</span>:*       uid:106 ino:22459 sk:6 v6only:1 &lt;-&gt;    
-</code></pre></div><ul>
-<li>Creamos el usuario en mi caso &lsquo;vagrant&rsquo; y la base de datos &lsquo;vagrant&rsquo;</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@postgres1:~$ sudo -u postgres createuser --interactive vagrant
-Shall the new role be a superuser? <span class="o">(</span>y/n<span class="o">)</span> y
-vagrant@postgres1:~$ createdb debian
-
-vagrant@postgres1:~$ createdb vagrant
-
-vagrant@postgres1:~$ psql
-psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
-Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
-
-<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># </span>
-
-</code></pre></div><ul>
-<li>Introducimos datos de prueba</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table depart<span class="o">(</span>
+</code></pre></div><p>Ahora salimos y entramos como el usuario creado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">psql -h localhost -U celia1 -W -d prueba1
+</code></pre></div><p>Creamos la tabla departamento</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table departamento<span class="o">(</span>
 dept_no integer,
 dnombre varchar<span class="o">(</span>20<span class="o">)</span>,
 loc varchar<span class="o">(</span>20<span class="o">)</span>,
 primary key <span class="o">(</span>dept_no<span class="o">)</span>
 <span class="o">)</span><span class="p">;</span>
-
-insert into depart
+</code></pre></div><ul>
+<li>Le añadimos los registros</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">insert into departamento
 values <span class="o">(</span><span class="s1">&#39;10&#39;</span>,<span class="s1">&#39;CONTABILIDAD&#39;</span>,<span class="s1">&#39;SEVILLA&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into depart
+insert into departamento
 values <span class="o">(</span><span class="s1">&#39;20&#39;</span>,<span class="s1">&#39;INVESTIGACION&#39;</span>,<span class="s1">&#39;MADRID&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into depart
+insert into departamento
 values <span class="o">(</span><span class="s1">&#39;30&#39;</span>,<span class="s1">&#39;VENTAS&#39;</span>,<span class="s1">&#39;BARCELONA&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into depart
+insert into departamento
 values <span class="o">(</span><span class="s1">&#39;40&#39;</span>,<span class="s1">&#39;PRODUCCION&#39;</span>,<span class="s1">&#39;BILBAO&#39;</span><span class="o">)</span><span class="p">;</span>
-
-
-create table emple<span class="o">(</span>
+</code></pre></div><p>prueba1=&gt; select * from dblink(&lsquo;dbname=prueba2 host=172.22.6.141 user=celia2 password=celia2&rsquo;, &lsquo;select * from emple&rsquo;);</p>
+<h2 id="máquina-2">Máquina 2</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">postgres</span><span class="o">=</span><span class="c1"># create user celia2 with password &#39;celia2&#39;;</span>
+CREATE ROLE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># create database prueba2;</span>
+CREATE DATABASE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># grant all privileges on database prueba2 to celia2;</span>
+GRANT
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># exit</span>
+postgres@postgres2:~$ 
+</code></pre></div><ul>
+<li>Creamos la tabla empleados. No le ponemos la opción de clave extanjera ya que ahora mismo no existe la tabla departamento en esta base de datos.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table empleado<span class="o">(</span>
 emp_no integer,
 apellidos varchar<span class="o">(</span>20<span class="o">)</span>,
 oficio varchar<span class="o">(</span>20<span class="o">)</span>,
@@ -268,51 +239,86 @@ fecha_alt date,
 salario integer,
 comision integer,
 dept_no integer,
-primary key <span class="o">(</span>emp_no<span class="o">))</span><span class="p">;</span>
-foreign key <span class="o">(</span>dept_no<span class="o">)</span> references depart <span class="o">(</span>dept_no<span class="o">)</span>
+primary key <span class="o">(</span>emp_no<span class="o">)</span>
 <span class="o">)</span><span class="p">;</span>
-
-insert into emple <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7369&#39;</span>,<span class="s1">&#39;SANCHEZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;104000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple
-values <span class="o">(</span><span class="s1">&#39;7499&#39;</span>,<span class="s1">&#39;ARROYO&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;208000&#39;</span>,<span class="s1">&#39;39000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple
-values <span class="o">(</span><span class="s1">&#39;7521&#39;</span>,<span class="s1">&#39;SALA&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;JIMENEZ&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;386750&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple
-values <span class="o">(</span><span class="s1">&#39;7654&#39;</span>,<span class="s1">&#39;MARTIN&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;182000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;NEGRO&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;370500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;GIL&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;REY&#39;</span>,<span class="s1">&#39;PRESIDENTE&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;650000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple
-values <span class="o">(</span><span class="s1">&#39;7844&#39;</span>,<span class="s1">&#39;TOVAR&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;195000&#39;</span>,<span class="s1">&#39;0&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7876&#39;</span>,<span class="s1">&#39;ALONSO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;143000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7900&#39;</span>,<span class="s1">&#39;JIMENO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;1235000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;FERNANDEZ&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
-insert into emple<span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
-values <span class="o">(</span><span class="s1">&#39;7934&#39;</span>,<span class="s1">&#39;MUÑOZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7782&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;169000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
-
-
 </code></pre></div><ul>
-<li>Miramos que se han creado las tablas con los registros.</li>
+<li>Le añadimos los registros</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">vagrant</span><span class="o">=</span><span class="c1"># \d</span>
-         List of relations
- Schema <span class="p">|</span>  Name  <span class="p">|</span> Type  <span class="p">|</span>  Owner  
---------+--------+-------+---------
- public <span class="p">|</span> depart <span class="p">|</span> table <span class="p">|</span> vagrant
- public <span class="p">|</span> emple  <span class="p">|</span> table <span class="p">|</span> vagrant
-<span class="o">(</span><span class="m">2</span> rows<span class="o">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7369&#39;</span>,<span class="s1">&#39;SANCHEZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;104000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado
+values <span class="o">(</span><span class="s1">&#39;7499&#39;</span>,<span class="s1">&#39;ARROYO&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;208000&#39;</span>,<span class="s1">&#39;39000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado
+values <span class="o">(</span><span class="s1">&#39;7521&#39;</span>,<span class="s1">&#39;SALA&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;JIMENEZ&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;386750&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado
+values <span class="o">(</span><span class="s1">&#39;7654&#39;</span>,<span class="s1">&#39;MARTIN&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;162500&#39;</span>,<span class="s1">&#39;182000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;NEGRO&#39;</span>,<span class="s1">&#39;DIRECTOR&#39;</span>,<span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;370500&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;GIL&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7839&#39;</span>,<span class="s1">&#39;REY&#39;</span>,<span class="s1">&#39;PRESIDENTE&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;650000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado
+values <span class="o">(</span><span class="s1">&#39;7844&#39;</span>,<span class="s1">&#39;TOVAR&#39;</span>,<span class="s1">&#39;VENDEDOR&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;195000&#39;</span>,<span class="s1">&#39;0&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7876&#39;</span>,<span class="s1">&#39;ALONSO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7788&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;143000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7900&#39;</span>,<span class="s1">&#39;JIMENO&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7698&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;1235000&#39;</span>,<span class="s1">&#39;30&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7902&#39;</span>,<span class="s1">&#39;FERNANDEZ&#39;</span>,<span class="s1">&#39;ANALISTA&#39;</span>,<span class="s1">&#39;7566&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;390000&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into empleado <span class="o">(</span>emp_no, apellidos, oficio, dir, fecha_alt, salario, dept_no<span class="o">)</span>
+values <span class="o">(</span><span class="s1">&#39;7934&#39;</span>,<span class="s1">&#39;MUÑOZ&#39;</span>,<span class="s1">&#39;EMPLEADO&#39;</span>,<span class="s1">&#39;7782&#39;</span>,<span class="s1">&#39;1980-12-12&#39;</span>,<span class="s1">&#39;169000&#39;</span>,<span class="s1">&#39;10&#39;</span><span class="o">)</span><span class="p">;</span>
+</code></pre></div><h3 id="crear-el-enlace-maquina1-maquina2">Crear el enlace maquina1-maquina2</h3>
+<p>Creamos un enlace en la máquina1, para ello nos conectamos como &lsquo;postgres&rsquo;</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">postgres@postgres1:~$ psql -d prueba1
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
+Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
 
+<span class="nv">prueba1</span><span class="o">=</span><span class="c1"># create extension dblink;</span>
+CREATE EXTENSION
+<span class="nv">prueba1</span><span class="o">=</span><span class="c1"># </span>
 
-<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># select * from depart;</span>
+</code></pre></div><p>Nos conectamos como el usuario &lsquo;celia1&rsquo; a la base de datos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">psql -h localhost -U celia1 -W -d prueba1
+</code></pre></div><p>Creamos el enlace de esta forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">select</span> * from dblink<span class="o">(</span><span class="s1">&#39;dbname=prueba2 host=192.168.100.224 user=celia2password=celia2&#39;</span>, <span class="s1">&#39;select * from empleado&#39;</span><span class="o">)</span> as empleados <span class="o">(</span>emp_no integer, apellidosvarchar, oficio varchar, dir integer, fecha_alt date, salario integer, comisioninteger, dept_no integer<span class="o">)</span><span class="p">;</span>
+
+</code></pre></div><p>Ahora comprobamos que efectivamente muestra la tabla empleado que está en el otro servidor.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">prueba1</span><span class="o">=</span>&gt; <span class="k">select</span> * from dblink<span class="o">(</span><span class="s1">&#39;dbname=prueba2 host=192.168.100.224 user=celia2 password=celia2&#39;</span>, <span class="s1">&#39;select * from empleado&#39;</span><span class="o">)</span> as empleados <span class="o">(</span>emp_no integer, apellidos varchar, oficio varchar, dir integer, fecha_alt date, salario integer, comision integer, dept_no integer<span class="o">)</span><span class="p">;</span>
+ emp_no <span class="p">|</span> apellidos <span class="p">|</span>   oficio   <span class="p">|</span> dir  <span class="p">|</span> fecha_alt  <span class="p">|</span> salario <span class="p">|</span> comision <span class="p">|</span> dept_no 
+--------+-----------+------------+------+------------+---------+----------+---------
+   <span class="m">7369</span> <span class="p">|</span> SANCHEZ   <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7902</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">104000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7499</span> <span class="p">|</span> ARROYO    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">208000</span> <span class="p">|</span>    <span class="m">39000</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7521</span> <span class="p">|</span> SALA      <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">162500</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7566</span> <span class="p">|</span> JIMENEZ   <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">386750</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7654</span> <span class="p">|</span> MARTIN    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">182000</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7698</span> <span class="p">|</span> NEGRO     <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">370500</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7788</span> <span class="p">|</span> GIL       <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7839</span> <span class="p">|</span> REY       <span class="p">|</span> PRESIDENTE <span class="p">|</span>      <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">650000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
+   <span class="m">7844</span> <span class="p">|</span> TOVAR     <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">195000</span> <span class="p">|</span>        <span class="m">0</span> <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7876</span> <span class="p">|</span> ALONSO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7788</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">143000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7900</span> <span class="p">|</span> JIMENO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span> <span class="m">1235000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
+   <span class="m">7902</span> <span class="p">|</span> FERNANDEZ <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
+   <span class="m">7934</span> <span class="p">|</span> MUÑOZ     <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7782</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">169000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
+
+</code></pre></div><h3 id="crear-el-enlace-maquina2-maquina1">Crear el enlace maquina2-maquina1</h3>
+<p>Ejecutamos el mismo procedimiento que hemos ido haciendo en el primer enlace y comprobamos que muestra la tabla departamento del primer servidor</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">postgres@postgres2:~$ psql -d prueba2
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-1.pgdg100+1<span class="o">))</span>
+Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
+
+<span class="nv">prueba2</span><span class="o">=</span><span class="c1"># create extension dblink;</span>
+CREATE EXTENSION
+<span class="nv">prueba2</span><span class="o">=</span><span class="c1"># quit</span>
+postgres@postgres2:~$ psql -h localhost -U celia2 -W -d prueba2
+Password: 
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-1.pgdg100+1<span class="o">))</span>
+SSL connection <span class="o">(</span>protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off<span class="o">)</span>
+Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
+
+<span class="nv">prueba2</span><span class="o">=</span>&gt; <span class="k">select</span> * from dblink<span class="o">(</span><span class="s1">&#39;dbname=prueba1 host=192.168.100.225 user=celia1 password=celia1&#39;</span>, <span class="s1">&#39;select * from departamento&#39;</span><span class="o">)</span> as departamento <span class="o">(</span>dept_no integer, dnombre varchar, loc varchar<span class="o">)</span><span class="p">;</span>
  dept_no <span class="p">|</span>    dnombre    <span class="p">|</span>    loc    
 ---------+---------------+-----------
       <span class="m">10</span> <span class="p">|</span> CONTABILIDAD  <span class="p">|</span> SEVILLA
@@ -320,26 +326,7 @@ values <span class="o">(</span><span class="s1">&#39;7934&#39;</span>,<span clas
       <span class="m">30</span> <span class="p">|</span> VENTAS        <span class="p">|</span> BARCELONA
       <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
 <span class="o">(</span><span class="m">4</span> rows<span class="o">)</span>
-
-<span class="nv">vagrant</span><span class="o">=</span><span class="c1"># select * from emple;</span>
- emp_no <span class="p">|</span> apellidos <span class="p">|</span>   oficio   <span class="p">|</span> dir  <span class="p">|</span> fecha_alt  <span class="p">|</span> salario <span class="p">|</span> comision <span class="p">|</span> dept_no 
---------+-----------+------------+------+------------+---------+----------+---------
-   <span class="m">7566</span> <span class="p">|</span> JIMENEZ   <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1981-02-04 <span class="p">|</span>  <span class="m">386750</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
-   <span class="m">7698</span> <span class="p">|</span> NEGRO     <span class="p">|</span> DIRECTOR   <span class="p">|</span> <span class="m">7839</span> <span class="p">|</span> 1981-01-05 <span class="p">|</span>  <span class="m">370500</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7788</span> <span class="p">|</span> GIL       <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1981-09-11 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
-   <span class="m">7844</span> <span class="p">|</span> TOVAR     <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1981-08-09 <span class="p">|</span>  <span class="m">195000</span> <span class="p">|</span>        <span class="m">0</span> <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7900</span> <span class="p">|</span> JIMENO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1981-03-12 <span class="p">|</span> <span class="m">1235000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7902</span> <span class="p">|</span> FERNANDEZ <span class="p">|</span> ANALISTA   <span class="p">|</span> <span class="m">7566</span> <span class="p">|</span> 1981-03-12 <span class="p">|</span>  <span class="m">390000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
-   <span class="m">7369</span> <span class="p">|</span> SANCHEZ   <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7902</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">104000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
-   <span class="m">7499</span> <span class="p">|</span> ARROYO    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">208000</span> <span class="p">|</span>    <span class="m">39000</span> <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7521</span> <span class="p">|</span> SALA      <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">162500</span> <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7654</span> <span class="p">|</span> MARTIN    <span class="p">|</span> VENDEDOR   <span class="p">|</span> <span class="m">7698</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">162500</span> <span class="p">|</span>   <span class="m">182000</span> <span class="p">|</span>      <span class="m">30</span>
-   <span class="m">7839</span> <span class="p">|</span> REY       <span class="p">|</span> PRESIDENTE <span class="p">|</span>      <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">650000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
-   <span class="m">7876</span> <span class="p">|</span> ALONSO    <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7788</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">143000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">20</span>
-   <span class="m">7934</span> <span class="p">|</span> MUÑOZ     <span class="p">|</span> EMPLEADO   <span class="p">|</span> <span class="m">7782</span> <span class="p">|</span> 1980-12-12 <span class="p">|</span>  <span class="m">169000</span> <span class="p">|</span>          <span class="p">|</span>      <span class="m">10</span>
-<span class="o">(</span><span class="m">13</span> rows<span class="o">)</span>
-
-</code></pre></div><p>prueba1=&gt; select * from dblink(&lsquo;dbname=prueba2 host=172.22.6.141 user=celia2 password=celia2&rsquo;, &lsquo;select * from emple&rsquo;);</p>
+</code></pre></div><p>alter table empleado add constraint fk_depno foreign key (dept_no) references dblink(&lsquo;dbname=prueba1 host=192.168.100.225 user=celia1 password=celia1&rsquo;, &lsquo;departamento (dept_no)');</p>
 <h2 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql.</h2>
 </div>
         <div class="post-footer">
