@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>interconexiones bbdd on 1bit1nfo</title>
+    <link>https://www.celiagm.es/tags/interconexiones-bbdd/</link>
+    <description>Recent content in interconexiones bbdd on 1bit1nfo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/interconexiones-bbdd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Interconexión de Servidores de Bases de Datos</title>
+      <link>https://www.celiagm.es/post/intrconexion/</link>
+      <pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/intrconexion/</guid>
+      <description>Descripción de la tarea Las interconexiones de servidores de bases de datos son operaciones que pueden ser muy útiles en diferentes contextos.</description>
+    </item>
+    
+  </channel>
+</rss>
