@@ -146,7 +146,7 @@
                         <span class="date"> Mon, Jan 1, 0001 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">12-minute read</span>
+                        <span class="reading-time">13-minute read</span>
                     </div>
                 
             </div>
@@ -628,72 +628,83 @@ Vol vol1.img created from vol.xml
 <span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>   <span class="n">6</span> <span class="n">abr</span>  <span class="n">5</span> <span class="n">19</span><span class="err">:</span><span class="n">50</span> <span class="n">postgresql</span>
 </code></pre></div><p>Montamos el disco en el directorio requerido</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># mount -t xfs /dev/vdb /var/lib/postgresql/</span>
+</code></pre></div><p>Vemos que se ha montado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/var/lib# lsblk -f 
+NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+vda                                                                     
+└─vda1 xfs          30a9cfb1-0b31-4368-8b7a-c6779804e450    1,7G    43% /
+vdb    xfs          6ebae309-2c2f-4c67-b098-20a9afbda1a5  980,8M     3% /var/lib/postgresql
+
 </code></pre></div><ol start="5">
 <li>Instala en maquina1 el sistema de BBDD PostgreSQL que ubicará sus ficheros con las bases de datos en /var/lib/postgresql utilizando una conexión ssh.</li>
 </ol>
-<p>Lo instalamos:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">apt-get install postgresql
-</code></pre></div><p>Comprobamos que se ha creado</p>
+<p>Instalamos prostgres como se indica en el siguiente <a href="https://www.celiagm.es/post/postgresql_debian/">post</a></p>
+<p>Comprobamos que se ha creado</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/var/lib/postgresql# ls -lh
 total <span class="m">0</span>
-drwxr-xr-x <span class="m">3</span> postgres postgres <span class="m">18</span> mar <span class="m">31</span> 21:48 <span class="m">11</span>
+drwxr-xr-x <span class="m">3</span> postgres postgres <span class="m">18</span> abr  <span class="m">7</span> 15:11 <span class="m">11</span>
 </code></pre></div><p>Vamos a darle una contraseña al usuario postgres</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">passwd</span> <span class="n">postgres</span>
 </code></pre></div><ol>
 <li>(Opcional) Puebla la base de datos con una BBDD de prueba (escribe en la tarea el nombre de usuario y contraseña para acceder a la BBDD).</li>
 </ol>
-<p>Primero vamos a crear de forma interactiva, para no tener que usar el usuario postgres, el usuario &lsquo;debian&rsquo; con la base de datos &lsquo;debian&rsquo;</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ sudo -u postgres createuser --interactive
-Ingrese el nombre del rol a agregar: debian
-¿Será el nuevo rol un superusuario? <span class="o">(</span>s/n<span class="o">)</span> s
-
-debian@debian-kvm:~$ createdb debian
-
-debian@debian-kvm:~$ psql
-psql <span class="o">(</span>11.10 <span class="o">(</span>Debian 11.10-0+deb10u1<span class="o">))</span>
+<p>Creamos el usario celia y la base de datos &lsquo;prueba&rsquo;</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ sudo su
+root@debian-kvm:/home/debian# su - postgresql
+su: el usuario postgresql no existe
+root@debian-kvm:/home/debian# su - postgres
+$ psql	
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-1.pgdg100+1<span class="o">))</span>
 Digite «help» para obtener ayuda.
 
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># \password</span>
-Ingrese la nueva contraseña:
-Ingrésela nuevamente:
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># create user celia with password &#39;celia&#39;;</span>
+CREATE ROLE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># create database prueba;</span>
+CREATE DATABASE
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># grant all privileges on database prueba to celia;</span>
+GRANT
+<span class="nv">postgres</span><span class="o">=</span><span class="c1"># exit</span>
+</code></pre></div><p>Entramos como usuario celia y poblamos la base de datos</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">psql -h localhost -U celia -W -d prueba
 
 </code></pre></div><p>Agregamos una tabla de prueba con sus registros</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">-- Creamos la tabla
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># CREATE TABLE equipos</span>
-debian-# <span class="o">(</span>
-debian<span class="o">(</span><span class="c1">#     codigo              VARCHAR(10),</span>
-debian<span class="o">(</span><span class="c1">#     nombre              VARCHAR(20),</span>
-debian<span class="o">(</span><span class="c1">#     year_fundacion      NUMERIC(4),</span>
-debian<span class="o">(</span><span class="c1">#     CONSTRAINT pk_equipos PRIMARY KEY (codigo)</span>
-debian<span class="o">(</span><span class="c1"># );</span>
-CREATE TABLE
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table departamento<span class="o">(</span>
+dept_no integer,
+dnombre varchar<span class="o">(</span>20<span class="o">)</span>,
+loc varchar<span class="o">(</span>20<span class="o">)</span>,
+primary key <span class="o">(</span>dept_no<span class="o">)</span>
+<span class="o">)</span><span class="p">;</span>
 
 -- Añadimos registros 
 
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># ALTER TABLE equipos ADD numtitulos NUMERIC(3);</span>
-ALTER TABLE
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;ABC123&#39;,&#39;Real Madrid&#39;,&#39;1902&#39;,&#39;116&#39;);</span>
-INSERT <span class="m">0</span> <span class="m">1</span>
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;ABC456&#39;,&#39;Real Betis Balompie&#39;,&#39;1907&#39;,&#39;116&#39;);</span>
-INSERT <span class="m">0</span> <span class="m">1</span>
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># INSERT INTO equipos (codigo,nombre,year_fundacion,numtitulos) VALUES (&#39;AVC783&#39;,&#39;Sevilla Fútbol Club&#39;,&#39;1890&#39;,&#39;116&#39;);</span>
-INSERT <span class="m">0</span> <span class="m">1</span>
-
--- Mostramos resultados 
-
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># \d</span>
-       Listado de relaciones
- Esquema <span class="p">|</span> Nombre  <span class="p">|</span> Tipo  <span class="p">|</span> Dueño  
----------+---------+-------+--------
- public  <span class="p">|</span> equipos <span class="p">|</span> tabla <span class="p">|</span> debian
+insert into departamento
+values <span class="o">(</span><span class="s1">&#39;10&#39;</span>,<span class="s1">&#39;CONTABILIDAD&#39;</span>,<span class="s1">&#39;SEVILLA&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into departamento
+values <span class="o">(</span><span class="s1">&#39;20&#39;</span>,<span class="s1">&#39;INVESTIGACION&#39;</span>,<span class="s1">&#39;MADRID&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into departamento
+values <span class="o">(</span><span class="s1">&#39;30&#39;</span>,<span class="s1">&#39;VENTAS&#39;</span>,<span class="s1">&#39;BARCELONA&#39;</span><span class="o">)</span><span class="p">;</span>
+insert into departamento
+values <span class="o">(</span><span class="s1">&#39;40&#39;</span>,<span class="s1">&#39;PRODUCCION&#39;</span>,<span class="s1">&#39;BILBAO&#39;</span><span class="o">)</span><span class="p">;</span>
+</code></pre></div><p>Mostramos la tabla con los registros</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">prueba</span><span class="o">=</span>&gt; <span class="se">\d</span>
+         Listado de relaciones
+ Esquema <span class="p">|</span>    Nombre    <span class="p">|</span> Tipo  <span class="p">|</span> Dueño 
+---------+--------------+-------+-------
+ public  <span class="p">|</span> departamento <span class="p">|</span> tabla <span class="p">|</span> celia
 <span class="o">(</span><span class="m">1</span> fila<span class="o">)</span>
 
+<span class="nv">prueba</span><span class="o">=</span>&gt; <span class="k">select</span> * from departamento<span class="p">;</span>
+ dept_no <span class="p">|</span>    dnombre    <span class="p">|</span>    loc    
+---------+---------------+-----------
+      <span class="m">10</span> <span class="p">|</span> CONTABILIDAD  <span class="p">|</span> SEVILLA
+      <span class="m">20</span> <span class="p">|</span> INVESTIGACION <span class="p">|</span> MADRID
+      <span class="m">30</span> <span class="p">|</span> VENTAS        <span class="p">|</span> BARCELONA
+      <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
+<span class="o">(</span><span class="m">4</span> filas<span class="o">)</span>
 
 </code></pre></div><ol start="8">
 <li>Crea una regla de NAT para que la base de datos sea accesible desde el exterior</li>
 </ol>
-<p>El usuario debian va ser el que se conecte de forma remota</p>
-<p>El usuario de prueba será &lsquo;debian&rsquo; con la contraseña &lsquo;debian&rsquo;.</p>
 <p>Ahora vamos a editar el fichero de configuracion de postgres para hacer que sea accesible desde otras maquinas</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">postgresql</span><span class="p">/</span><span class="n">11</span><span class="p">/</span><span class="n">main</span><span class="p">/</span><span class="n">postgresql</span><span class="p">.</span><span class="n">conf</span>
 </code></pre></div><p>Buscamos las líneas siguientes y las modificamos así</p>
@@ -729,31 +740,32 @@ mar <span class="m">31</span> 22:18:03 debian-kvm systemd<span class="o">[</span
 
 </code></pre></div><p>Ahora que está accesible solo tenemos que crear la regla NAT</p>
 <p>Primero miramos por donde está escuchando postgres</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/# netstat -tlpn
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/home/debian# netstat -tlpn
 Active Internet connections <span class="o">(</span>only servers<span class="o">)</span>
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
-tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      290/sshd
-tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:5432            0.0.0.0:*               LISTEN      3231/postgres
-tcp6       <span class="m">0</span>      <span class="m">0</span> :::22                   :::*                    LISTEN      290/sshd
-tcp6       <span class="m">0</span>      <span class="m">0</span> :::5432                 :::*                    LISTEN      3231/postgres
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      408/sshd            
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:5432            0.0.0.0:*               LISTEN      8164/postgres       
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::22                   :::*                    LISTEN      408/sshd            
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::5432                 :::*                    LISTEN      8164/postgres    
 </code></pre></div><p>Comprobamos que es el puerto <strong>5434</strong>, por lo tanto</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo iptables -A INPUT -p tcp -s 10.10.20.158/24 --dport <span class="m">5432</span> -m state --state NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport <span class="m">5432</span> -m state --state ESTABLISHED -j ACCEPT
 </code></pre></div><p>Comprobamos que podemos acceder desde la máquina anfitriona y podemos ver la tabla creada. Le pasaremos el parámetro -h (host) &ndash;port (puerto ) -U (usuario) -W (contraseña de forma forzada)</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~$ psql -h 10.10.20.158 --port <span class="m">5432</span> -U debian -W
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~$ psql -h 10.10.20.158 --port <span class="m">5432</span> -U celia -W prueba
 Contraseña: 
-psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">)</span>, servidor 11.10 <span class="o">(</span>Debian 11.10-0+deb10u1<span class="o">))</span>
+psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
 conexión SSL <span class="o">(</span>protocolo: TLSv1.3, cifrado: TLS_AES_256_GCM_SHA384, bits: 256, compresión: desactivado<span class="o">)</span>
 Digite «help» para obtener ayuda.
 
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># \d</span>
-       Listado de relaciones
- Esquema <span class="p">|</span> Nombre  <span class="p">|</span> Tipo  <span class="p">|</span> Dueño  
----------+---------+-------+--------
- public  <span class="p">|</span> equipos <span class="p">|</span> tabla <span class="p">|</span> debian
+<span class="nv">prueba</span><span class="o">=</span>&gt; <span class="se">\d</span>
+         Listado de relaciones
+ Esquema <span class="p">|</span>    Nombre    <span class="p">|</span> Tipo  <span class="p">|</span> Dueño 
+---------+--------------+-------+-------
+ public  <span class="p">|</span> departamento <span class="p">|</span> tabla <span class="p">|</span> celia
 <span class="o">(</span><span class="m">1</span> fila<span class="o">)</span>
 
-<span class="nv">debian</span><span class="o">=</span><span class="c1"># </span>
+<span class="nv">prueba</span><span class="o">=</span>&gt; 
+
 
 </code></pre></div><ol start="9">
 <li>
@@ -776,7 +788,10 @@ Formatting <span class="s1">&#39;maquina2.qcow2&#39;</span>, <span class="nv">fm
 -rw-r--r-- <span class="m">1</span> libvirt-qemu libvirt-qemu 347M abr  <span class="m">5</span> 19:32 maquina1.qcow2
 -rw-r--r-- <span class="m">1</span> root         root         193K abr  <span class="m">5</span> 19:33 maquina2.qcow2
 
-</code></pre></div></div>
+</code></pre></div><ol start="12">
+<li>Crea una nueva máquina (maquina2) que utilice imagen anterior, con 1 GiB de RAM y que también esté conectada a intra.</li>
+</ol>
+</div>
         <div class="post-footer">
             <div class="info">
                 
