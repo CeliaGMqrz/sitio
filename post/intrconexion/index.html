@@ -145,10 +145,10 @@
                 
                     <div class="info">
                         <em class="fas fa-calendar-day"></em>
-                        <span class="date"> Wed, Apr 7, 2021 
+                        <span class="date"> Tue, Apr 20, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">6-minute read</span>
+                        <span class="reading-time">15-minute read</span>
                     </div>
                 
             </div>
@@ -157,13 +157,17 @@
 <p>Las interconexiones de servidores de bases de datos son operaciones que pueden ser muy útiles en diferentes contextos. Básicamente, se trata de acceder a datos que no están almacenados en nuestra base de datos, pudiendo combinarlos con los que ya tenemos.</p>
 <p>En esta práctica veremos varias formas de crear un enlace entre distintos servidores de bases de datos.</p>
 <p>Se pide:</p>
-<pre><code>* Realizar un enlace entre dos servidores de bases de datos ORACLE, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
-  
-*  Realizar un enlace entre dos servidores de bases de datos Postgres, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
-  
-*  Realizar un enlace entre un servidor ORACLE y otro Postgres o MySQL empleando Heterogeneus Services, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.
-</code></pre>
-<h2 id="enlace-entre-bases-de-datos-oracle">Enlace entre bases de datos ORACLE.</h2>
+<ul>
+<li>
+<p>Realizar un enlace entre dos servidores de bases de datos ORACLE, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.</p>
+</li>
+<li>
+<p>Realizar un enlace entre dos servidores de bases de datos Postgres, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.</p>
+</li>
+<li>
+<p>Realizar un enlace entre un servidor ORACLE y otro Postgres o MySQL empleando Heterogeneus Services, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.</p>
+</li>
+</ul>
 <h2 id="enlace-entre-bases-de-datos-postgresql---postgresql">Enlace entre bases de datos PostgreSQL - PostgreSQL.</h2>
 <p>Primero tenemos que crear el entorno de trabajo, en este caso he usado dos máquinas virtuales con Debian Buster, sobre las que está instalado postgresql. Para ver el entorno de trabajo vaya este post <a href="https://www.celiagm.es/post/postgresql_debian/">Instalación de postgresql sobre Debian Buster</a></p>
 <p>El <strong>objetivo</strong> de este post se trata de lo siguiente:</p>
@@ -327,8 +331,489 @@ Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
       <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
 <span class="o">(</span><span class="m">4</span> rows<span class="o">)</span>
 </code></pre></div><p>Como hemos visto se ha creado los enlaces correctamente y hemos podido hacer consultas a tablas externas.</p>
-<h2 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql.</h2>
-</div>
+<h2 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql</h2>
+<p>Vamos a crear un enlace desde Oracle ubicado en un CentOS8 a Postgresql ubicado en Debian Buster.</p>
+<h3 id="configuracion-servidor-oracle-centos8">Configuracion Servidor Oracle (CentOS8)</h3>
+<p>Necesitaremos instalar los siguientes paquetes:</p>
+<ul>
+<li>postgresql-odbc.x86_64 (Controlador oficial de postgres)</li>
+<li>unixODBC (Administrador de controladores. Permite trabajar con SQL)</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dnf install unixODBC-2.3.7-1.el8.i686
+dnf install postgresql-odbc.x86_64 
+</code></pre></div><p>Ahora vamos a la configuración.</p>
+<p>Primero vamos a editar el fichero <code>/etc/odbcinst.ini</code>. En este fichero está la configuración para los controladores unixODBC. Es recomendable editarlo con la utilidad &lsquo;obdcinst&rsquo; pero en esta ocasión lo editaremos a mano y dejaremos el siguiente contenido.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /etc/odbcinst.ini
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>PostgreSQL ANSI<span class="o">]</span>
+<span class="nv">Description</span><span class="o">=</span>PostgreSQL ODBC driver <span class="o">(</span>ANSI version<span class="o">)</span>
+<span class="nv">Driver</span><span class="o">=</span>psqlodbca.so
+<span class="nv">Setup</span><span class="o">=</span>libodbcpsqlS.so
+<span class="nv">Debug</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">CommLog</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">UsageCount</span><span class="o">=</span><span class="m">1</span>
+
+<span class="o">[</span>PostgreSQL Unicode<span class="o">]</span>
+<span class="nv">Description</span><span class="o">=</span>PostgreSQL ODBC driver <span class="o">(</span>Unicode version<span class="o">)</span>
+<span class="nv">Driver</span><span class="o">=</span>psqlodbcw.so
+<span class="nv">Setup</span><span class="o">=</span>libodbcpsqlS.so
+<span class="nv">Debug</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">CommLog</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">UsageCount</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div><p>Ahora vamos a editar el fichero <code>/etc/odbc.ini</code>. El contenido de este fichero es más complicado porque según el controlador que vayamos a usar requiere entradas diferentes. En este caso introduciremos la entrada para Postgresql.</p>
+<p>Tendremos que indicar la dirección del servidor postgres, el usuario, la contraseña y a la base de datos donde nos vamos a conectar.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /etc/odbc.ini
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+<span class="o">[</span>PSQLA<span class="o">]</span>
+<span class="nv">Debug</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">CommLog</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">ReadOnly</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">Driver</span> <span class="o">=</span> PostgreSQL ANSI
+<span class="nv">Servername</span> <span class="o">=</span> 192.168.100.67
+<span class="nv">Username</span> <span class="o">=</span> celia
+<span class="nv">Password</span> <span class="o">=</span> celia
+<span class="nv">Port</span> <span class="o">=</span> <span class="m">5432</span>
+<span class="nv">Database</span> <span class="o">=</span> prueba
+<span class="nv">Trace</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">TraceFile</span> <span class="o">=</span> /tmp/sql.log
+
+<span class="o">[</span>PSQLU<span class="o">]</span>
+<span class="nv">Debug</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">CommLog</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">ReadOnly</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">Driver</span> <span class="o">=</span> PostgreSQL Unicode
+<span class="nv">Servername</span> <span class="o">=</span> 192.168.100.67
+<span class="nv">Username</span> <span class="o">=</span>  celia
+<span class="nv">Password</span> <span class="o">=</span> celia
+<span class="nv">Port</span> <span class="o">=</span> <span class="m">5432</span>
+<span class="nv">Database</span> <span class="o">=</span> prueba
+<span class="nv">Trace</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">TraceFile</span> <span class="o">=</span> /tmp/sql.log
+
+<span class="o">[</span>Default<span class="o">]</span>
+<span class="nv">Driver</span> <span class="o">=</span> /usr/lib64/liboplodbcS.so.2
+
+</code></pre></div><p>Una vez se haya configurado podemos comprobar la sintaxis de la configuración con los siguientes comandos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>root@bd ~<span class="o">]</span><span class="c1"># odbcinst -q -d</span>
+<span class="o">[</span>PostgreSQL ANSI<span class="o">]</span>
+<span class="o">[</span>PostgreSQL Unicode<span class="o">]</span>
+<span class="o">[</span>MySQL<span class="o">]</span>
+<span class="o">[</span>FreeTDS<span class="o">]</span>
+<span class="o">[</span>MariaDB<span class="o">]</span>
+
+<span class="o">[</span>root@bd ~<span class="o">]</span><span class="c1"># odbcinst -q -s</span>
+<span class="o">[</span>PSQLA<span class="o">]</span>
+<span class="o">[</span>PSQLU<span class="o">]</span>
+<span class="o">[</span>Default<span class="o">]</span>
+
+</code></pre></div><p>Ahora vamos a comprobar la conexión con la base de datos de postgres de esta forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>root@bd ~<span class="o">]</span><span class="c1"># isql -v PSQLU</span>
++---------------------------------------+
+<span class="p">|</span> Connected!                            <span class="p">|</span>
+<span class="p">|</span>                                       <span class="p">|</span>
+<span class="p">|</span> sql-statement                         <span class="p">|</span>
+<span class="p">|</span> <span class="nb">help</span> <span class="o">[</span>tablename<span class="o">]</span>                      <span class="p">|</span>
+<span class="p">|</span> quit                                  <span class="p">|</span>
+<span class="p">|</span>                                       <span class="p">|</span>
++---------------------------------------+
+SQL&gt; <span class="k">select</span> * from departamento<span class="p">;</span>
++------------+---------------------+---------------------+
+<span class="p">|</span> dept_no    <span class="p">|</span> dnombre             <span class="p">|</span> loc                 <span class="p">|</span>
++------------+---------------------+---------------------+
+<span class="p">|</span> <span class="m">10</span>         <span class="p">|</span> CONTABILIDAD        <span class="p">|</span> SEVILLA             <span class="p">|</span>
+<span class="p">|</span> <span class="m">20</span>         <span class="p">|</span> INVESTIGACION       <span class="p">|</span> MADRID              <span class="p">|</span>
+<span class="p">|</span> <span class="m">30</span>         <span class="p">|</span> VENTAS              <span class="p">|</span> BARCELONA           <span class="p">|</span>
+<span class="p">|</span> <span class="m">40</span>         <span class="p">|</span> PRODUCCION          <span class="p">|</span> BILBAO              <span class="p">|</span>
++------------+---------------------+---------------------+
+SQLRowCount returns <span class="m">4</span>
+<span class="m">4</span> rows fetched
+SQL&gt; quit
+<span class="o">[</span>root@bd ~<span class="o">]</span><span class="c1"># isql -v PSQLA</span>
++---------------------------------------+
+<span class="p">|</span> Connected!                            <span class="p">|</span>
+<span class="p">|</span>                                       <span class="p">|</span>
+<span class="p">|</span> sql-statement                         <span class="p">|</span>
+<span class="p">|</span> <span class="nb">help</span> <span class="o">[</span>tablename<span class="o">]</span>                      <span class="p">|</span>
+<span class="p">|</span> quit                                  <span class="p">|</span>
+<span class="p">|</span>                                       <span class="p">|</span>
++---------------------------------------+
+SQL&gt; <span class="k">select</span> * from departamento<span class="p">;</span>
++------------+---------------------+---------------------+
+<span class="p">|</span> dept_no    <span class="p">|</span> dnombre             <span class="p">|</span> loc                 <span class="p">|</span>
++------------+---------------------+---------------------+
+<span class="p">|</span> <span class="m">10</span>         <span class="p">|</span> CONTABILIDAD        <span class="p">|</span> SEVILLA             <span class="p">|</span>
+<span class="p">|</span> <span class="m">20</span>         <span class="p">|</span> INVESTIGACION       <span class="p">|</span> MADRID              <span class="p">|</span>
+<span class="p">|</span> <span class="m">30</span>         <span class="p">|</span> VENTAS              <span class="p">|</span> BARCELONA           <span class="p">|</span>
+<span class="p">|</span> <span class="m">40</span>         <span class="p">|</span> PRODUCCION          <span class="p">|</span> BILBAO              <span class="p">|</span>
++------------+---------------------+---------------------+
+SQLRowCount returns <span class="m">4</span>
+<span class="m">4</span> rows fetched
+
+</code></pre></div><p>Como podemos comprobar ya podemos visualizar el contenido de la tabla departamento que tenemos en postgres.</p>
+<p>Si todo ha ido bien hasta este punto, vamos a crear el fichero <code>initPSQLU.ora</code>. Este fichero nos permitirá crear el enlace con postgresql.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /opt/oracle/product/19c/dbhome_1/hs/admin/initPSQLU.ora
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">HS_FDS_CONNECT_INFO</span> <span class="o">=</span> PSQLU
+<span class="nv">HS_FDS_TRACE_LEVEL</span> <span class="o">=</span> Debug
+<span class="nv">HS_FDS_SHAREABLE_NAME</span> <span class="o">=</span> /usr/lib64/psqlodbcw.so
+<span class="nv">HS_LANGUAGE</span> <span class="o">=</span> AMERICAN_AMERICA.WE8ISO8859P1
+<span class="nb">set</span> <span class="nv">ODBCINI</span><span class="o">=</span>/etc/odbc.ini
+</code></pre></div><p>Ahora vamos a editar los ficheros <code>listener.ora</code> y <code>tsnames.ora</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora 
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># listener.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora</span>
+<span class="c1"># Generated by Oracle configuration tools.</span>
+
+<span class="nv">LISTENER</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION_LIST</span> <span class="o">=</span>
+    <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> bd.oracle.celia.es<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> IPC<span class="o">)(</span><span class="nv">KEY</span> <span class="o">=</span> EXTPROC1521<span class="o">))</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+<span class="nv">SID_LIST_LISTENER</span><span class="o">=</span>
+ <span class="o">(</span><span class="nv">SID_LIST</span><span class="o">=</span>
+ <span class="o">(</span><span class="nv">SID_DESC</span><span class="o">=</span>
+ <span class="o">(</span><span class="nv">SID_NAME</span><span class="o">=</span>PSQLU<span class="o">)</span>
+ <span class="o">(</span><span class="nv">ORACLE_HOME</span><span class="o">=</span>/opt/oracle/product/19c/dbhome_1<span class="o">)</span>
+ <span class="o">(</span><span class="nv">PROGRAM</span><span class="o">=</span>dg4odbc<span class="o">)</span>
+ <span class="o">)</span>
+ <span class="o">)</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora 
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+<span class="c1"># tnsnames.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora</span>
+<span class="c1"># Generated by Oracle configuration tools.</span>
+
+<span class="nv">ORCLCDB</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+    <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> localhost<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+    <span class="o">(</span><span class="nv">CONNECT_DATA</span> <span class="o">=</span>
+      <span class="o">(</span><span class="nv">SERVER</span> <span class="o">=</span> DEDICATED<span class="o">)</span>
+      <span class="o">(</span><span class="nv">SERVICE_NAME</span> <span class="o">=</span> ORCLCDB<span class="o">)</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+<span class="nv">LISTENER_ORCLCDB</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> localhost<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+
+
+<span class="nv">PSQLU</span> <span class="o">=</span>
+ <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=</span>
+ <span class="o">(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>tcp<span class="o">)(</span><span class="nv">HOST</span><span class="o">=</span>localhost<span class="o">)(</span><span class="nv">PORT</span><span class="o">=</span>1521<span class="o">))</span>
+ <span class="o">(</span><span class="nv">CONNECT_DATA</span><span class="o">=(</span><span class="nv">SID</span><span class="o">=</span>PSQLU<span class="o">))</span>
+ <span class="o">(</span><span class="nv">HS</span><span class="o">=</span>OK<span class="o">)</span>
+ <span class="o">)</span>
+
+
+</code></pre></div><p>Una vez configurado todo, desde el ususario oracle paramos el listener y lo volvemos a iniciar.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">lsnrctl stop
+lsnrctl start
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oracle@bd ~<span class="o">]</span>$ lsnrctl stop
+
+LSNRCTL <span class="k">for</span> Linux: Version 19.0.0.0.0 - Production on 20-APR-2021 13:59:43
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>TCP<span class="o">)(</span><span class="nv">HOST</span><span class="o">=</span>bd.oracle.celia.es<span class="o">)(</span><span class="nv">PORT</span><span class="o">=</span>1521<span class="o">)))</span>
+The <span class="nb">command</span> completed successfully
+<span class="o">[</span>oracle@bd ~<span class="o">]</span>$ lsnrctl start
+
+LSNRCTL <span class="k">for</span> Linux: Version 19.0.0.0.0 - Production on 20-APR-2021 13:59:48
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1991, 2019, Oracle.  All rights reserved.
+
+Starting /opt/oracle/product/19c/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR <span class="k">for</span> Linux: Version 19.0.0.0.0 - Production
+System parameter file is /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora
+Log messages written to /opt/oracle/diag/tnslsnr/bd/listener/alert/log.xml
+Listening on: <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>tcp<span class="o">)(</span><span class="nv">HOST</span><span class="o">=</span>bd.oracle.celia.es<span class="o">)(</span><span class="nv">PORT</span><span class="o">=</span>1521<span class="o">)))</span>
+Listening on: <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>ipc<span class="o">)(</span><span class="nv">KEY</span><span class="o">=</span>EXTPROC1521<span class="o">)))</span>
+
+Connecting to <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>TCP<span class="o">)(</span><span class="nv">HOST</span><span class="o">=</span>bd.oracle.celia.es<span class="o">)(</span><span class="nv">PORT</span><span class="o">=</span>1521<span class="o">)))</span>
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR <span class="k">for</span> Linux: Version 19.0.0.0.0 - Production
+Start Date                20-APR-2021 13:59:48
+Uptime                    <span class="m">0</span> days <span class="m">0</span> hr. <span class="m">0</span> min. <span class="m">0</span> sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora
+Listener Log File         /opt/oracle/diag/tnslsnr/bd/listener/alert/log.xml
+Listening Endpoints Summary...
+  <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>tcp<span class="o">)(</span><span class="nv">HOST</span><span class="o">=</span>bd.oracle.celia.es<span class="o">)(</span><span class="nv">PORT</span><span class="o">=</span>1521<span class="o">)))</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION</span><span class="o">=(</span><span class="nv">ADDRESS</span><span class="o">=(</span><span class="nv">PROTOCOL</span><span class="o">=</span>ipc<span class="o">)(</span><span class="nv">KEY</span><span class="o">=</span>EXTPROC1521<span class="o">)))</span>
+Services Summary...
+Service <span class="s2">&#34;PSQLU&#34;</span> has <span class="m">1</span> instance<span class="o">(</span>s<span class="o">)</span>.
+  Instance <span class="s2">&#34;PSQLU&#34;</span>, status UNKNOWN, has <span class="m">1</span> handler<span class="o">(</span>s<span class="o">)</span> <span class="k">for</span> this service...
+The <span class="nb">command</span> completed successfully
+</code></pre></div><p>Comprobamos que está escuchando en el puerto indicado.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oracle@bd ~<span class="o">]</span>$ netstat -tlpn
+<span class="o">(</span>Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.<span class="o">)</span>
+Active Internet connections <span class="o">(</span>only servers<span class="o">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:111             0.0.0.0:*               LISTEN      -                   
+tcp        <span class="m">0</span>      <span class="m">0</span> 192.168.122.1:53        0.0.0.0:*               LISTEN      -                   
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp        <span class="m">0</span>      <span class="m">0</span> 127.0.0.1:631           0.0.0.0:*               LISTEN      -                   
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::29443                :::*                    LISTEN      2950/ora_d000_ORCLC 
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::111                  :::*                    LISTEN      -                   
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::1521                 :::*                    LISTEN      5731/tnslsnr        
+tcp6       <span class="m">0</span>      <span class="m">0</span> :::22                   :::*                    LISTEN      -                   
+tcp6       <span class="m">0</span>      <span class="m">0</span> ::1:631                 :::*                    LISTEN      -         
+</code></pre></div><h3 id="configuracion-servidor-postgresql">Configuracion Servidor postgresql</h3>
+<p>Los siguientes ficheros tienen que tener el siguiente contenido, como hemos hecho en el primer apartado de enlace <em>postgresql-postgresql</em></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano /etc/postgresql/11/main/postgresql.conf 
+
+. . . 
+<span class="nv">listen_addresses</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+. . . 
+
+nano /etc/postgresql/11/main/pg_hba.conf 
+
+. . . 
+host all all 0.0.0.0/0 md5
+. . . 
+</code></pre></div><p>Reiniciamos el servicio de postgresql y creamos el enlace con oracle.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">systemctl restart postgresql
+</code></pre></div><h3 id="crear-el-enlace">Crear el enlace</h3>
+<p>Desde el servidor de <strong>oracle</strong> creamos el link para postgresql de esta forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sqlplus / as sysdba
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; create public database link psql1 connect to <span class="s2">&#34;celia&#34;</span> identified by <span class="s2">&#34;celia&#34;</span> using <span class="s1">&#39;PSQLU&#39;</span><span class="p">;</span>
+
+Enlace con la base de datos creado.
+
+</code></pre></div><p>Una vez creado el enlace vamos a realizar una consulta a postgresql</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; connect c##celia/celia
+Conectado.
+
+SQL&gt; <span class="k">select</span> <span class="s2">&#34;dnombre&#34;</span> from <span class="s2">&#34;departamento&#34;</span>@psql1<span class="p">;</span>                     
+
+dnombre
+--------------------------------------------------------------------------------
+CONTABILIDAD
+INVESTIGACION
+VENTAS
+PRODUCCION
+
+SQL&gt; <span class="k">select</span> <span class="s2">&#34;dnombre&#34;</span> , <span class="s2">&#34;dept_no&#34;</span> from <span class="s2">&#34;departamento&#34;</span>@psql1<span class="p">;</span>     
+
+dnombre
+--------------------------------------------------------------------------------
+   dept_no
+----------
+CONTABILIDAD
+	<span class="m">10</span>
+
+INVESTIGACION
+	<span class="m">20</span>
+
+VENTAS
+	<span class="m">30</span>
+
+
+dnombre
+--------------------------------------------------------------------------------
+   dept_no
+----------
+PRODUCCION
+	<span class="m">40</span>
+
+</code></pre></div><p>Ademas también podemos hacer <em>joins</em>. Para ello vamos a crear la tabla empleados en la base de datos oracle y haremos una consulta de ambas tablas en diferentes gestores.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">CREATE TABLE empleados <span class="o">(</span>dni VARCHAR2<span class="o">(</span>4<span class="o">)</span>,nombre VARCHAR2<span class="o">(</span>10<span class="o">)</span>, depart VARCHAR2<span class="o">(</span>3<span class="o">)</span>, CONSTRAINT pk_empleados PRIMARY KEY <span class="o">(</span>dni<span class="o">))</span><span class="p">;</span>
+
+INSERT INTO empleados <span class="o">(</span>dni, nombre, depart<span class="o">)</span> VALUES<span class="o">(</span><span class="s1">&#39;1111&#39;</span>,<span class="s1">&#39;Carlos&#39;</span>,<span class="s1">&#39;40&#39;</span><span class="o">)</span><span class="p">;</span>
+INSERT INTO empleados <span class="o">(</span>dni, nombre, depart<span class="o">)</span> VALUES<span class="o">(</span><span class="s1">&#39;2222&#39;</span>,<span class="s1">&#39;Celia&#39;</span>,<span class="s1">&#39;40&#39;</span><span class="o">)</span><span class="p">;</span>
+INSERT INTO empleados <span class="o">(</span>dni, nombre, depart<span class="o">)</span> VALUES<span class="o">(</span><span class="s1">&#39;3333&#39;</span>,<span class="s1">&#39;Lucía&#39;</span>,<span class="s1">&#39;20&#39;</span><span class="o">)</span><span class="p">;</span>
+</code></pre></div><p>Comprobamos que se ha creado:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> * from empleados<span class="p">;</span>
+
+DNI  NOMBRE	DEP
+---- ---------- ---
+<span class="m">1111</span> Carlos	<span class="m">40</span>
+<span class="m">2222</span> Celia	<span class="m">40</span>
+<span class="m">3333</span> Luc??a	<span class="m">20</span>
+
+</code></pre></div><h3 id="funcionamiento-del-enlace-oracle-postgresql">Funcionamiento del enlace oracle-postgresql</h3>
+<p>Ahora vamos hacer la siguiente consulta, que es un join de las dos tablas cada una ubicada en un gestor diferente, siendo <strong>empleados</strong> en la de oracle y <strong>departamentos</strong> en la de postgres.</p>
+<p>La consulta consiste en sacar los nombres de los empleados y la localización a la que pertenecen según el departamento.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+SQL&gt; <span class="k">select</span> a.nombre, b.<span class="s2">&#34;loc&#34;</span> from empleados a, <span class="s2">&#34;departamento&#34;</span>@psql1 b where a.depart <span class="o">=</span> b.<span class="s2">&#34;dept_no&#34;</span><span class="p">;</span>
+
+NOMBRE
+----------
+loc
+--------------------------------------------------------------------------------
+Luc??a
+MADRID
+
+Carlos
+BILBAO
+
+Celia
+BILBAO
+
+</code></pre></div><h2 id="enlace-servidor-oracle---servidor-oracle">Enlace Servidor Oracle - Servidor Oracle</h2>
+<h3 id="configuración-servidor-oracle-1">Configuración Servidor ORACLE 1</h3>
+<p>En la primera máquina con oracle vamos a configurarla de la siguiente manera editando los ficheros que expongo a continuación.</p>
+<p><code>nano /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># listener.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora</span>
+<span class="c1"># Generated by Oracle configuration tools.</span>
+
+<span class="nv">LISTENER</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION_LIST</span> <span class="o">=</span>
+    <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> 0.0.0.0<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> IPC<span class="o">)(</span><span class="nv">KEY</span> <span class="o">=</span> EXTPROC1521<span class="o">))</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+<span class="c1">#SID_LIST_LISTENER=</span>
+<span class="c1"># (SID_LIST=</span>
+<span class="c1"># (SID_DESC=</span>
+<span class="c1"># (SID_NAME=PSQLU)</span>
+<span class="c1"># (ORACLE_HOME=/opt/oracle/product/19c/dbhome_1)</span>
+<span class="c1"># (PROGRAM=dg4odbc)</span>
+<span class="c1"># )</span>
+<span class="c1"># )</span>
+
+</code></pre></div><p>Editamos el siguiente fichero donde ahora vamos a indicar el segundo servidor oracle, especificamos la dirección del mismo y el nombre de la base de datos (que en este caso se llama igual porque es una clonación del primer servidor.)</p>
+<p><code>nano /opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># tnsnames.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora</span>
+<span class="c1"># Generated by Oracle configuration tools.</span>
+
+<span class="nv">ORCLCDB</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+    <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> localhost<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+    <span class="o">(</span><span class="nv">CONNECT_DATA</span> <span class="o">=</span>
+      <span class="o">(</span><span class="nv">SERVER</span> <span class="o">=</span> DEDICATED<span class="o">)</span>
+      <span class="o">(</span><span class="nv">SERVICE_NAME</span> <span class="o">=</span> ORCLCDB<span class="o">)</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+<span class="nv">LISTENER_ORCLCDB</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> localhost<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+
+
+<span class="c1"># Segundo servidor oracle</span>
+<span class="nv">ORCL2</span> <span class="o">=</span>
+ <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+ <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> 192.168.100.186<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+ <span class="o">(</span><span class="nv">CONNECT_DATA</span> <span class="o">=</span>
+ <span class="o">(</span><span class="nv">SERVER</span> <span class="o">=</span> DEDICATED<span class="o">)</span>
+ <span class="o">(</span><span class="nv">SERVICE_NAME</span> <span class="o">=</span> ORCLCDB<span class="o">)</span>
+ <span class="o">)</span>
+ <span class="o">)</span>
+
+<span class="c1"># para postgresql</span>
+<span class="c1">#PSQLU =</span>
+<span class="c1"># (DESCRIPTION=</span>
+<span class="c1"># (ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))</span>
+<span class="c1"># (CONNECT_DATA=(SID=PSQLU))</span>
+<span class="c1"># (HS=OK)</span>
+<span class="c1"># )</span>
+
+
+</code></pre></div><p>Una vez cambiada la configuración paramos el listener y lo volvemos a iniciar.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">lsnrctl stop
+lsnrctl start
+</code></pre></div><h3 id="configuración-servidor-oracle-2">Configuración Servidor ORACLE 2</h3>
+<p>En la segunda máquina oracle vamos a cambiar también la configuración de la siguiente forma.</p>
+<p><code>nano /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora </code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># listener.ora Network Configuration File: /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora</span>
+<span class="c1"># Generated by Oracle configuration tools.</span>
+
+<span class="nv">LISTENER</span> <span class="o">=</span>
+  <span class="o">(</span><span class="nv">DESCRIPTION_LIST</span> <span class="o">=</span>
+    <span class="o">(</span><span class="nv">DESCRIPTION</span> <span class="o">=</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> TCP<span class="o">)(</span><span class="nv">HOST</span> <span class="o">=</span> 0.0.0.0<span class="o">)(</span><span class="nv">PORT</span> <span class="o">=</span> 1521<span class="o">))</span>
+      <span class="o">(</span><span class="nv">ADDRESS</span> <span class="o">=</span> <span class="o">(</span><span class="nv">PROTOCOL</span> <span class="o">=</span> IPC<span class="o">)(</span><span class="nv">KEY</span> <span class="o">=</span> EXTPROC1521<span class="o">))</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+
+
+</code></pre></div><p>Ahora reiniciamos el servicio como hemos hecho anteriormente</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">lsnrctl stop
+lsnrctl start
+</code></pre></div><h2 id="crear-enlace-desde-el-primer-servidor-de-oracle">Crear enlace desde el primer servidor de oracle</h2>
+<p>Nos conectamos como administrador y creamos el enlace.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oracle@bd ~<span class="o">]</span>$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Apr <span class="m">20</span> 16:15:45 <span class="m">2021</span>
+Version 19.3.0.0.0
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1982, 2019, Oracle.  All rights reserved.
+
+
+Conectado a:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL&gt; create database link oracle1
+  <span class="m">2</span>  connect to c##celia
+  <span class="m">3</span>  identified by celia
+  <span class="m">4</span>  using <span class="s1">&#39;orcl2&#39;</span><span class="p">;</span>
+
+Enlace con la base de datos creado.
+
+</code></pre></div><p>Primero probaremos que podemos acceder al otro servidor con el siguiente comando</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>oracle@bd ~<span class="o">]</span>$ sql c##celia/celia@192.168.100.186/orclcdb
+
+SQLcl: Versión 19.1 Production en mar abr <span class="m">20</span> 16:33:32 <span class="m">2021</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1982, 2021, Oracle. Todos los derechos reservados.
+
+Conectado a:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+
+SQL&gt; <span class="k">select</span> * from alumnos<span class="p">;</span>
+
+DNI             NOMBRE    
+--------------- ----------
+<span class="m">1111</span>            Carlos    
+<span class="m">2222</span>            Celia     
+<span class="m">3333</span>            Luc��a    
+
+</code></pre></div><p>Efectivamente tenemos conexión. Ahora vamos hacer las consultas.</p>
+<h2 id="funcionamiento">Funcionamiento</h2>
+<p>Nos logueamos como admistrador y hacemos la consulta de esta forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> * from cat@oracle1<span class="p">;</span>
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLE_TYPE
+-----------
+ALUMNOS
+TABLE
+
+CURSOS
+TABLE
+
+MATRICULAS
+TABLE
+
+</code></pre></div><p>También podemos hacer joins de dos tablas en ambos servidores.</p>
+<p>Eliminamos las tablas matriculas y cursos y las ubicamos en el primer servidor</p>
+<p><strong>Quiero saber a qué curso va cada niño con un JOIN.</strong></p>
+<p>Siendo:</p>
+<ul>
+<li>tabla alumnos (servidor oracle 2)</li>
+<li>tablas cursos y matriculas (servidor oracle 1)</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="k">select</span> distinct a.nombre, c.nombrecurso as curso from alumnos@oracle1 a, matriculas b, cursos c where a.dni <span class="o">=</span> b.dni and b.codigocurso <span class="o">=</span> c.codigocurso<span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> distinct a.nombre, c.nombrecurso as curso from alumnos@oracle1 a, matriculas b, cursos c where a.dni <span class="o">=</span> b.dni and b.codigocurso <span class="o">=</span> c.codigocurso<span class="p">;</span>
+
+NOMBRE	   CURSO
+---------- -----
+Celia	   <span class="m">2</span>
+Luc??a	   <span class="m">3</span>
+Carlos	   <span class="m">1</span>
+
+
+</code></pre></div></div>
         <div class="post-footer">
             <div class="info">
                 

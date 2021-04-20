@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Celia García Márquez </title>
+    <title> Celia García Márquez | ISCSI </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <meta name="description" content="Blog sobre informática">
+    <meta name="description" content="Configurar un servidor ISCSI">
     
     <link rel="stylesheet"
           href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
@@ -29,10 +29,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
 
-    <link rel="canonical" href="https://www.celiagm.es/">
+    <link rel="canonical" href="https://www.celiagm.es/post/iscsi/">
 
     
-    <link rel="alternate" type="application/rss+xml" href="https://www.celiagm.es/index.xml" title="1bit1nfo" />
     
     
     
@@ -53,8 +52,8 @@
     <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
 
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="Blog sobre informática"/>
+<meta name="twitter:title" content="ISCSI"/>
+<meta name="twitter:description" content="Configurar un servidor ISCSI"/>
 
 
     
@@ -106,7 +105,7 @@
         
         
             
-            <li><a class="current"
+            <li><a 
                    href="/"
                         
                    title="">Inicio</a></li>
@@ -136,131 +135,66 @@
 
     <div class="autopagerize_page_element">
         <div class="content">
-
     <div class="post  animated fadeInDown ">
-        
-        <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/iscsi/iscsi.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>ISCSI</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Wed, Apr 7, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">2-minute read</span>
+                    </div>
+                
+            </div>
 
+            <h2 id="conceptos-previos">Conceptos previos</h2>
+<p><strong>¿Qué es ISCSI?</strong></p>
+<p>Así a grandes rasgos se utiliza principalmente en redes de almacenamiento y proporciona acceso a dispositivos de bloque sobre TCP/IP. Es un protocolo a nivel de aplicación que como hemos dicho anteriormente permite el acceso a un dispositivo de almacenamiento de forma remota y segura.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># -*- mode: ruby -*-</span>
+<span class="c1"># vi: set ft=ruby :</span>
+
+
+Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
+  <span class="nv">disco</span> <span class="o">=</span> <span class="s1">&#39;.vagrant/midisco.vdi&#39;</span>
+  config.vm.define :nodo1 <span class="k">do</span> <span class="p">|</span>nodo1<span class="p">|</span>
+    nodo1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo1.vm.hostname <span class="o">=</span> <span class="s2">&#34;nodo1&#34;</span>
+    nodo1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;wlp2s0&#34;</span>
+    nodo1.vm.network :private_network, ip: <span class="s2">&#34;10.0.0.2&#34;</span>
+    nodo1.vm.provider :virtualbox <span class="k">do</span> <span class="p">|</span>v<span class="p">|</span>
+      v.customize <span class="o">[</span><span class="s2">&#34;createhd&#34;</span>, <span class="s2">&#34;--filename&#34;</span>, disco, <span class="s2">&#34;--size&#34;</span>, 1024<span class="o">]</span>
+      v.customize <span class="o">[</span><span class="s2">&#34;storageattach&#34;</span>, :id, <span class="s2">&#34;--storagectl&#34;</span>, <span class="s2">&#34;SATA Controller&#34;</span>, <span class="s2">&#34;--port&#34;</span>, 1, <span class="s2">&#34;--device&#34;</span>, 0, <span class="s2">&#34;--type&#34;</span>, <span class="s2">&#34;hdd&#34;</span>, <span class="s2">&#34;--medium&#34;</span>, disco<span class="o">]</span>
+    end
+  end
+  config.vm.define :nodo2 <span class="k">do</span> <span class="p">|</span>nodo2<span class="p">|</span>
+    nodo2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo2.vm.hostname <span class="o">=</span> <span class="s2">&#34;nodo2&#34;</span>
+    nodo2.vm.network :private_network, ip: <span class="s2">&#34;10.0.0.3&#34;</span>
+  end
+end
+</code></pre></div><h2 id="tarea">Tarea:</h2>
+<p>Configura un escenario con vagrant o similar que incluya varias máquinas que permita realizar la configuración de un servidor iSCSI y dos clientes (uno linux y otro windows). Explica de forma detallada en la tarea los pasos realizados.</p>
+<p>Crea un target con una LUN y conéctala a un cliente GNU/Linux. Explica cómo escaneas desde el cliente buscando los targets disponibles y utiliza la unidad lógica proporcionada, formateándola si es necesario y montándola.
+Utiliza systemd mount para que el target se monte automáticamente al arrancar el cliente
+Crea un target con 2 LUN y autenticación por CHAP y conéctala a un cliente windows. Explica cómo se escanea la red en windows y cómo se utilizan las unidades nuevas (formateándolas con NTFS)</p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/iscsi/">ISCSI</a><a class="tag" href="/tags/almacenamiento/">almacenamiento</a></span>
+
+            </div>
+        </div>
+
+        
     </div>
 
-    
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-title">
-                <h3><a href="/post/rich-content/">Ejemplos para youtube</a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>YouTube Privacy Enhanced Shortcode    Twitter Simple Shortcode .</p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> Sun, Mar 10, 2019 
-                                             </span>
-                        
-                        <a class="tag"
-                                   href="/tags/shortcodes/">shortcodes</a><a class="tag"
-                                   href="/tags/privacy/">privacy</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-thumbnail">
-                <a href="/post/image-test/">
-                <img src="/images/landscape.jpg" alt="Thumbnail image" loading="lazy">
-                </a>
-            </div>
-            
-            <div class="post-title">
-                <h3><a href="/post/image-test/">Ejemplos para imagenes</a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>Thumbnails can be enabled easily by setting the thumbnail parameter in the frontmatter to an image such as &quot;images/landscape.</p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> Mon, Mar 4, 2019 
-                                             </span>
-                        
-                        <a class="tag"
-                                   href="/tags/thumbnail/">thumbnail</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-
-        <div class="post  animated fadeInDown ">
-            
-            <div class="post-title">
-                <h3><a href="/post/kubernetes/"></a>
-                </h3>
-            </div>
-            <div class="post-content">
-                <div class="p_part"><p>Introducción a Kubernetes  Instalación de minikube  curl -LO https://storage.</p></div>
-            </div>
-            <div class="post-footer">
-                <div class="meta">
-                    <div class="info">
-                        <em class="fas fa-calendar-day"></em>
-                            <span class="date"> Mon, Jan 1, 0001 
-                                             </span>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-    <div class="pagination">
-        
-<ul class="pagination">
-  <li class="page-item">
-    <a href="/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a href="/page/5/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/">1</a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/page/2/">2</a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/page/3/">3</a>
-  </li>
-  <li class="page-item disabled">
-    <span aria-hidden="true">&nbsp;&hellip;&nbsp;</span>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/page/5/">5</a>
-  </li>
-  <li class="page-item active">
-    <a class="page-link" href="/page/6/">6</a>
-  </li>
-  <li class="page-item disabled">
-    <a  class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a href="/page/6/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-  </li>
-</ul>
-
-
-    </div>
 
         </div>
     </div>

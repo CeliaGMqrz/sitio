@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ISCSI on 1bit1nfo</title>
+    <link>https://www.celiagm.es/tags/iscsi/</link>
+    <description>Recent content in ISCSI on 1bit1nfo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 07 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/iscsi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ISCSI</title>
+      <link>https://www.celiagm.es/post/iscsi/</link>
+      <pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/iscsi/</guid>
+      <description>Conceptos previos ¿Qué es ISCSI?
+Así a grandes rasgos se utiliza principalmente en redes de almacenamiento y proporciona acceso a dispositivos de bloque sobre TCP/IP.</description>
+    </item>
+    
+  </channel>
+</rss>
