@@ -315,7 +315,9 @@ Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
 <span class="nv">prueba2</span><span class="o">=</span><span class="c1"># create extension dblink;</span>
 CREATE EXTENSION
 <span class="nv">prueba2</span><span class="o">=</span><span class="c1"># quit</span>
-postgres@postgres2:~$ psql -h localhost -U celia2 -W -d prueba2
+
+</code></pre></div><h2 id="funcionamiento">Funcionamiento</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">postgres@postgres2:~$ psql -h localhost -U celia2 -W -d prueba2
 Password: 
 psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-1.pgdg100+1<span class="o">))</span>
 SSL connection <span class="o">(</span>protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off<span class="o">)</span>
@@ -777,7 +779,7 @@ DNI             NOMBRE
 <span class="m">3333</span>            Luc��a    
 
 </code></pre></div><p>Efectivamente tenemos conexión. Ahora vamos hacer las consultas.</p>
-<h2 id="funcionamiento">Funcionamiento</h2>
+<h2 id="funcionamiento-1">Funcionamiento</h2>
 <p>Nos logueamos como admistrador y hacemos la consulta de esta forma:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; <span class="k">select</span> * from cat@oracle1<span class="p">;</span>
 
