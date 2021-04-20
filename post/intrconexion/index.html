@@ -168,7 +168,7 @@
 <p>Realizar un enlace entre un servidor <strong>ORACLE</strong> y otro <strong>Postgres</strong> o MySQL empleando Heterogeneus Services, explicando la configuración necesaria en ambos extremos y demostrando su funcionamiento.</p>
 </li>
 </ul>
-<h2 id="enlace-entre-bases-de-datos-postgresql---postgresql">Enlace entre bases de datos PostgreSQL - PostgreSQL.</h2>
+<h1 id="enlace-entre-bases-de-datos-postgresql---postgresql">Enlace entre bases de datos PostgreSQL - PostgreSQL.</h1>
 <p>Primero tenemos que crear el entorno de trabajo, en este caso he usado dos máquinas virtuales con Debian Buster, sobre las que está instalado postgresql. Para ver el entorno de trabajo vaya este post <a href="https://www.celiagm.es/post/postgresql_debian/">Instalación de postgresql sobre Debian Buster</a></p>
 <p>El <strong>objetivo</strong> de este post se trata de lo siguiente:</p>
 <p>Teniendo en cuenta el entorno de trabajo ya creado, los datos de prueba para poblar la base de datos serán los mismos, pero introduciremos una tabla en un servidor y la otra tabla en otro servidor de manera que vamos a <strong>construir un enlace</strong> entre ambos. Así cuando hagamos una consulta desde un servidor haciendo referencia al otro podamos obtener información conjunta de los dos servidores.</p>
@@ -330,7 +330,7 @@ Type <span class="s2">&#34;help&#34;</span> <span class="k">for</span> help.
       <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
 <span class="o">(</span><span class="m">4</span> rows<span class="o">)</span>
 </code></pre></div><p>Como hemos visto se ha creado los enlaces correctamente y hemos podido hacer consultas a tablas externas.</p>
-<h2 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql</h2>
+<h1 id="enlace-entre-bases-de-datos-oracle-y-postgresql">Enlace entre bases de datos ORACLE y Postgresql</h1>
 <p>Vamos a crear un enlace desde Oracle ubicado en un CentOS8 a Postgresql ubicado en Debian Buster.</p>
 <h3 id="configuracion-servidor-oracle-centos8">Configuracion Servidor Oracle (CentOS8)</h3>
 <p>Necesitaremos instalar los siguientes paquetes:</p>
@@ -653,7 +653,7 @@ BILBAO
 Celia
 BILBAO
 
-</code></pre></div><h2 id="enlace-servidor-oracle---servidor-oracle">Enlace Servidor Oracle - Servidor Oracle</h2>
+</code></pre></div><h1 id="enlace-servidor-oracle---servidor-oracle">Enlace Servidor Oracle - Servidor Oracle</h1>
 <h3 id="configuración-servidor-oracle-1">Configuración Servidor ORACLE 1</h3>
 <p>En la primera máquina con oracle vamos a configurarla de la siguiente manera editando los ficheros que expongo a continuación.</p>
 <p><code>nano /opt/oracle/product/19c/dbhome_1/network/admin/listener.ora</code></p>
