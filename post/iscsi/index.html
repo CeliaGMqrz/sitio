@@ -148,7 +148,7 @@
                         <span class="date"> Wed, Apr 7, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">2-minute read</span>
+                        <span class="reading-time">7-minute read</span>
                     </div>
                 
             </div>
@@ -156,33 +156,258 @@
             <h2 id="conceptos-previos">Conceptos previos</h2>
 <p><strong>¿Qué es ISCSI?</strong></p>
 <p>Así a grandes rasgos se utiliza principalmente en redes de almacenamiento y proporciona acceso a dispositivos de bloque sobre TCP/IP. Es un protocolo a nivel de aplicación que como hemos dicho anteriormente permite el acceso a un dispositivo de almacenamiento de forma remota y segura.</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># -*- mode: ruby -*-</span>
+<p>ISCSI es un estándar del protocolo SCSI que permite la distribución de dispositivos de bloques a través de TCP/IP. Como hemos dicho anteriormente se suele usar en entornos donde se encuetra una NAS por ejemplo para aprovisionar de almacenamiento en red.</p>
+<p>En este post vamos a tener un entorno en el cual utilizaremos dos máquinas debian y una windows.</p>
+<h2 id="tarea">Tarea:</h2>
+<p>Configura un escenario con vagrant o similar que incluya varias máquinas que permita realizar la configuración de un servidor iSCSI y dos clientes (uno linux y otro windows). Explica de forma detallada en la tarea los pasos realizados.</p>
+<p>En este caso vamos a utilizar Vagrant con virtualbox 6.0.</p>
+<p>Tendremos:</p>
+<ul>
+<li>Máquina 1: debian1 (Debian Buster)
+<ul>
+<li>Disco duro de 1G</li>
+<li>Interfaz de red pública en modo puente al br0 de mi máquina anfitriona</li>
+<li>Interfaz de red privada con direccionamiento 10.0.4.3</li>
+</ul>
+</li>
+<li>Máquina 2: debian2- Cliente (Debian Buster)
+<ul>
+<li>Interfaz de red privada con direccionamiento 10.0.4.4</li>
+</ul>
+</li>
+<li>Máquina 3: Windows Cliente (Windows 7)
+<ul>
+<li>Interfaz de red privada con direccionamiento 10.0.4.5</li>
+</ul>
+</li>
+</ul>
+<p>El escenario lo montamos con una receta de vagrant con un fichero Vagrantfile:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
+<span class="c1"># -*- mode: ruby -*-</span>
 <span class="c1"># vi: set ft=ruby :</span>
 
 
 Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
   <span class="nv">disco</span> <span class="o">=</span> <span class="s1">&#39;.vagrant/midisco.vdi&#39;</span>
-  config.vm.define :nodo1 <span class="k">do</span> <span class="p">|</span>nodo1<span class="p">|</span>
-    nodo1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
-    nodo1.vm.hostname <span class="o">=</span> <span class="s2">&#34;nodo1&#34;</span>
-    nodo1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;wlp2s0&#34;</span>
-    nodo1.vm.network :private_network, ip: <span class="s2">&#34;10.0.0.2&#34;</span>
-    nodo1.vm.provider :virtualbox <span class="k">do</span> <span class="p">|</span>v<span class="p">|</span>
+  config.vm.define :debian1 <span class="k">do</span> <span class="p">|</span>debian1<span class="p">|</span>
+    debian1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    debian1.vm.hostname <span class="o">=</span> <span class="s2">&#34;debian1&#34;</span>
+    debian1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
+    debian1.vm.network :private_network, ip: <span class="s2">&#34;10.0.4.3&#34;</span>
+    debian1.vm.provider :virtualbox <span class="k">do</span> <span class="p">|</span>v<span class="p">|</span>
       v.customize <span class="o">[</span><span class="s2">&#34;createhd&#34;</span>, <span class="s2">&#34;--filename&#34;</span>, disco, <span class="s2">&#34;--size&#34;</span>, 1024<span class="o">]</span>
-      v.customize <span class="o">[</span><span class="s2">&#34;storageattach&#34;</span>, :id, <span class="s2">&#34;--storagectl&#34;</span>, <span class="s2">&#34;SATA Controller&#34;</span>, <span class="s2">&#34;--port&#34;</span>, 1, <span class="s2">&#34;--device&#34;</span>, 0, <span class="s2">&#34;--type&#34;</span>, <span class="s2">&#34;hdd&#34;</span>, <span class="s2">&#34;--medium&#34;</span>, disco<span class="o">]</span>
+      v.customize <span class="o">[</span><span class="s2">&#34;storageattach&#34;</span>, :id, <span class="s2">&#34;--storagectl&#34;</span>, <span class="s2">&#34;SATA Controller&#34;</span>, <span class="s2">&#34;--port&#34;</span>, 1, <span class="s2">&#34;--device&#34;</span>, 0, $
     end
   end
-  config.vm.define :nodo2 <span class="k">do</span> <span class="p">|</span>nodo2<span class="p">|</span>
-    nodo2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
-    nodo2.vm.hostname <span class="o">=</span> <span class="s2">&#34;nodo2&#34;</span>
-    nodo2.vm.network :private_network, ip: <span class="s2">&#34;10.0.0.3&#34;</span>
+  config.vm.define :debian2 <span class="k">do</span> <span class="p">|</span>debian2<span class="p">|</span>
+    debian2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    debian2.vm.hostname <span class="o">=</span> <span class="s2">&#34;debian2&#34;</span>
+    debian2.vm.network :private_network, ip: <span class="s2">&#34;10.0.4.4&#34;</span>
+  end
+
+config.vm.define :windows <span class="k">do</span> <span class="p">|</span>windows<span class="p">|</span>
+    windows.vm.box <span class="o">=</span> <span class="s2">&#34;icehofman/windows-7-virtualbox&#34;</span>
+    windows.vm.hostname <span class="o">=</span> <span class="s2">&#34;windows&#34;</span>
+    windows.vm.network :private_network, ip: <span class="s2">&#34;10.0.4.5&#34;</span>
   end
 end
-</code></pre></div><h2 id="tarea">Tarea:</h2>
-<p>Configura un escenario con vagrant o similar que incluya varias máquinas que permita realizar la configuración de un servidor iSCSI y dos clientes (uno linux y otro windows). Explica de forma detallada en la tarea los pasos realizados.</p>
-<p>Crea un target con una LUN y conéctala a un cliente GNU/Linux. Explica cómo escaneas desde el cliente buscando los targets disponibles y utiliza la unidad lógica proporcionada, formateándola si es necesario y montándola.
-Utiliza systemd mount para que el target se monte automáticamente al arrancar el cliente
-Crea un target con 2 LUN y autenticación por CHAP y conéctala a un cliente windows. Explica cómo se escanea la red en windows y cómo se utilizan las unidades nuevas (formateándolas con NTFS)</p>
+
+</code></pre></div><h2 id="configuración">Configuración</h2>
+<h3 id="máquina-1-servidor-debian">Máquina 1: Servidor Debian</h3>
+<p>Utilizaremos Logical Volume Management (LVM) como respaldo de almacenamiento para el destino ISCSI.</p>
+<p>Necesitaremos tener instalado el paquete lvm2.</p>
+<p>Inicializamos el disco y creamos el grupo de volúmenes lógicos en el que vamos a particionar un volumen de 500M</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian1:~$ sudo pvcreate /dev/sdb
+  Physical volume <span class="s2">&#34;/dev/sdb&#34;</span> successfully created.
+vagrant@debian1:~$ sudo vgcreate gp1 /dev/sdb
+  Volume group <span class="s2">&#34;gp1&#34;</span> successfully created
+vagrant@debian1:~$ sudo lvcreate -L 500M -n v_gp1 gp1
+  Logical volume <span class="s2">&#34;v_gp1&#34;</span> created.
+vagrant@debian1:~$ lsblk -f
+NAME        FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+sda                                                                          
+├─sda1      ext4         983742b1-65a8-49d1-a148-a3865ea09e24   16.1G     7% /
+├─sda2                                                                       
+└─sda5      swap         04559374-06db-46f1-aa31-e7a4e6ec3286                <span class="o">[</span>SWAP<span class="o">]</span>
+sdb                                                                          
+└─gp1-v_gp1               
+</code></pre></div><h3 id="crear-el-target-y-definir-una-lun">Crear el target y definir una LUN</h3>
+<blockquote>
+<p>Crea un <strong>target con una LUN</strong> y conéctala a un cliente GNU/Linux.</p>
+</blockquote>
+<p>Necesitaremos el paquete <code>tgt</code>. Este paquete se conoce como Marco de Destino. Tiene como objetivo simplificar la creación y el mantenimiento de controladores de destino SCSI.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install tgt
+</code></pre></div><p>Ahora definiremos la <strong>LUN</strong>. Para no entrar en detalles una LUN es una pequeña parte de un disco lógico que se asignará al servidor cliente para su utilización. Nuestro cliente lo reconocerá como un disco corriente aunque en realidad se trate de una infraestructura más compleja en la que el almacenamiento está compartido por red. (SAN por ejemplo).</p>
+<p>Para ello editaremos el fichero de configuración <code>/etc/tgt/targets.conf</code> y indicamos el target con destino al volumen lógico que hemos definido anteriormente.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Empty targets configuration file -- please see the package</span>
+<span class="c1"># documentation directory for an example.</span>
+<span class="c1">#</span>
+<span class="c1"># You can drop individual config snippets into /etc/tgt/conf.d</span>
+include /etc/tgt/conf.d/*.conf
+
+&lt;target iqn.2021-04.iscsi:tgt1&gt;
+    backing-store /dev/gp1/v_gp1   
+&lt;/target&gt;
+
+</code></pre></div><p>Reiniciamos el servicio tgt de esta forma</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo /etc/init.d/tgt reload
+</code></pre></div><p>Verificamos que está disponible el LUN que acabamos de definir</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian1:~$ sudo tgtadm --mode target --op show
+Target 1: iqn.2021-04.iscsi:tgt1
+    System information:
+        Driver: iscsi
+        State: ready
+    I_T nexus information:
+    LUN information:
+        LUN: <span class="m">0</span>
+            Type: controller
+            SCSI ID: IET     <span class="m">00010000</span>
+            SCSI SN: beaf10
+            Size: <span class="m">0</span> MB, Block size: <span class="m">1</span>
+            Online: Yes
+            Removable media: No
+            Prevent removal: No
+            Readonly: No
+            SWP: No
+            Thin-provisioning: No
+            Backing store type: null
+            Backing store path: None
+            Backing store flags: 
+        LUN: <span class="m">1</span>
+            Type: disk
+            SCSI ID: IET     <span class="m">00010001</span>
+            SCSI SN: beaf11
+            Size: <span class="m">524</span> MB, Block size: <span class="m">512</span>
+            Online: Yes
+            Removable media: No
+            Prevent removal: No
+            Readonly: No
+            SWP: No
+            Thin-provisioning: No
+            Backing store type: rdwr
+            Backing store path: /dev/gp1/v_gp1
+            Backing store flags: 
+    Account information:
+    ACL information:
+        ALL
+
+</code></pre></div><p>Efectivamente tenemos la LUN definida y el servidor configurado para que los clientes puedan acceder al disco.</p>
+<h3 id="máquina-2-iniciador-debian">Máquina 2: Iniciador Debian</h3>
+<p>Antes de continuar vamos a explicar brevemente que es un iniciador.</p>
+<p>El <strong>iniciador ISCSI</strong> es un software en este caso que, origina la comunicación entre el cliente y el sistema de almacenamiento ISCSI externo y permite el envío de datos entre ambos.</p>
+<p>Necesitaremos instalar el paquete <code>open-iscsi</code>. Este software nos permite usar el target del servidor.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install open-iscsi
+</code></pre></div><p>Editamos el fichero <code>/etc/iscsi/iscsid.conf</code> y le indicamos que busque los targets de forma automática de la siguiente forma.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">#*****************</span>
+<span class="c1"># Startup settings</span>
+<span class="c1">#*****************</span>
+
+<span class="c1"># To request that the iscsi initd scripts startup a session set to &#34;automatic&#34;.</span>
+node.startup <span class="o">=</span> automatic
+<span class="c1">#</span>
+<span class="c1"># To manually startup the session set to &#34;manual&#34;. The default is manual.</span>
+<span class="c1">#node.startup = manual</span>
+
+</code></pre></div><p>Reiniciamos el servicio para efectuar los cambios</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl restart open-iscsi
+</code></pre></div><blockquote>
+<p>Explica cómo escaneas desde el cliente buscando los targets disponibles y utiliza la unidad lógica proporcionada, formateándola si es necesario y montándola.</p>
+</blockquote>
+<p>Ahora vamos a comprobar que al escanear encontramos el target indicando la ip del servidor.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ sudo iscsiadm -m discovery -t st -p 10.0.4.3
+10.0.4.3:3260,1 iqn.2021-04.iscsi:tgt1
+</code></pre></div><h4 id="conectar-al-target">Conectar al target</h4>
+<p>Para conectarnos al target utilizaremos <strong>iscsiadm</strong> que es la herramienta que tiene el paquete open-iscsi para su administración.</p>
+<p>Le tendremos que pasar varios parámetros, entre ellos el modo, el nombre del target y el portal destino, en este caso la ip del servidor, siendo el puerto predeterminado el 3260.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo iscsiadm -m node -T iqn.2021-04.iscsi:tgt1 --portal <span class="s2">&#34;10.0.4.3&#34;</span> --login
+</code></pre></div><p>Vemos que efectivamente se ha conectando con éxito.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ sudo iscsiadm -m node -T iqn.2021-04.iscsi:tgt1 --portal <span class="s2">&#34;10.0.4.3&#34;</span> --login
+Logging in to <span class="o">[</span>iface: default, target: iqn.2021-04.iscsi:tgt1, portal: 10.0.4.3,3260<span class="o">]</span> <span class="o">(</span>multiple<span class="o">)</span>
+Login to <span class="o">[</span>iface: default, target: iqn.2021-04.iscsi:tgt1, portal: 10.0.4.3,3260<span class="o">]</span> successful.
+</code></pre></div><p>Ahora si todo ha ido bien deberíamos de ver el nuevo disco en nuestro cliente</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ lsblk -f
+NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+sda                                                                     
+├─sda1 ext4         983742b1-65a8-49d1-a148-a3865ea09e24   16.1G     7% /
+├─sda2                                                                  
+└─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                <span class="o">[</span>SWAP<span class="o">]</span>
+sdb                                                                     
+</code></pre></div><h3 id="formatear-y-montar-el-disco-nuevo">Formatear y montar el disco nuevo</h3>
+<p>Ahora ya podemos formatear y montar el disco para darle uso.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo fdisk /dev/sdb 
+sudo mkfs.ext4 /dev/sdb1
+sudo mkdir /home/vagrant/disco
+sudo mount /dev/sdb1 /home/vagrant/disco
+</code></pre></div><p>Vemos que se ha creado y montado correctamente</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ sudo mount /dev/sdb1 /home/vagrant/disco/
+vagrant@debian2:~$ lsblk -f
+NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+sda                                                                     
+├─sda1 ext4         983742b1-65a8-49d1-a148-a3865ea09e24   16.1G     7% /
+├─sda2                                                                  
+└─sda5 swap         04559374-06db-46f1-aa31-e7a4e6ec3286                <span class="o">[</span>SWAP<span class="o">]</span>
+sdb                                                                     
+└─sdb1 ext4         a7bc3eab-12fa-41d5-9bb4-c9a1fc6eb753    444M     0% /home/vagrant/disco
+</code></pre></div><h3 id="montar-el-target-automáticamente">Montar el target automáticamente.</h3>
+<blockquote>
+<p>Utiliza systemd mount para que el target se monte automáticamente al arrancar el cliente</p>
+</blockquote>
+<p>Para ello vamos a crear una unidad de systemd tipo <code>.mount</code>. Esta se encargará de montar los volúmenes despues que se inicie el servicio de open-iscsi.</p>
+<p>Para hacer esto necesitaremos indicar en el fichero de extensión .mount el target que vamos a montar y dónde lo vamos a montar.</p>
+<p>Creamos el directorio donde lo vamos a montar</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian2:~# mkdir /iscsi
+</code></pre></div><p>Creamos la unidad</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo nano /etc/systemd/system/iscsi-tgt1.mount
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>Unit<span class="o">]</span>
+<span class="nv">Description</span><span class="o">=</span>Unidad de montaje para tgt1
+<span class="nv">After</span><span class="o">=</span>open-iscsi.service
+
+<span class="o">[</span>Mount<span class="o">]</span>
+<span class="nv">What</span><span class="o">=</span>/dev/sdb1
+<span class="nv">Where</span><span class="o">=</span>/iscsi/tgt1
+<span class="nv">Type</span><span class="o">=</span>ext4
+<span class="nv">Options</span><span class="o">=</span>defaults
+
+<span class="o">[</span>Install<span class="o">]</span>
+<span class="nv">WantedBy</span><span class="o">=</span>multi-user.target
+</code></pre></div><p>Reiniciamos los servicios</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ sudo systemctl daemon-reload
+vagrant@debian2:~$ sudo systemctl <span class="nb">enable</span> iscsi-tgt1.mount
+vagrant@debian2:~$ sudo systemctl start iscsi-tgt1.mount
+
+</code></pre></div><p>Comprobamos que está habilitado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ sudo systemctl status iscsi-tgt1.mount
+● iscsi-tgt1.mount - Unidad de montaje para tgt1
+   Loaded: loaded <span class="o">(</span>/etc/systemd/system/iscsi-tgt1.mount<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+   Active: active <span class="o">(</span>mounted<span class="o">)</span> since Sat 2021-04-24 17:43:34 GMT<span class="p">;</span> 1min 42s ago
+    Where: /iscsi/tgt1
+     What: /dev/sdb1
+    Tasks: <span class="m">0</span> <span class="o">(</span>limit: 544<span class="o">)</span>
+   Memory: 112.0K
+   CGroup: /system.slice/iscsi-tgt1.mount
+
+Apr <span class="m">24</span> 17:43:34 debian2 systemd<span class="o">[</span>1<span class="o">]</span>: Mounting Unidad de montaje para tgt1...
+Apr <span class="m">24</span> 17:43:34 debian2 systemd<span class="o">[</span>1<span class="o">]</span>: Mounted Unidad de montaje para tgt1.
+
+</code></pre></div><p>Si reiniciamos la máquina cliente y todo ha ido bien debería de montarse automáticamente.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ lsblk 
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    <span class="m">0</span> 19.8G  <span class="m">0</span> disk 
+├─sda1   8:1    <span class="m">0</span> 18.8G  <span class="m">0</span> part /
+├─sda2   8:2    <span class="m">0</span>    1K  <span class="m">0</span> part 
+└─sda5   8:5    <span class="m">0</span> 1021M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
+sdb      8:16   <span class="m">0</span>  500M  <span class="m">0</span> disk 
+└─sdb1   8:17   <span class="m">0</span>  499M  <span class="m">0</span> part /iscsi/tgt1
+</code></pre></div><p>Comprobamos que es totalmente funcional</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian2:~$ <span class="nb">cd</span> /iscsi/tgt1/
+vagrant@debian2:/iscsi/tgt1$ ls
+hola.txt  lost+found
+vagrant@debian2:/iscsi/tgt1$ 
+
+</code></pre></div><h3 id="target-con-2-lun-cliente-windows-chap">Target con 2 LUN. Cliente Windows CHAP.</h3>
+<blockquote>
+<p>Crea un target con 2 LUN y autenticación por CHAP y conéctala a un cliente windows. Explica cómo se escanea la red en windows y cómo se utilizan las unidades nuevas (formateándolas con NTFS)</p>
+</blockquote>
 </div>
         <div class="post-footer">
             <div class="info">
