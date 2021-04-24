@@ -410,7 +410,7 @@ vagrant@debian2:/iscsi/tgt1$
 <p>Crea un target con 2 LUN y autenticación por CHAP y conéctala a un cliente windows. Explica cómo se escanea la red en windows y cómo se utilizan las unidades nuevas (formateándolas con NTFS)</p>
 </blockquote>
 <h4 id="máquina-1-servidor-debian-1">Máquina 1: Servidor Debian</h4>
-<p>Creamos dos volúmenes lógicos de 200M cada -</p>
+<p>Creamos dos volúmenes lógicos de 200M cada uno.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@debian1:~$ sudo lvcreate -L 200M -n v1_gp1 gp1
   Logical volume <span class="s2">&#34;v1_gp1&#34;</span> created.
 vagrant@debian1:~$ sudo lvcreate -L 200M -n v2_gp1 gp1
@@ -425,14 +425,14 @@ sdb          LVM2_member       bc0nrL-OLGb-0Y2M-IC0g-zJiX-T5Mk-7UGptu
 ├─gp1-v_gp1                                                                          
 ├─gp1-v1_gp1                                                                         
 └─gp1-v2_gp1          
-</code></pre></div><p>De igual forma que creamos el primer target, ahora vamos a crear otro pero definiremos dos LUN.</p>
+</code></pre></div><p>De igual forma que creamos el primer target, ahora vamos a crear otro pero definiremos dos <strong>LUN</strong>. Utilizaremos la autentificación <strong>CHAP</strong> , es decir le pondremos el usuario y la contraseña para que se pueda autentificar con el cliente windows.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">## Crear el target</span>
 
 &lt;target iqn.2021-04.iscsi:tgt2&gt;
       backing-store /dev/gp1/v1_gp1
       backing-store /dev/gp1/v2_gp1
       initiator-address 10.0.4.5
-      incominguser celia.celia celia.celia
+      incominguser usuario contrasenia
 &lt;/target&gt;
 
 </code></pre></div><p>Ahora reiniciamos el servicio y habilitamos el target con los dos lun, podemos ver que se han habilitado los nuevos lun con los discos indicados</p>
