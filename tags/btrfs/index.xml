@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Btrfs on 1bit1nfo</title>
+    <link>https://www.celiagm.es/tags/btrfs/</link>
+    <description>Recent content in Btrfs on 1bit1nfo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 03 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/btrfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sistemas de ficheros avanzados. Btrfs.</title>
+      <link>https://www.celiagm.es/post/sistemas_ficheros/</link>
+      <pubDate>Mon, 03 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/sistemas_ficheros/</guid>
+      <description>ZFS/Btrfs Son sistemas de archivos de alto rendimiento.
+En este post hablaremos sobre Btrfs, que es el que hemos elegido para la práctica.</description>
+    </item>
+    
+  </channel>
+</rss>

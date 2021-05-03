@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Celia García Márquez </title>
+    <title> Celia García Márquez | Sistemas de ficheros avanzados. Btrfs. </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <meta name="description" content="Blog sobre informática">
+    <meta name="description" content="Sistemas de ficheros avanzados">
     
     <link rel="stylesheet"
           href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
@@ -52,8 +52,8 @@
     <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
 
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="Sistemas de ficheros avanzados ZFS/Btrfs Son sistemas de archivos de alto rendimiento."/>
+<meta name="twitter:title" content="Sistemas de ficheros avanzados. Btrfs."/>
+<meta name="twitter:description" content="Sistemas de ficheros avanzados"/>
 
 
     
@@ -138,12 +138,14 @@
     <div class="post  animated fadeInDown ">
         <div class="post-content">
             
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/btrfs/btrfs.png" alt="Thumbnail image">
+            
             <div class="post-title">
-                <h3></h3>
+                <h3>Sistemas de ficheros avanzados. Btrfs.</h3>
                 
                     <div class="info">
                         <em class="fas fa-calendar-day"></em>
-                        <span class="date"> Mon, Jan 1, 0001 
+                        <span class="date"> Mon, May 3, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
                         <span class="reading-time">12-minute read</span>
@@ -151,8 +153,7 @@
                 
             </div>
 
-            <h1 id="sistemas-de-ficheros-avanzados">Sistemas de ficheros avanzados</h1>
-<h2 id="zfsbtrfs">ZFS/Btrfs</h2>
+            <h2 id="zfsbtrfs">ZFS/Btrfs</h2>
 <p>Son sistemas de archivos de alto rendimiento.</p>
 <p>En este post hablaremos sobre Btrfs, que es el que hemos elegido para la práctica.</p>
 <p><strong>Btrfs</strong> lo desarrolló Oracle Corporation para GNU/Linux. Surge con el objetivo de sustituir el sistema de archivos ZFS linux. Actualmente se considera estable. A diferencia del sistema original tiene una serie de caracteristicas que lo aventaja.</p>
@@ -549,6 +550,7 @@ Label: none  uuid: feef8097-1952-4633-ac08-04dd1eeee2f6
 	devid    <span class="m">1</span> size 924.00MiB used 342.38MiB path /dev/sdf
 
 </code></pre></div><h2 id="fragmentación">Fragmentación</h2>
+<p><img src="/images/btrfs/defrag.png" alt="defrag.png"></p>
 <p>Para hacer una Fragmentación ejecutamos lo siguiente</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vagrant@btrfs2:~$ sudo btrfs filesystem defragment -r  /home/vagrant/compresion/
 vagrant@btrfs2:~$ sudo btrfs filesystem show /home/vagrant/compresion/
@@ -566,7 +568,8 @@ Label: none  uuid: feef8097-1952-4633-ac08-04dd1eeee2f6
         <div class="post-footer">
             <div class="info">
                 
-                
+                <span class="separator"><a class="tag" href="/tags/btrfs/">Btrfs</a></span>
+
             </div>
         </div>
 
