@@ -154,11 +154,19 @@
             </div>
 
             <h2 id="postgresql">POSTGRESQL</h2>
-<h3 id="características-ventajosas-de-postgresql">Características ventajosas de postgresql</h3>
-<p><strong>Formato de almacenamiento a nivel de archivos y directorios</strong></p>
+<h3 id="características-ventajas-e-inconvenientes-de-postgresql">Características: Ventajas e inconvenientes de postgresql</h3>
+<h3 id="formato-de-almacenamiento-a-nivel-de-archivos-y-directorios-de-postgresql">Formato de almacenamiento a nivel de archivos y directorios de postgresql</h3>
+<ul>
+<li>
 <p>Los archivos de configuración y los datos utilizados por el clúster de la base de datos se almacenan juntos dentro del directorio de datos llamado <strong>PGDATA</strong>, ubicado en <strong>/var/lib/pgsql/data</strong>. Pueden existir varios clústeres, administrados por diferentes instancias en el servidor de la misma máquina. <strong>PGDATA</strong> contiene varios subdirectorios y archivos de control.</p>
+</li>
+<li>
 <p>Una tabla que tiene columnas con entradas excesivamente grandes dispondrá de una tabla <strong>TOAST</strong> (The Oversized-Attribute Storage Technique) asociada, esta tabla se usa para el almacenamiento fuera de línea de valores de campo que son demasiado grandes para mantenerlos en las filas.</p>
+</li>
+<li>
 <p>Las tablas de secuencias y TOAST tienen el mismo formato que una tabla normal.</p>
+</li>
+<li>
 <p>Con la tabla TOAST podemos usar varias estrategias de almacenamiento.</p>
 <ul>
 <li>Plain</li>
@@ -166,28 +174,63 @@
 <li>External</li>
 <li>Main</li>
 </ul>
+</li>
+</ul>
+<blockquote>
 <p>No voy a extenderme mucho en las estrategias pero si quieres ver mas información puedes consultar esta <a href="https://www.postgresql.org/docs/current/storage-toast.html">documentacion oficial de postgresql</a></p>
+</blockquote>
+<h3 id="tablespaces-en-postgresql">Tablespaces en postgresql</h3>
+<ul>
+<li>
 <p>En versiones antiguas (anterior a la 9.0), no soportaba <strong>tablespaces</strong> para definir dónde almacenar la base de datos, esquema , índices etc. Posteriormente se implementó.</p>
+</li>
+<li>
 <p>Mediante el uso de <strong>tablespaces</strong> un administrador puede controlar el diseño del disco de una instalación de POSTGRESQL, esto es muy útil si la partición o el volumen en el que se instaló el clúster se queda sin espacio y no se puede ampliar; Seguidamente se crearía un espacio de tabla en una partición diferente y se podría usar temporalmente hasta que se pueda volver a configurar el sistema.</p>
+</li>
+<li>
 <p>También es de utilidad para conocer el patrón de uso de los objetos de la base de datos y así optimizar el <strong>rendimiento</strong>, Como por ejemplo un índice que se le da mucho uso se puede ubicar en un disco más rápido.</p>
+</li>
+<li>
 <p>Recordamos la <strong>sintaxis</strong> básica para crear un tablespace en postgresql</p>
+</li>
+</ul>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">nombredeltablespace</span> <span class="k">LOCATION</span> <span class="s1">&#39;/ruta/del/disco/encuestion&#39;</span><span class="p">;</span>
-</code></pre></div><p>Tenemos la opción <strong>pg_total_relation_size</strong> también para el control de espacio de almacemamiento. A través de la creación de una vista usando esta función podríamos observar el estado del almacenamiento de la base de datos, como por ejemplo ver el espacio que ocupa la base de datos.</p>
+</code></pre></div><h3 id="función-pg_total_relation_size">Función pg_total_relation_size</h3>
+<p>Tenemos la opción <strong>pg_total_relation_size</strong> también para el control de espacio de almacemamiento. A través de la creación de una vista usando esta función podríamos observar el estado del almacenamiento de la base de datos, como por ejemplo ver el espacio que ocupa la base de datos.</p>
 <h3 id="desventajas-de-postgresql-vs-oracle">Desventajas de postgresql vs Oracle</h3>
+<ul>
+<li>
 <p>Podríamos decir varias de ellas pero la más relevante que he encontrado es que al hacer una transacción si se encuentra algún fallo, automáticamente no se ejecuta nada. Sin embargo Oracle cuenta con la opción de recuperar un punto anterior en la ejecución de la transacción.</p>
+</li>
+<li>
+<p>En versiones anteriores no soportaba tablespaces.</p>
+</li>
+</ul>
 <h2 id="mariadb">MariaDB</h2>
 <p>MySQL tiene un sistema de almacenamiento íntegro sobre espacios de tablas o <strong>tablespaces</strong>. Usa &lsquo;InnoDB&rsquo; y &lsquo;NDB&rsquo;.</p>
-<p><strong>¿Que es InnoDB?</strong></p>
+<ul>
+<li><strong>¿Que es InnoDB?</strong></li>
+</ul>
 <p>Pues es un mecanismo de almacenamiento de datos exclusivo de MYSQL, incluido como formato de tabla estándar en todas las distribuciones de MYSQL (posterior a la 4.0).Permite recuperar un problema volviendo a ejecutar los registros(logs).</p>
 <p>Las tablas que utilizan el motor de almacenamiento InnoDB se escriben en el disco de archivos de datos denominados tablespaces. Un espacio de tabla puede contener una o más tablas InnoDB, así como ínidices asociados.</p>
-<p><strong>¿Qué es NDB Clúster?</strong></p>
+<ul>
+<li><strong>¿Qué es NDB Clúster?</strong></li>
+</ul>
 <p>Es otro mecanismo de almacenamiento subyacente a MySQL Clúster. En general se usa para gestionar el almacenamiento de tablas.</p>
 <h3 id="similitudes-y-diferencias-respecto-a-oracle">Similitudes y diferencias respecto a Oracle</h3>
+<ul>
+<li>
 <p>MySQL según hemos comentado anteriormente usa <strong>tablespaces</strong>, siendo esta la primera y más clara <strong>similitud</strong> entre este gestor de base de datos y <strong>Oracle</strong>.</p>
+</li>
+<li>
 <p>De diferente forma pero se pueden gestionar los tablespaces tanto en Oracle como en MYSQL.</p>
+</li>
+</ul>
 <p><strong>IMPORTANTE</strong></p>
 <p>Mariadb como tal no puede crear <strong>tablespaces</strong>. Como podemos ver en la <a href="https://mariadb.com/kb/en/create-tablespace/">documentación</a></p>
-<p>EN <a href="https://dev.mysql.com/doc/refman/5.7/en/create-tablespace.html">MYSQL 5.7</a> sí podemos crear tablespaces con la siguiente sintaxis.</p>
+<ul>
+<li>EN <a href="https://dev.mysql.com/doc/refman/5.7/en/create-tablespace.html">MYSQL 5.7</a> sí podemos crear tablespaces con la siguiente sintaxis.</li>
+</ul>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">tablespace_name</span>
 
   <span class="n">InnoDB</span> <span class="k">and</span> <span class="n">NDB</span><span class="p">:</span>
@@ -221,8 +264,14 @@
 </span><span class="c1"></span><span class="k">alter</span> <span class="n">tablespace</span> <span class="n">nombre_tablespace</span> <span class="k">add</span> <span class="n">datafile</span> <span class="n">nombre_datafile</span> <span class="k">size</span> <span class="mi">100</span><span class="n">M</span> 
 <span class="n">autoextend</span> <span class="k">on</span> <span class="k">next</span> <span class="mi">250</span><span class="n">K</span> <span class="n">maxsize</span> <span class="mi">200</span><span class="n">M</span><span class="p">;</span> 
 </code></pre></div><h3 id="limitación-quota-de-almacenamiento">Limitación: Quota de almacenamiento</h3>
+<ul>
+<li>
 <p>Una de las <strong>limitaciones</strong> que tiene MySQL con InnoDB es que no se pueden aplicar quotas de almacenamiento a distintos usuarios, mientras que en Oracle sí.</p>
+</li>
+<li>
 <p>En oracle esta información está reflejada en <strong>DBA_TS_QUOTAS</strong>, que describe las cuotas de tablespace para todos los usuarios.</p>
+</li>
+</ul>
 <p>Este sería un ejemplo en el que se modifica la quota de un usuario.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ps$tkyte</span><span class="o">@</span><span class="n">ORA920LAP</span><span class="o">&gt;</span> <span class="k">alter</span> <span class="k">user</span> <span class="n">ops$tkyte</span> <span class="n">quota</span> <span class="n">unlimited</span> <span class="k">on</span> <span class="n">users</span><span class="p">;</span>
 
