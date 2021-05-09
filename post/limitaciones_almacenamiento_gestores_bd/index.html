@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento) </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento)">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/limitaciones_almacenamiento_gestores_bd/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento)"/>
+<meta name="twitter:description" content="Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento)"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/almacenamiento/banner.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento)</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Sun, May 9, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">5-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h2 id="postgresql">POSTGRESQL</h2>
+<h3 id="características-ventajosas-de-postgresql">Características ventajosas de postgresql</h3>
+<p><strong>Formato de almacenamiento a nivel de archivos y directorios</strong></p>
+<p>Los archivos de configuración y los datos utilizados por el clúster de la base de datos se almacenan juntos dentro del directorio de datos llamado <strong>PGDATA</strong>, ubicado en <strong>/var/lib/pgsql/data</strong>. Pueden existir varios clústeres, administrados por diferentes instancias en el servidor de la misma máquina. <strong>PGDATA</strong> contiene varios subdirectorios y archivos de control.</p>
+<p>Una tabla que tiene columnas con entradas excesivamente grandes dispondrá de una tabla <strong>TOAST</strong> (The Oversized-Attribute Storage Technique) asociada, esta tabla se usa para el almacenamiento fuera de línea de valores de campo que son demasiado grandes para mantenerlos en las filas.</p>
+<p>Las tablas de secuencias y TOAST tienen el mismo formato que una tabla normal.</p>
+<p>Con la tabla TOAST podemos usar varias estrategias de almacenamiento.</p>
+<ul>
+<li>Plain</li>
+<li>Extendend</li>
+<li>External</li>
+<li>Main</li>
+</ul>
+<p>No voy a extenderme mucho en las estrategias pero si quieres ver mas información puedes consultar esta <a href="https://www.postgresql.org/docs/current/storage-toast.html">documentacion oficial de postgresql</a></p>
+<p>En versiones antiguas (anterior a la 9.0), no soportaba <strong>tablespaces</strong> para definir dónde almacenar la base de datos, esquema , índices etc. Posteriormente se implementó.</p>
+<p>Mediante el uso de <strong>tablespaces</strong> un administrador puede controlar el diseño del disco de una instalación de POSTGRESQL, esto es muy útil si la partición o el volumen en el que se instaló el clúster se queda sin espacio y no se puede ampliar; Seguidamente se crearía un espacio de tabla en una partición diferente y se podría usar temporalmente hasta que se pueda volver a configurar el sistema.</p>
+<p>También es de utilidad para conocer el patrón de uso de los objetos de la base de datos y así optimizar el <strong>rendimiento</strong>, Como por ejemplo un índice que se le da mucho uso se puede ubicar en un disco más rápido.</p>
+<p>Recordamos la <strong>sintaxis</strong> básica para crear un tablespace en postgresql</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">nombredeltablespace</span> <span class="k">LOCATION</span> <span class="s1">&#39;/ruta/del/disco/encuestion&#39;</span><span class="p">;</span>
+</code></pre></div><p>Tenemos la opción <strong>pg_total_relation_size</strong> también para el control de espacio de almacemamiento. A través de la creación de una vista usando esta función podríamos observar el estado del almacenamiento de la base de datos, como por ejemplo ver el espacio que ocupa la base de datos.</p>
+<h3 id="desventajas-de-postgresql-vs-oracle">Desventajas de postgresql vs Oracle</h3>
+<p>Podríamos decir varias de ellas pero la más relevante que he encontrado es que al hacer una transacción si se encuentra algún fallo, automáticamente no se ejecuta nada. Sin embargo Oracle cuenta con la opción de recuperar un punto anterior en la ejecución de la transacción.</p>
+<h2 id="mariadb">MariaDB</h2>
+<p>MySQL tiene un sistema de almacenamiento íntegro sobre espacios de tablas o <strong>tablespaces</strong>. Usa &lsquo;InnoDB&rsquo; y &lsquo;NDB&rsquo;.</p>
+<p><strong>¿Que es InnoDB?</strong></p>
+<p>Pues es un mecanismo de almacenamiento de datos exclusivo de MYSQL, incluido como formato de tabla estándar en todas las distribuciones de MYSQL (posterior a la 4.0).Permite recuperar un problema volviendo a ejecutar los registros(logs).</p>
+<p>Las tablas que utilizan el motor de almacenamiento InnoDB se escriben en el disco de archivos de datos denominados tablespaces. Un espacio de tabla puede contener una o más tablas InnoDB, así como ínidices asociados.</p>
+<p><strong>¿Qué es NDB Clúster?</strong></p>
+<p>Es otro mecanismo de almacenamiento subyacente a MySQL Clúster. En general se usa para gestionar el almacenamiento de tablas.</p>
+<h3 id="similitudes-y-diferencias-respecto-a-oracle">Similitudes y diferencias respecto a Oracle</h3>
+<p>MySQL según hemos comentado anteriormente usa <strong>tablespaces</strong>, siendo esta la primera y más clara <strong>similitud</strong> entre este gestor de base de datos y <strong>Oracle</strong>.</p>
+<p>De diferente forma pero se pueden gestionar los tablespaces tanto en Oracle como en MYSQL.</p>
+<p><strong>IMPORTANTE</strong></p>
+<p>Mariadb como tal no puede crear <strong>tablespaces</strong>. Como podemos ver en la <a href="https://mariadb.com/kb/en/create-tablespace/">documentación</a></p>
+<p>EN <a href="https://dev.mysql.com/doc/refman/5.7/en/create-tablespace.html">MYSQL 5.7</a> sí podemos crear tablespaces con la siguiente sintaxis.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">tablespace_name</span>
+
+  <span class="n">InnoDB</span> <span class="k">and</span> <span class="n">NDB</span><span class="p">:</span>
+    <span class="k">ADD</span> <span class="n">DATAFILE</span> <span class="s1">&#39;file_name&#39;</span>
+
+  <span class="n">InnoDB</span> <span class="k">only</span><span class="p">:</span>
+    <span class="p">[</span><span class="n">FILE_BLOCK_SIZE</span> <span class="o">=</span> <span class="n">value</span><span class="p">]</span>
+
+  <span class="n">NDB</span> <span class="k">only</span><span class="p">:</span>
+    <span class="n">USE</span> <span class="n">LOGFILE</span> <span class="k">GROUP</span> <span class="n">logfile_group</span>
+    <span class="p">[</span><span class="n">EXTENT_SIZE</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">extent_size</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">INITIAL_SIZE</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">initial_size</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">AUTOEXTEND_SIZE</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">autoextend_size</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">MAX_SIZE</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">max_size</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">NODEGROUP</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">nodegroup_id</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">WAIT</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">COMMENT</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="s1">&#39;string&#39;</span><span class="p">]</span>
+
+  <span class="n">InnoDB</span> <span class="k">and</span> <span class="n">NDB</span><span class="p">:</span>
+    <span class="p">[</span><span class="n">ENGINE</span> <span class="p">[</span><span class="o">=</span><span class="p">]</span> <span class="n">engine_name</span><span class="p">]</span>
+</code></pre></div><h3 id="similitud-autoextender-tablespace">Similitud: Autoextender tablespace</h3>
+<p>Tanto en ORACLE como en MYSQL tenemos la opción de <strong>autoextender</strong> el tablespace:</p>
+<p>De esta forma cuando un archivo de la tabla requiere espacio original lo podemos extender.</p>
+<p>La sintaxis sería:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Crear el tablespace
+</span><span class="c1"></span><span class="k">CREATE</span> <span class="n">TABLESPACE</span> <span class="n">ts1</span> <span class="n">AUTOEXTEND_SIZE</span> <span class="o">=</span> <span class="mi">4</span><span class="n">M</span><span class="p">;</span>
+<span class="c1">-- Modifcarlo
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="n">TABLESPACE</span> <span class="n">ts1</span> <span class="n">AUTOEXTEND_SIZE</span> <span class="o">=</span> <span class="mi">8</span><span class="n">M</span><span class="p">;</span>
+</code></pre></div><p>En Oracle otro ejemplo sería;</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Modificar el tablespace
+</span><span class="c1"></span><span class="k">alter</span> <span class="n">tablespace</span> <span class="n">nombre_tablespace</span> <span class="k">add</span> <span class="n">datafile</span> <span class="n">nombre_datafile</span> <span class="k">size</span> <span class="mi">100</span><span class="n">M</span> 
+<span class="n">autoextend</span> <span class="k">on</span> <span class="k">next</span> <span class="mi">250</span><span class="n">K</span> <span class="n">maxsize</span> <span class="mi">200</span><span class="n">M</span><span class="p">;</span> 
+</code></pre></div><h3 id="limitación-quota-de-almacenamiento">Limitación: Quota de almacenamiento</h3>
+<p>Una de las <strong>limitaciones</strong> que tiene MySQL con InnoDB es que no se pueden aplicar quotas de almacenamiento a distintos usuarios, mientras que en Oracle sí.</p>
+<p>En oracle esta información está reflejada en <strong>DBA_TS_QUOTAS</strong>, que describe las cuotas de tablespace para todos los usuarios.</p>
+<p>Este sería un ejemplo en el que se modifica la quota de un usuario.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ps$tkyte</span><span class="o">@</span><span class="n">ORA920LAP</span><span class="o">&gt;</span> <span class="k">alter</span> <span class="k">user</span> <span class="n">ops$tkyte</span> <span class="n">quota</span> <span class="n">unlimited</span> <span class="k">on</span> <span class="n">users</span><span class="p">;</span>
+
+<span class="k">User</span> <span class="n">altered</span><span class="p">.</span>
+
+<span class="n">ops$tkyte</span><span class="o">@</span><span class="n">ORA920LAP</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">USER_TS_QUOTAS</span><span class="p">;</span>
+
+<span class="n">TABLESPACE_NAME</span>                     <span class="n">BYTES</span>  <span class="n">MAX_BYTES</span>     <span class="n">BLOCKS</span> <span class="n">MAX_BLOCKS</span>
+<span class="c1">------------------------------ ---------- ---------- ---------- ----------
+</span><span class="c1"></span><span class="n">USERS</span>                             <span class="mi">1572864</span>         <span class="o">-</span><span class="mi">1</span>        <span class="mi">192</span>         <span class="o">-</span><span class="mi">1</span>
+<span class="n">T_2M</span>                             <span class="mi">10485760</span>          <span class="mi">0</span>       <span class="mi">1280</span>          <span class="mi">0</span>
+<span class="n">T_1M</span>                                    <span class="mi">0</span>          <span class="mi">0</span>          <span class="mi">0</span>          <span class="mi">0</span>
+
+<span class="n">ops$tkyte</span><span class="o">@</span><span class="n">ORA920LAP</span><span class="o">&gt;</span> <span class="k">alter</span> <span class="k">user</span> <span class="n">ops$tkyte</span> <span class="n">quota</span> <span class="mi">0</span><span class="n">k</span> <span class="k">on</span> <span class="n">users</span><span class="p">;</span>
+
+<span class="k">User</span> <span class="n">altered</span><span class="p">.</span>
+
+<span class="n">ops$tkyte</span><span class="o">@</span><span class="n">ORA920LAP</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">USER_TS_QUOTAS</span><span class="p">;</span>
+
+<span class="n">TABLESPACE_NAME</span>                     <span class="n">BYTES</span>  <span class="n">MAX_BYTES</span>     <span class="n">BLOCKS</span> <span class="n">MAX_BLOCKS</span>
+<span class="c1">------------------------------ ---------- ---------- ---------- ----------
+</span><span class="c1"></span><span class="n">USERS</span>                             <span class="mi">1572864</span>          <span class="mi">0</span>        <span class="mi">192</span>          <span class="mi">0</span>
+<span class="n">T_2M</span>                             <span class="mi">10485760</span>          <span class="mi">0</span>       <span class="mi">1280</span>          <span class="mi">0</span>
+<span class="n">T_1M</span>                                    <span class="mi">0</span>          <span class="mi">0</span>          <span class="mi">0</span>          <span class="mi">0</span>
+</code></pre></div><h2 id="conclusión">Conclusión</h2>
+<p><strong>Postgresql</strong> estaba muy limitado en cuanto al control de espacios de tablas en versiones anteriores, ahora podemos gestionarlo de mejor manera, teniendo en cuenta la funcionalidad de la téctina TOAST que permite ampliar el espacio en otra tabla TOAST como hemos explicado al principio del post. Respecto a Oracle estas funciones vienen de forma nativa y gestionan el espacio de manera más eficiente y rápida.</p>
+<p>En cuanto a <strong>MySQL</strong> nos limita la posibilidad de asignar cuotas de almacenamiento a los usuarios en comparación a <strong>Oracle</strong> que si lo permite. Sin embargo también posee funciones de control de almacenamiento de tablas comunes y tablespaces, como la opción <em>autoextend</em> que tambien la presenta Oracle. Estos dos gestores serían los más eficientes según mi punto de vista si de almacenamiento nos referimos. Pero si tuviera que elegir uno de los gestores en este campo me quedaría con <strong>ORACLE</strong>.</p>
+<p>Fuente:</p>
+<p><a href="https://www.postgresql.org/docs/current/storage.html">https://www.postgresql.org/docs/current/storage.html</a></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/oracle/">oracle</a><a class="tag" href="/tags/postgres/">postgres</a><a class="tag" href="/tags/mariadb/">mariadb</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>

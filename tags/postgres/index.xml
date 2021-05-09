@@ -16,5 +16,14 @@
       <description>En esta entrada se van a ver diferentes formas de gestionar el almacenamiento en los distintos gestores de bases de datos, Postgres, Oracle y MariaDB/MySql.</description>
     </item>
     
+    <item>
+      <title>Limitaciones de Postgresql y MariaDB VS Oracle (Almacenamiento)</title>
+      <link>https://www.celiagm.es/post/limitaciones_almacenamiento_gestores_bd/</link>
+      <pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/limitaciones_almacenamiento_gestores_bd/</guid>
+      <description>POSTGRESQL Características ventajosas de postgresql Formato de almacenamiento a nivel de archivos y directorios</description>
+    </item>
+    
   </channel>
 </rss>
