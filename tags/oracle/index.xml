@@ -6,7 +6,16 @@
     <description>Recent content in oracle on 1bit1nfo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.celiagm.es/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gestión del almacenamiento. Gestores de bases de datos</title>
+      <link>https://www.celiagm.es/post/almacenamientobd/</link>
+      <pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.celiagm.es/post/almacenamientobd/</guid>
+      <description>En esta entrada se van a ver diferentes formas de gestionar el almacenamiento en los distintos gestores de bases de datos, Postgres, Oracle y MariaDB/MySql.</description>
+    </item>
+    
     <item>
       <title>Aplicación web python, flask y Oracle</title>
       <link>https://www.celiagm.es/post/appweboracle/</link>
