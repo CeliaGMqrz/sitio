@@ -148,7 +148,7 @@
                         <span class="date"> Sun, May 9, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">One-minute read</span>
+                        <span class="reading-time">4-minute read</span>
                     </div>
                 
             </div>
@@ -157,15 +157,86 @@
 <blockquote>
 <p>Para amenizar el post he separado el caso de Oracle en el siguiente post:</p>
 </blockquote>
+<p><img src="/images/almacenamiento/oracle.png" alt="oracle.png"></p>
 <h2 id="1-gestión-de-almacenamiento-en-oraclehttpswwwceliagmespostalmacenamiento_oracle"><a href="https://www.celiagm.es/post/almacenamiento_oracle/">1. Gestión de almacenamiento en ORACLE</a></h2>
+<p><img src="/images/almacenamiento/postgres.png" alt="postgres.png"></p>
 <h2 id="2-gestión-de-almacenamiento-en-postgresql">2. Gestión de almacenamiento en POSTGRESQL.</h2>
-<h3 id="averigua-si-pueden-establecerse-claúsulas-de-almacenamiento-para-las-tablas-o-los-espacios-de-tablas-en-postgres">Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en Postgres.</h3>
-<p>Postgres puede establacer cláusulas de almacenamiento como lo hace Oracle. La diferencia entre ellos es que Oracle lo tiene implementado desde las primeras versiones y Postgresql no. Por lo que Postgres utiliza tablespaces de una forma diferente.</p>
+<blockquote>
+<p>Averigua si pueden establecerse claúsulas de almacenamiento para las tablas o los espacios de tablas en Postgres.</p>
+</blockquote>
+<p><strong>Postgres</strong> no puede establacer cláusulas de almacenamiento como lo hace Oracle. La diferencia entre ellos es que Oracle lo tiene implementado desde las primeras versiones y Postgresql no. Por lo que Postgres utiliza <strong>tablespaces</strong> de una forma diferente.</p>
 <p>Postgresql tiene varias funcionalidades que permite controlar el espacio de almacenamiento de forma específica. Estas funcionalidades las menciono en el siguiente <a href="https://www.celiagm.es/post/limitaciones_almacenamiento_gestores_bd/">post</a></p>
+<p><img src="/images/almacenamiento/mysql.png" alt="mysql.png"></p>
 <h2 id="3-gestión-de-almacenamiento-en-mysql">3. Gestión de almacenamiento en MySQL</h2>
-<h3 id="averigua-si-existe-el-concepto-de-índice-en-mysql-y-si-coincide-con-el-existente-en-oracle-explica-los-distintos-tipos-de-índices-existentes">Averigua si existe el concepto de índice en MySQL y si coincide con el existente en ORACLE. Explica los distintos tipos de índices existentes.</h3>
+<blockquote>
+<p>Averigua si existe el concepto de índice en MySQL y si coincide con el existente en ORACLE. Explica los distintos tipos de índices existentes.</p>
+</blockquote>
+<p>El concepto de <strong>índice</strong> sí existe. MySQL los usa para encontrar filas que contienen los valores específicos de las columnas empleadas en una consulta. Esto hace que aumente la velocidad de búsqueda ya que si no existiesen empezaría a buscar desde la primera fila hasta la que se demanda y a razón de eso se demoraría más.</p>
+<p>Coincide pues con los índices en Oracle ya que se emplean igualmente para la obtención de la información de tablas con mayor rapidez y eficiencia.</p>
+<p>Los tipos de índice que existen en MYSQL son los siguientes:</p>
+<ul>
+<li>INDEX (NON-UNIQUE) Se trata de un índice normal, no único. Admite valores duplicados para las columnas.</li>
+<li>UNIQUE. Se refiere a un índice en el que todas las columnas deben tener un valor único, en otras palabras, no admite valores duplicados.</li>
+<li>PRIMARY. Las columnas deben tener un valor único pero sólo puede existir un índice PRIMARY en cada una de las tablas.</li>
+<li>FULLTEXT. Estos índices se emplean para buscar tipos texto (CHAR, VARCHAR O TEXT),</li>
+<li>SPATIAL. Sirven para realizar búsquedas de datos de formas geométricas representadas en el gráfico.</li>
+</ul>
+<p>Para crear un índice se emplea la siguiente estructura:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="err">«</span><span class="k">CREATE</span> <span class="p">[</span><span class="k">UNIQUE</span> <span class="o">|</span> <span class="n">FULLTEXT</span> <span class="o">|</span> <span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="n">nombreindice</span> <span class="k">ON</span> <span class="n">nombretabla</span> <span class="p">(</span><span class="n">nombredecolumna_columnas</span><span class="err">…</span><span class="p">)</span> <span class="n">tipoindice</span><span class="p">;</span><span class="err">»</span><span class="p">;</span>
+</code></pre></div><p>Ejemplo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">UNIQUE</span> <span class="k">INDEX</span> <span class="n">mi_indice_unico</span> <span class="k">ON</span> <span class="n">mi_tabla</span> <span class="p">(</span><span class="n">mi_columna</span><span class="p">)</span> <span class="k">USING</span> <span class="n">HASH</span><span class="p">;</span>
+
+<span class="c1">-- Otro ejemplo 
+</span><span class="c1"></span>
+<span class="k">create</span> <span class="k">index</span> <span class="n">fecha</span> <span class="k">on</span> <span class="n">partidos</span> <span class="p">(</span><span class="n">fecha</span><span class="p">);</span>
+
+</code></pre></div><p>Si quisieramos borrar un índice lo haríamos de la siguiente forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="c1">--Ejemplo 
+</span><span class="c1"></span>
+<span class="k">drop</span> <span class="k">index</span> <span class="n">equipolocal_visitante_fecha</span> <span class="k">on</span> <span class="n">partidos</span>
+</code></pre></div><p>Si queremos ver todos los índices en mysql ejecutamos la siguiente sentencia:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SHOW</span> <span class="k">INDEX</span> <span class="k">FROM</span> <span class="n">nombretabla</span> <span class="p">[</span><span class="k">FROM</span> <span class="n">db_name</span><span class="p">];</span>
+</code></pre></div><p>La sintaxis completa para crear un <strong>índice</strong> la encuentras en la <a href="https://mariadb.com/kb/en/create-index/">documentacion oficial</a></p>
+<p><img src="/images/almacenamiento/mongodb.png" alt="mongodb.png"></p>
 <h2 id="4-gestión-de-almacenamiento-en-mongodb">4. Gestión de almacenamiento en MongoDB</h2>
-<h3 id="explica-los-distintos-motores-de-almacenamiento-que-ofrece-mongodb-sus-características-principales-y-en-qué-casos-es-más-recomendable-utilizar-cada-uno-de-ellos">Explica los distintos motores de almacenamiento que ofrece MongoDB, sus características principales y en qué casos es más recomendable utilizar cada uno de ellos.</h3>
+<blockquote>
+<p>Explica los distintos motores de almacenamiento que ofrece MongoDB, sus características principales y en qué casos es más recomendable utilizar cada uno de ellos.</p>
+</blockquote>
+<p>El motor de almacenamiento es el componente de la base de datos que se encarga de administrar el almacenamiento de datos propiamente como ya sabemos. MongoDB dispone de varios motores de almacenamiento, se usa uno u otro dependiendo del trabajo que vayamos a realizar.</p>
+<ul>
+<li>
+<p><strong>WiredTiger</strong>. Es el motor de almacenamiento por defecto que se inicia en MongoDB 3.2. Es adecuado para la mayoria de los usos y el recomendable para empezar a usar MongoDB. Este motor proporciona un modelo de simultaneidad a nivel de documento, puntos de control y compresión entre otros. Es adecuado para sacar el mayor rendimiento posible.</p>
+</li>
+<li>
+<p><strong>In-Memory Storage Engine (En memoria)</strong>. ES un motor que en lugar de almacenar documentos en el disco si no que los retiene en memoria para tener los datos más mano, es decir con más rapidez y más eficiencia. También proporciona simultaneidad a nivel de documento para las operaciones de escritura, así permitiendo modificar al usuario diferentes documentos de una colección al mismo tiempo.</p>
+</li>
+</ul>
+<p>Si queremos saber el motor de almacenamiento que está usando mongodb actualmente:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">db</span><span class="p">.</span><span class="n">serverStatus</span><span class="p">().</span><span class="n">storageEngine</span>
+<span class="err">{</span> <span class="s2">&#34;name&#34;</span> <span class="p">:</span> <span class="s2">&#34;wiredTiger&#34;</span> <span class="err">}</span>
+
+</code></pre></div><p>Si queremos saber todos los detalles hacemos lo siguiente</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">db</span><span class="p">.</span><span class="n">serverStatus</span><span class="p">().</span><span class="n">wiredTiger</span>
+</code></pre></div><h3 id="otros-motores-del-almacenamiento">Otros motores del almacenamiento</h3>
+<p>Según la documentación de MongoDB:</p>
+<blockquote>
+<p>A partir de la versión 4.2, MongoDB elimina el motor de almacenamiento MMAPv1 obsoleto.</p>
+</blockquote>
+<p>A pesar de quedar obsoleto debemos recalcar características importantes sobre este motor las cuales son las siguientes:</p>
+<ul>
+<li>Lecturas de volumenes de mayor tamaño.</li>
+<li>Insercciones de mayor tamaño.</li>
+<li>Gran utilización de la memoria del sistema ya que se usa como caché. Además cada 60'' el motor descarga los cambios en los datos del disco y los guarda en memoria caché.</li>
+</ul>
+<p>Cabe mencionar otros motores de versiones anteriores pero que en este post no voy a explicar porque actualmente no se usan.</p>
+<ul>
+<li>Fusión-io</li>
+<li>TokuMX</li>
+</ul>
+<p>Fuentes:</p>
+<p><a href="https://docs.mongodb.com/manual/core/storage-engines/">https://docs.mongodb.com/manual/core/storage-engines/</a></p>
+<p><a href="https://severalnines.com/database-blog/why-you-should-still-be-using-mmapv1-storage-engine-mongodb">https://severalnines.com/database-blog/why-you-should-still-be-using-mmapv1-storage-engine-mongodb</a></p>
 </div>
         <div class="post-footer">
             <div class="info">
