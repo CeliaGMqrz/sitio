@@ -148,14 +148,20 @@
                         <span class="date"> Thu, Mar 25, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">13-minute read</span>
+                        <span class="reading-time">14-minute read</span>
                     </div>
                 
             </div>
 
-            <p>En este post se va a llevar a cabo una práctica para manejar libvirt. Saber gestionar un sistema de virtualización a bajo nivel.</p>
-<h2 id="1-crea-con-virt-install-una-imagen-de-debian-buster-con-formato-qcow2-y-un-tamaño-máximo-de-3gib-esta-imagen-se-denominará-buster-baseqcow2-el-sistema-de-ficheros-del-sistema-instalado-en-esta-imagen-será-xfs-la-imagen-debe-estar-configurada-para-poder-usar-hasta-dos-interfaces-de-red-por-dhcp-el-usuario-debian-con-contraseña-debian-puede-utilizar-sudo-sin-contraseña">1. Crea con <code>virt-install</code> una imagen de Debian Buster con formato qcow2 y un tamaño máximo de 3GiB. Esta imagen se denominará <code>buster-base.qcow2</code>. El sistema de ficheros del sistema instalado en esta imagen será XFS. La imagen debe estar configurada para poder usar hasta dos interfaces de red por dhcp. El usuario <code>debian</code> con contraseña <code>debian</code> puede utilizar sudo sin contraseña.</h2>
-<h3 id="11-crear-redes">1.1. Crear redes</h3>
+            <p>En este post se va a llevar a cabo una práctica para manejar <strong>libvirt</strong>. Saber gestionar un <strong>sistema de virtualización a bajo nivel</strong>.</p>
+<p>Para <strong>conceptos previos</strong> puedes acceder a este <a href="https://www.celiagm.es/post/migracion_app_mv/">post</a></p>
+<p><strong>Tarea:</strong></p>
+<blockquote>
+<ol>
+<li>Crea con <code>virt-install</code> una imagen de Debian Buster con formato qcow2 y un tamaño máximo de 3GiB. Esta imagen se denominará <code>buster-base.qcow2</code>. El sistema de ficheros del sistema instalado en esta imagen será XFS. La imagen debe estar configurada para poder usar hasta dos interfaces de red por dhcp. El usuario <code>debian</code> con contraseña <code>debian</code> puede utilizar sudo sin contraseña.</li>
+</ol>
+</blockquote>
+<h3 id="crear-redes">Crear redes</h3>
 <p>Primero tenemos que crear las redes que necesitamos, en este caso usaremos la default que es <strong>&lsquo;virbr0&rsquo;</strong> y una nueva que vamos a crear <strong>&lsquo;virbr2&rsquo;</strong>.</p>
 <p>La <strong>red default</strong> tiene estas caracteristicas:</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;network&gt;
@@ -171,8 +177,9 @@
   &lt;/ip&gt;
 &lt;/network&gt;
 
-</code></pre></div><p>Actualmente tenemos dos redes, una es la que está por defecto y la otra es una que ha creado vagrant llamada virbr1 (esta no la vamos a usar), por lo que vamos a crear la virbr2</p>
-<p>Creamos la red <code>virbr2</code>, dándole un direccionamiento <code>192.168.200.0/24</code> en modo NAT.</p>
+</code></pre></div><p>Actualmente tenemos <strong>dos redes</strong>, una es la que está <strong>por defecto</strong> y la otra es una que ha creado vagrant llamada <em>virbr1</em> (esta no la vamos a usar), por lo que vamos a crear la <strong>virbr2</strong></p>
+<h4 id="crear-virbr2">Crear virbr2</h4>
+<p>Creamos la red <strong><code>virbr2</code></strong>, dándole un direccionamiento <strong><code>192.168.200.0/24</code></strong> en modo <strong>NAT</strong>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">nano red2.xml
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;network&gt;
   &lt;name&gt;red2&lt;/name&gt;
@@ -189,10 +196,10 @@
   &lt;/ip&gt;
 &lt;/network&gt;
 
-</code></pre></div><p>Definimos la nueva red <code>virbr2</code></p>
+</code></pre></div><p>Definimos la nueva red <strong><code>virbr2</code></strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define red2.xml
 Network red2 defined from red2.xml
-</code></pre></div><p>Listamos las redes que tenemos</p>
+</code></pre></div><h4 id="listar-las-redes">Listar las redes</h4>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-list --all
  Name              State      Autostart   Persistent
 ------------------------------------------------------
@@ -200,7 +207,7 @@ Network red2 defined from red2.xml
  red2              active     no          no
  vagrant-libvirt   inactive   no          yes
 
-</code></pre></div><p>Iniciamos las redes oportunas, las marcamos como <strong>autostart</strong></p>
+</code></pre></div><p>Iniciamos las redes oportunas, las marcamos como <strong>autostart</strong> para que se inicien automáticamente.</p>
 <p>Listamos las redes y comprobamos que estan activas</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-list --all
  Name              State      Autostart   Persistent
@@ -208,22 +215,22 @@ Network red2 defined from red2.xml
  default           active     yes         yes
  red2              active     yes         yes
  vagrant-libvirt   inactive   no          yes
-</code></pre></div><h3 id="12-crear-imagen">1.2. Crear imagen</h3>
-<p>Una vez creadas las redes y activadas vamos a crear la mv con la imagen qcow2</p>
+</code></pre></div><h3 id="crear-mv-con-la-imagen-qcow2">Crear mv con la imagen qcow2</h3>
+<p>Una vez creadas las redes y activadas vamos a crear la <strong>mv</strong> con la imagen <strong>qcow2</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">virt-install --connect qemu:///system --name buster-base --cdrom ~/isos/debian-10.8.0-amd64-netinst.iso --disk <span class="nv">size</span><span class="o">=</span><span class="m">3</span> --network <span class="nv">bridge</span><span class="o">=</span>virbr0 --network <span class="nv">bridge</span><span class="o">=</span>virbr2 --memory <span class="m">1024</span> --vcpus <span class="m">1</span>
-</code></pre></div><p>Hacemos la instalación, teniendo en cuenta el sistema de archivos con formato XFS.</p>
+</code></pre></div><p>Hacemos la <strong>instalación</strong>, teniendo en cuenta el sistema de archivos con formato <strong>XFS</strong>. No me voy a demorar con la instalación y suponemos que sabemos hacerlo. Una vez iniciado el sistema comprobamos los discos del sistema.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ lsblk -f
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 sr0
 vda
 └─vda1 xfs          30a9cfb1-0b31-4368-8b7a-c6779804e450      2G    35% /
 
-</code></pre></div><p>Cuando se haya finalizado la instalación vamos a descargar sudo.</p>
+</code></pre></div><p>Cuando se haya finalizado la instalación vamos a descargar <strong>sudo</strong>, ya que necesitaremos que el usuario debian en este caso tenga <strong>privilegios</strong> de administrador.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">su -
 apt install sudo
 adduser debian sudo
 nano /etc/sudoers
-</code></pre></div><p>Añadimos al usuario debian a sudoers de forma que pueda usar sudo sin contraseña.</p>
+</code></pre></div><p>Añadimos al usuario <strong>debian</strong> a <strong>sudoers</strong> de forma que pueda usar <em>sudo sin contraseña</em>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># User privilege specification</span>
 root    <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
 debian <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
@@ -231,7 +238,7 @@ debian <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o
 %sudo   <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
 %debian <span class="nv">ALL</span><span class="o">=(</span>ALL:ALL<span class="o">)</span> ALL
 debian <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> NOPASSWD:ALL
-</code></pre></div><p>Comprobamos que se ha creado el archivo <code>buster-base.xml</code> que contiene la informacion de la máquina que hemos creado.</p>
+</code></pre></div><p>Comprobamos que se ha creado el archivo <strong><code>buster-base.xml</code></strong> que contiene la informacion de la máquina que hemos creado.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:/etc/libvirt/qemu$ sudo cat buster-base.xml
 &lt;!--
 WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
@@ -399,16 +406,22 @@ or other application using the libvirt API.
   &lt;/devices&gt;
 &lt;/domain&gt;
 
-</code></pre></div><p>Comprobamos que se ha creado el fichero .qcow2 en el directorio <code>/var/lib/libvirt/images/</code></p>
+</code></pre></div><p>Comprobamos que se ha creado el fichero <strong><code>.qcow2 </code></strong> en el directorio <strong><code>/var/lib/libvirt/images/</code></strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# ls
 buster-base.qcow2  compilar_default.img  debian-VAGRANTSLASH-buster64_vagrant_box_image_10.4.0.img
-</code></pre></div><h3 id="13-crea-un-par-de-claves-ssh-en-formato-ecdsa-y-sin-frase-de-paso-y-agrega-la-clave-pública-al-usuario-debian">1.3. Crea un par de claves ssh en formato ecdsa y sin frase de paso y agrega la clave pública al usuario debian</h3>
-<p>Creamos el par de claves indicado</p>
+</code></pre></div><h3 id="crear-par-de-claves">Crear par de claves</h3>
+<blockquote>
+<p>Crea un par de claves ssh en formato ecdsa y sin frase de paso y agrega la clave pública al usuario debian</p>
+</blockquote>
+<p>Creamos el <strong>par de claves</strong> indicado en la máquina anfitriona.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ssh-keygen -t ecdsa -b <span class="m">521</span>
-</code></pre></div><p>En la mv creamos el fichero &lsquo;authorized_keys&rsquo;</p>
+</code></pre></div><p>En la mv creamos el fichero <strong><code>authorized_keys</code></strong> e introducimos la clave pública.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~/.ssh$ cat authorized_keys
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAF5SCIOXoPk1sXDH43L1r4YqoP15DHGxRfCvat01stXT0YEIeXujgFalyETMu3WqlIjLtca/b5JV4Gk//rk0IdfVQAXhQFgruXQ6e7EYSru0D9XCaTuiJ4oMzoFu/+caYUT+o5HeOSHTWj1EfOqqbJDsuACJ5vvjubPrQ54P6orN3D1dQ<span class="o">==</span> celiagm@debian
-</code></pre></div><h3 id="14-utiliza-la-herramienta-virt-sparsify-para-reducir-al-máximo-el-tamaño-de-la-imagen">1.4. Utiliza la herramienta virt-sparsify para reducir al máximo el tamaño de la imagen</h3>
+</code></pre></div><h3 id="reducir-el-tamaño-virt-sparsify">Reducir el tamaño: virt-sparsify</h3>
+<blockquote>
+<p>Utiliza la herramienta virt-sparsify para reducir al máximo el tamaño de la imagen</p>
+</blockquote>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virt-sparsify --compress buster-base.qcow2 buster-base_red.qcow2
 <span class="o">[</span>   0.0<span class="o">]</span> Create overlay file in /tmp to protect <span class="nb">source</span> disk
 <span class="o">[</span>   0.0<span class="o">]</span> Examine <span class="nb">source</span> disk
@@ -419,21 +432,29 @@ ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAF5SCIO
 virt-sparsify: Before deleting the old disk, carefully check that the
 target disk boots and works correctly.
 
-</code></pre></div><p>Comprobamos que está creada la imagen y ocupa menos espacio</p>
+</code></pre></div><p><strong>Comprobamos</strong> que está creada la imagen y <strong>ocupa menos espacio</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# ls -lh
 total 5,8G
 -rw------- <span class="m">1</span> root         root         3,1G mar <span class="m">22</span> 17:38 buster-base.qcow2
 -rw-r--r-- <span class="m">1</span> root         root         377M mar <span class="m">22</span> 17:46 buster-base_red.qcow2
 
-</code></pre></div><h3 id="15-sube-la-imagen-y-la-clave-privada-ssh-a-alguna-ubicación-pública-desde-la-que-se-pueda-descargar">1.5. Sube la imagen y la clave privada ssh a alguna ubicación pública desde la que se pueda descargar</h3>
+</code></pre></div><h3 id="subir-imagen-a-un-sitio">Subir imagen a un sitio</h3>
+<blockquote>
+<p>Sube la imagen y la clave privada ssh a alguna ubicación pública desde la que se pueda descargar</p>
+</blockquote>
 <p>Lo subimos a Mega</p>
 <hr>
-<h2 id="2-escribe-un-shell-script-que-ejecutado-por-un-usuario-con-acceso-a-qemusystem-realice-los-siguientes-pasos">2. Escribe un shell script que ejecutado por un usuario con acceso a qemu:///system realice los siguientes pasos:</h2>
-<p><strong>1. Crea una imagen nueva, que utilice <code>buster-base.qcow2</code> como imagen base y tenga 5 GiB de tamaño máximo. Esta imagen se denominará <code>maquina1.qcow2</code></strong></p>
+<h3 id="2-escribe-un-shell-script-que-ejecutado-por-un-usuario-con-acceso-a-qemusystem-realice-los-siguientes-pasos">2. Escribe un shell script que ejecutado por un usuario con acceso a qemu:///system realice los siguientes pasos:</h3>
+<h4 id="crear-nueva-imagen-desde-una-imagen-base">Crear nueva imagen desde una imagen base</h4>
+<blockquote>
+<p><strong>1. Crea una imagen nueva, que utilice <strong><code>buster-base.qcow2</code></strong> como imagen base y tenga 5 GiB de tamaño máximo. Esta imagen se denominará <code>maquina1.qcow2</code></strong></p>
+</blockquote>
+<p>Creamos la imagen</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina1.qcow2 5G
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina1.qcow2 5G
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina1.qcow2 5G
 Formatting <span class="s1">&#39;maquina1.qcow2&#39;</span>, <span class="nv">fmt</span><span class="o">=</span>qcow2 <span class="nv">size</span><span class="o">=</span><span class="m">5368709120</span> <span class="nv">backing_file</span><span class="o">=</span>buster-base_red.qcow2 <span class="nv">cluster_size</span><span class="o">=</span><span class="m">65536</span> <span class="nv">lazy_refcounts</span><span class="o">=</span>off <span class="nv">refcount_bits</span><span class="o">=</span><span class="m">16</span>
-</code></pre></div><p>Comprobamos que se ha creado</p>
+</code></pre></div><p>Comprobamos que se ha creado <code>maquina1.qcow2</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# ls -lh
 total 5,8G
 -rw------- <span class="m">1</span> root         root         3,1G mar <span class="m">22</span> 17:38 buster-base.qcow2
@@ -441,11 +462,14 @@ total 5,8G
 -rw------- <span class="m">1</span> root         root         3,2G mar <span class="m">18</span> 17:51 compilar_default.img
 -rwxr--r-- <span class="m">1</span> libvirt-qemu libvirt-qemu 1,1G ene <span class="m">27</span> 11:01 debian-VAGRANTSLASH-buster64_vagrant_box_image_10.4.0.img
 -rw-r--r-- <span class="m">1</span> root         root         193K mar <span class="m">22</span> 18:18 maquina1.qcow2
-</code></pre></div><p><strong>2. Crea una red interna de nombre intra con salida al exterior mediante <strong>NAT</strong> que utilice el direccionamiento <code>10.10.20.0/24</code></strong></p>
-<p>Creamos el nuevo fichero .xml.</p>
-<p>Le proporcionamos un identificador y le proporcionamos una mac respetando los tres primeros octetos.</p>
+</code></pre></div><h4 id="crear-red-interna-intra">Crear red interna <code>intra</code></h4>
+<blockquote>
+<p><strong>2. Crea una red interna de nombre intra con salida al exterior mediante NAT que utilice el direccionamiento <code>10.10.20.0/24</code></strong></p>
+</blockquote>
+<p>Creamos el nuevo fichero <strong>.xml</strong>.</p>
+<p>Le proporcionamos un <strong>identificador</strong> y le proporcionamos una <strong>mac</strong> respetando los tres primeros octetos.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cat /proc/sys/kernel/random/uuid
-</code></pre></div><p><code>intra.xml</code></p>
+</code></pre></div><p><strong><code>intra.xml</code></strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;network&gt;
   &lt;name&gt;intra&lt;/name&gt;
   &lt;uuid&gt;697e03ff-85da-45ff-815b-b16170e2125f&lt;/uuid&gt;
@@ -462,7 +486,7 @@ total 5,8G
     &lt;/dhcp&gt;
   &lt;/ip&gt;
 &lt;/network&gt;
-</code></pre></div><p>La definimos, la iniciamos y comprobamos que esta activo</p>
+</code></pre></div><p>La <strong>definimos</strong>, la <strong>iniciamos</strong> y <strong>comprobamos</strong> que esta activo</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu/networks# virsh net-define intra.xml
 Network intra defined from intra.xml
 
@@ -481,8 +505,11 @@ root@debian:/home/celiagm/isos# virsh net-list --all
  red2              active     yes         yes
  vagrant-libvirt   inactive   no          yes
 
-</code></pre></div><p><strong>3. Crea una máquina virtual (maquina1) conectada a la red <strong>intra</strong>, con 1 GiB de RAM, que utilice como disco raíz <code>maquina1.qcow2</code> y que se inicie automáticamente. Arranca la máquina.</strong></p>
-<p>Creamos el dominio, llamado maquina1.xml</p>
+</code></pre></div><h3 id="crear-mv">Crear MV</h3>
+<blockquote>
+<p><strong>3. Crea una máquina virtual (maquina1) conectada a la red <strong>intra</strong>, con 1 GiB de RAM, que utilice como disco raíz <code>maquina1.qcow2</code> y que se inicie automáticamente. Arranca la máquina.</strong></p>
+</blockquote>
+<p>Creamos el <strong>dominio</strong>, llamado <strong><code>maquina1.xml</code></strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;domain <span class="nv">type</span><span class="o">=</span><span class="s2">&#34;kvm&#34;</span>&gt;
   &lt;name&gt;dominio1&lt;/name&gt;
   &lt;memory <span class="nv">unit</span><span class="o">=</span><span class="s2">&#34;G&#34;</span>&gt;1&lt;/memory&gt;
@@ -504,16 +531,16 @@ root@debian:/home/celiagm/isos# virsh net-list --all
     &lt;graphics <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;vnc&#39;</span> <span class="nv">port</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span> <span class="nv">autoport</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span> <span class="nv">listen</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span> /&gt;
   &lt;/devices&gt;
 &lt;/domain&gt;
-</code></pre></div><p>Comprobamos que es válido el fichero xml</p>
+</code></pre></div><p>Comprobamos que es <strong>válido</strong> el fichero xml</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virt-xml-validate maquina1.xml
 maquina1.xml validates
-</code></pre></div><p>Definimos y arrancamos la máquina</p>
+</code></pre></div><p><strong>Definimos y arrancamos la máquina</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virsh define maquina1.xml
 Domain maquina1 defined from maquina1.xml
 
 root@debian:/etc/libvirt/qemu# virsh start maquina1
 Domain maquina1 started
-</code></pre></div><p>Vemos que está encendida</p>
+</code></pre></div><p>Comprobamos que está <strong>encendida</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/etc/libvirt/qemu# virsh list --all
  Id   Name               State
 -----------------------------------
@@ -521,10 +548,13 @@ Domain maquina1 started
  -    buster-base        shut off
  -    compilar_default   shut off
 
-</code></pre></div><p>Nos conectamos a ella</p>
+</code></pre></div><p>Nos <strong>conectamos</strong> a ella</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">$ virt-viewer -c qemu:///system maquina1
-</code></pre></div><p><strong>4. Crea un <strong>volumen adicional</strong> de 1 GiB de tamaño en formato <strong>RAW</strong> ubicado en el pool por defecto</strong></p>
-<p>Creamos el volumen de 1Gb</p>
+</code></pre></div><h3 id="crear-volumen-adicional-raw-pool-por-defecto">Crear volumen adicional RAW (pool por defecto)</h3>
+<blockquote>
+<p><strong>4. Crea un <strong>volumen adicional</strong> de 1 GiB de tamaño en formato <strong>RAW</strong> ubicado en el pool por defecto</strong></p>
+</blockquote>
+<p>Creamos el <strong>xml</strong> del volumen de <strong>1Gb</strong></p>
 <p><code>vol.xml</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">&lt;volume <span class="nv">type</span><span class="o">=</span><span class="s1">&#39;file&#39;</span>&gt;
   &lt;name&gt;vol1.img&lt;/name&gt;
@@ -541,15 +571,19 @@ Domain maquina1 started
 </code></pre></div><p>Creamos el volumen en el <strong>pool por defecto</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-create default vol.xml
 Vol vol1.img created from vol.xml
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-list default
+</code></pre></div><h3 id="listar-volumenes">Listar volumenes</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# virsh vol-list default
  Name                                                        Path
 ------------------------------------------------------------------------------------------------------------------------------------------------
  buster-base.qcow2                                           /var/lib/libvirt/images/buster-base.qcow2
  compilar_default.img                                        /var/lib/libvirt/images/compilar_default.img
  debian-VAGRANTSLASH-buster64_vagrant_box_image_10.4.0.img   /var/lib/libvirt/images/debian-VAGRANTSLASH-buster64_vagrant_box_image_10.4.0.img
  vol1.img                                                    /var/lib/libvirt/images/vol1.img
-</code></pre></div><p><strong>5. Una vez iniciada la MV maquina1, conecta el volumen a la máquina, crea un sistema de ficheros XFS en el volumen y móntalo en el directorio <code>/var/lib/postgresql</code>. Ten cuidado con los <strong>propietarios</strong> y <strong>grupos</strong> que pongas, para que funcione adecuadamente el siguiente punto.</strong></p>
-<p>Conectamos el volumen creado de 1Gb a la máquina</p>
+</code></pre></div><h3 id="gestión-del-volumen-nuevo-para-postgresql">Gestión del volumen nuevo para postgresql</h3>
+<blockquote>
+<p><strong>5. Una vez iniciada la MV maquina1, conecta el volumen a la máquina, crea un sistema de ficheros XFS en el volumen y móntalo en el directorio <code>/var/lib/postgresql</code>. Ten cuidado con los <strong>propietarios</strong> y <strong>grupos</strong> que pongas, para que funcione adecuadamente el siguiente punto.</strong></p>
+</blockquote>
+<p>Conectamos el volumen creado de <strong>1Gb</strong> a la máquina</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"> <span class="n">root</span><span class="nv">@debian</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="p">/</span><span class="n">libvirt</span><span class="p">/</span><span class="n">images</span><span class="c"># virsh attach-disk maquina1 --source /var/lib/libvirt/images/vol1.img --target vdc --persistent</span>
 <span class="n">Disk</span> <span class="n">attached</span> <span class="n">successfully</span>
 
@@ -579,34 +613,42 @@ Vol vol1.img created from vol.xml
 <span class="n">vda</span>
 <span class="err">└─</span><span class="n">vda1</span> <span class="n">xfs</span>          <span class="n">30a9cfb1</span><span class="p">-</span><span class="n">0b31</span><span class="p">-</span><span class="n">4368</span><span class="p">-</span><span class="n">8b7a-c6779804e450</span>      <span class="n">2G</span>    <span class="n">35</span><span class="p">%</span> <span class="p">/</span>
 <span class="n">vdb</span>    <span class="n">xfs</span>          <span class="n">6ebae309</span><span class="p">-</span><span class="n">2c2f</span><span class="p">-</span><span class="n">4c67-b098</span><span class="p">-</span><span class="n">20a9afbda1a5</span>
-</code></pre></div><p>Antes de montarlo en el directorio <code>/var/lib/postgresql.</code> vamos a ver qué permisos tenemos que darle y que usuarios tenemos que crear para la base de datos en postgresql.</p>
-<p>Creamos el grupo postgres</p>
+</code></pre></div><h3 id="conceder-permisos-adecuados">Conceder permisos adecuados</h3>
+<p>Antes de montarlo en el directorio <code>/var/lib/postgresql.</code> vamos a ver qué permisos tenemos que darle y que usuarios tenemos que crear para la base de datos en postgresql.</p>
+<p>Creamos el <strong>grupo postgres</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">groupadd</span> <span class="n">postgres</span>
 
 <span class="n">debian</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">~$</span> <span class="n">sudo</span> <span class="n">useradd</span> <span class="n">postgres</span> <span class="n">-m</span> <span class="n">-g</span> <span class="n">postgres</span>
-</code></pre></div><p>Creamos el directorio y le damos los permisos adecuados</p>
+</code></pre></div><p><strong>Creamos el directorio</strong> y le damos los <strong>permisos adecuados</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># mkdir postgresql</span>
 <span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># chown -R postgres:postgres postgresql/</span>
 <span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># ls -l | grep &#39;post&#39;</span>
 <span class="n">drwxr-xr-x</span> <span class="n">2</span> <span class="n">postgres</span> <span class="n">postgres</span>   <span class="n">6</span> <span class="n">abr</span>  <span class="n">5</span> <span class="n">19</span><span class="err">:</span><span class="n">50</span> <span class="n">postgresql</span>
-</code></pre></div><p>Montamos el disco en el directorio requerido</p>
+</code></pre></div><p><strong>Montamos el disco</strong> en el directorio requerido</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">root</span><span class="nv">@debian</span><span class="n">-kvm</span><span class="err">:</span><span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">lib</span><span class="c"># mount -t xfs /dev/vdb /var/lib/postgresql/</span>
-</code></pre></div><p>Vemos que se ha montado</p>
+</code></pre></div><p>Comprobamos que se ha montado</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/var/lib# lsblk -f 
 NAME   FSTYPE LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 vda                                                                     
 └─vda1 xfs          30a9cfb1-0b31-4368-8b7a-c6779804e450    1,7G    43% /
 vdb    xfs          6ebae309-2c2f-4c67-b098-20a9afbda1a5  980,8M     3% /var/lib/postgresql
 
-</code></pre></div><p><strong>6. Instala en maquina1 el sistema de BBDD <strong>PostgreSQL</strong> que ubicará sus ficheros con las bases de datos en <code>/var/lib/postgresql</code> utilizando una conexión ssh.</strong></p>
-<p>Instalamos prostgres como se indica en el siguiente <a href="https://www.celiagm.es/post/postgresql_debian/">post</a></p>
-<p>Comprobamos que se ha creado</p>
+</code></pre></div><h3 id="instalar-postgresql-vía-ssh">Instalar postgresql vía ssh</h3>
+<blockquote>
+<p><strong>6. Instala en maquina1 el sistema de BBDD <strong>PostgreSQL</strong> que ubicará sus ficheros con las bases de datos en <code>/var/lib/postgresql</code> utilizando una conexión ssh.</strong></p>
+</blockquote>
+<p>Accedemos por <strong>ssh</strong> a la mv.</p>
+<p>Instalamos <strong>prostgres</strong> como se indica en el siguiente <a href="https://www.celiagm.es/post/postgresql_debian/">post</a></p>
+<p>Comprobamos que se ha creado el directorio <strong>11</strong> correspondiente a la versión de postgresql.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/var/lib/postgresql# ls -lh
 total <span class="m">0</span>
 drwxr-xr-x <span class="m">3</span> postgres postgres <span class="m">18</span> abr  <span class="m">7</span> 15:11 <span class="m">11</span>
-</code></pre></div><p>Vamos a darle una contraseña al usuario postgres</p>
+</code></pre></div><p>Vamos a darle una <strong>contraseña</strong> al usuario postgres</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">passwd</span> <span class="n">postgres</span>
-</code></pre></div><p><strong>7. (Opcional) <strong>Puebla la base de datos</strong> con una BBDD de prueba (escribe en la tarea el nombre de usuario y contraseña para acceder a la BBDD).</strong></p>
+</code></pre></div><h3 id="poblar-la-base-de-datos-de-postgresql">Poblar la base de datos de PostgreSQL</h3>
+<blockquote>
+<p><strong>7. (Opcional) <strong>Puebla la base de datos</strong> con una BBDD de prueba (escribe en la tarea el nombre de usuario y contraseña para acceder a la BBDD).</strong></p>
+</blockquote>
 <p>Creamos el usario <code>celia</code> y la base de datos <code>prueba</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@debian-kvm:~$ sudo su
 root@debian-kvm:/home/debian# su - postgresql
@@ -623,10 +665,10 @@ CREATE DATABASE
 <span class="nv">postgres</span><span class="o">=</span><span class="c1"># grant all privileges on database prueba to celia;</span>
 GRANT
 <span class="nv">postgres</span><span class="o">=</span><span class="c1"># exit</span>
-</code></pre></div><p>Entramos como usuario celia y poblamos la base de datos</p>
+</code></pre></div><p>Entramos como usuario <strong>celia</strong> y poblamos la base de datos</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">psql -h localhost -U celia -W -d prueba
 
-</code></pre></div><p>Agregamos una tabla de prueba con sus registros</p>
+</code></pre></div><p>Agregamos una tabla de <strong>prueba</strong> con sus registros</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">create table departamento<span class="o">(</span>
 dept_no integer,
 dnombre varchar<span class="o">(</span>20<span class="o">)</span>,
@@ -661,28 +703,31 @@ values <span class="o">(</span><span class="s1">&#39;40&#39;</span>,<span class=
       <span class="m">40</span> <span class="p">|</span> PRODUCCION    <span class="p">|</span> BILBAO
 <span class="o">(</span><span class="m">4</span> filas<span class="o">)</span>
 
-</code></pre></div><p><strong>8. Crea una <strong>regla de NAT</strong> para que la base de datos sea accesible desde el exterior</strong></p>
-<p>Ahora vamos a editar el fichero de configuracion de postgres para hacer que sea accesible desde otras maquinas</p>
+</code></pre></div><h3 id="regla-nat">Regla NAT</h3>
+<blockquote>
+<p><strong>8. Crea una <strong>regla de NAT</strong> para que la base de datos sea accesible desde el exterior</strong></p>
+</blockquote>
+<p>Ahora vamos a <strong>editar el fichero de configuracion de postgres</strong> para hacer que sea accesible desde otras maquinas</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">postgresql</span><span class="p">/</span><span class="n">11</span><span class="p">/</span><span class="n">main</span><span class="p">/</span><span class="n">postgresql</span><span class="p">.</span><span class="n">conf</span>
-</code></pre></div><p>Buscamos las líneas siguientes y las modificamos así</p>
+</code></pre></div><p>Buscamos las líneas siguientes y las modificamos así, de tal forma que sea accesible desde el exterior.</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">listen_addresses</span> <span class="p">=</span> <span class="s1">&#39;*&#39;</span>          <span class="c"># what IP address(es) to listen on;</span>
 
 <span class="c">#unix_socket_group = &#39;&#39;                 # (change requires restart)</span>
 <span class="n">unix_socket_permissions</span> <span class="p">=</span> <span class="n">0700</span>          <span class="c"># begin with 0 to use octal notation</span>
 
-</code></pre></div><p>Editamos el siguiente fichero también y cambiamos lo siguiente</p>
+</code></pre></div><p><strong>Editamos</strong> el siguiente fichero también y cambiamos lo siguiente</p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell">
 <span class="n">nano</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">postgresql</span><span class="p">/</span><span class="n">11</span><span class="p">/</span><span class="n">main</span><span class="p">/</span><span class="n">pg_hba</span><span class="p">.</span><span class="n">conf</span>
 
-</code></pre></div><p>Cambiamos</p>
+</code></pre></div><p><strong>Cambiamos</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># IPv4 local connections:</span>
 <span class="n">host</span>    <span class="n">all</span>             <span class="n">all</span>             <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">/</span><span class="n">32</span>            <span class="n">md5</span>
 
 <span class="c"># lo cambiamos por</span>
 
 <span class="n">host</span>    <span class="n">all</span>             <span class="n">all</span>             <span class="n">all</span>                   <span class="n">md5</span>
-</code></pre></div><p>Para permitir las conexiones desde cualquier dirección ip con cualquier usuario y base de datos (si éste tiene permiso para ello).</p>
-<p>Ahora reiniciamos el servicio de postgres</p>
+</code></pre></div><p>Para <strong>permitir las conexiones desde cualquier dirección ip</strong> con cualquier <strong>usuario</strong> y base de datos (si éste tiene permiso para ello).</p>
+<p>Ahora <strong>reiniciamos el servicio de postgres</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">postgresql</span>
 </code></pre></div><p>Comprobamos que está funcionando</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian-kvm:/# sudo systemctl status postgresql
@@ -707,7 +752,8 @@ tcp6       <span class="m">0</span>      <span class="m">0</span> :::5432       
 </code></pre></div><p>Comprobamos que es el puerto <strong>5434</strong>, por lo tanto</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">sudo iptables -A INPUT -p tcp -s 10.10.20.158/24 --dport <span class="m">5432</span> -m state --state NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport <span class="m">5432</span> -m state --state ESTABLISHED -j ACCEPT
-</code></pre></div><p>Comprobamos que podemos acceder desde la máquina anfitriona y podemos ver la tabla creada. Le pasaremos el parámetro -h (host) &ndash;port (puerto ) -U (usuario) -W (contraseña de forma forzada)</p>
+</code></pre></div><h3 id="acceso-remoto-a-la-base-de-datos-anfitriona---maquina-virtual">Acceso remoto a la base de datos (anfitriona - maquina virtual)</h3>
+<p>Comprobamos que podemos acceder desde la máquina anfitriona y podemos ver la tabla creada. Le pasaremos el parámetro -h (host) &ndash;port (puerto ) -U (usuario) -W (contraseña de forma forzada)</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~$ psql -h 10.10.20.158 --port <span class="m">5432</span> -U celia -W prueba
 Contraseña: 
 psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
@@ -724,9 +770,19 @@ Digite «help» para obtener ayuda.
 <span class="nv">prueba</span><span class="o">=</span>&gt; 
 
 
-</code></pre></div><p><strong>9. Pausa la ejecución para comprobar los pasos hasta este punto</strong></p>
+</code></pre></div><h3 id="punto-de-control">Punto de control</h3>
+<blockquote>
+<p><strong>9. Pausa la ejecución para comprobar los pasos hasta este punto</strong></p>
+</blockquote>
+<p>Los pasos hasta aquí parecen correctos. (El script nos mostraría un OK)</p>
+<blockquote>
 <p><strong>10. Continúa la ejecución cuando el usuario pulse &lsquo;C&rsquo;</strong></p>
+</blockquote>
+<h3 id="crear-imagen-nueva-desde-imagen-base-maquina2">Crear imagen nueva desde imagen base: maquina2</h3>
+<blockquote>
 <p><strong>11. Crea una imagen que utilice <code>buster-base.qcow2</code> como imagen base y que tenga un tamaño de 4 GiB. Esta imagen se llamará <code>maquina2.qcow2</code></strong></p>
+</blockquote>
+<p>Hacemos el mismo procedimiento que al principio</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina2.qcow2 4G
 </code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@debian:/var/lib/libvirt/images# qemu-img create -f qcow2 -b buster-base_red.qcow2 maquina2.qcow2 4G
 Formatting <span class="s1">&#39;maquina2.qcow2&#39;</span>, <span class="nv">fmt</span><span class="o">=</span>qcow2 <span class="nv">size</span><span class="o">=</span><span class="m">4294967296</span> <span class="nv">backing_file</span><span class="o">=</span>buster-base_red.qcow2 <span class="nv">cluster_size</span><span class="o">=</span><span class="m">65536</span> <span class="nv">lazy_refcounts</span><span class="o">=</span>off <span class="nv">refcount_bits</span><span class="o">=</span><span class="m">16</span>
