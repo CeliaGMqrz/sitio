@@ -1126,7 +1126,7 @@ root@debian:/etc/libvirt/qemu/networks# virsh net-list --all
 <li>Reiniciar el servicio de postgres</li>
 <li>Comprobar que postgres está funcionando</li>
 </ul>
-<p>Una vez hecho eso en la máquina anfitriona accedemos a la base de datos con la dirección ip que ha adoptado ahora del puente.</p>
+<p>Una vez hecho eso en la máquina anfitriona accedemos a la base de datos con la <strong>dirección ip</strong> que ha adoptado ahora del puente.</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">celiagm@debian:~$ psql -h 192.168.100.62 -U celia -W -d prueba
 Contraseña: 
 psql <span class="o">(</span>11.11 <span class="o">(</span>Debian 11.11-0+deb10u1<span class="o">))</span>
@@ -1157,12 +1157,12 @@ Digite «help» para obtener ayuda.
  -    maquina1           shut off
 
 </code></pre></div><p>Apagamos la máquina2</p>
-<p>Aumentamos la RAM de máquina2 a 2GiB</p>
+<p>Aumentamos la RAM de máquina2 a <strong>2GiB</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">
 <span class="m">1</span> Gb _&gt; <span class="m">1048576</span>
 <span class="m">2</span> Gb _&gt; <span class="m">2097152</span>
 virsh setmem maquina2 <span class="m">2097152</span> --config
-virsh setmemmax maquina2 <span class="m">2097152</span> --config
+virsh setmaxmem maquina2 <span class="m">2097152</span> --config
 </code></pre></div><p>Vemos que ha cambiado el fichero xml</p>
 <div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">  &lt;memory <span class="nv">unit</span><span class="o">=</span><span class="s1">&#39;KiB&#39;</span>&gt;2097152&lt;/memory&gt;
   &lt;currentMemory <span class="nv">unit</span><span class="o">=</span><span class="s1">&#39;KiB&#39;</span>&gt;2097152&lt;/currentMemory&gt;
