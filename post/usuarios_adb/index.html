@@ -546,6 +546,7 @@ end
 </blockquote>
 <hr>
 <h2 id="mysql">MySQL</h2>
+<h2 id="ejercicio-8">Ejercicio 8</h2>
 <blockquote>
 <p><strong>8. Averigua que privilegios de sistema hay en MySQL y como se asignan a un usuario.</strong></p>
 </blockquote>
@@ -629,6 +630,7 @@ end
 <span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
 </code></pre></div><p><strong>Fuente</strong></p>
 <p><a href="https://dev.mysql.com/doc/refman/5.7/en/privileges-provided.html">https://dev.mysql.com/doc/refman/5.7/en/privileges-provided.html</a></p>
+<h2 id="ejercicio-9">Ejercicio 9</h2>
 <blockquote>
 <p><strong>9. Averigua cual es la forma de asignar y revocar privilegios sobre una tabla concreta en MySQL.</strong></p>
 </blockquote>
@@ -663,7 +665,8 @@ end
 
 </code></pre></div><p>De esta forma quitaríamos todos los permisos a un usuario</p>
 <div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">REVOKE</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="n">BD</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">usuario</span><span class="o">@</span><span class="n">localhost</span>
-</code></pre></div><blockquote>
+</code></pre></div><h2 id="ejercicio-10">Ejercicio 10</h2>
+<blockquote>
 <p><strong>10. Averigua si existe el concepto de rol en MySQL y señala las diferencias con los roles de ORACLE.</strong></p>
 </blockquote>
 <p>Antes de nada aclarar el <strong>concepto de rol</strong></p>
@@ -690,6 +693,7 @@ end
 <p><strong>Fuente:</strong></p>
 <p><a href="https://dev.mysql.com/doc/refman/8.0/en/roles.html#:~:text=A%20MySQL%20role%20is%20a,privileges%20associated%20with%20each%20role">https://dev.mysql.com/doc/refman/8.0/en/roles.html#:~:text=A%20MySQL%20role%20is%20a,privileges%20associated%20with%20each%20role</a>.</p>
 <p><a href="https://docs.oracle.com/cd/A97630_01/server.920/a96521/privs.htm#:~:text=A%20role%20groups%20several%20privileges,to%20help%20in%20database%20administration">https://docs.oracle.com/cd/A97630_01/server.920/a96521/privs.htm#:~:text=A%20role%20groups%20several%20privileges,to%20help%20in%20database%20administration</a>.</p>
+<h2 id="ejercicio-11">Ejercicio 11</h2>
 <blockquote>
 <p><strong>11. Averigua si existe el concepto de perfil como conjunto de límites sobre el uso de recursos osobre la contraseña en MySQL y señala las diferencias con los perfiles de ORACLE.</strong></p>
 </blockquote>
@@ -724,6 +728,7 @@ end
 <p><a href="https://dev.mysql.com/doc/mysql-security-excerpt/8.0/en/password-management.html">https://dev.mysql.com/doc/mysql-security-excerpt/8.0/en/password-management.html</a>
 <a href="https://dev.mysql.com/doc/refman/8.0/en/user-resources.html">https://dev.mysql.com/doc/refman/8.0/en/user-resources.html</a></p>
 <p><a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm">https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm</a></p>
+<h2 id="ejercicio-12">Ejercicio 12</h2>
 <blockquote>
 <p><strong>12. Realiza consultas al diccionario de datos de MySQL para averiguar todos los privilegios que tiene un usuario concreto.</strong></p>
 </blockquote>
@@ -738,7 +743,8 @@ end
 <span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
 </span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
 
-</code></pre></div><blockquote>
+</code></pre></div><h2 id="ejercicio-13">Ejercicio 13</h2>
+<blockquote>
 <p><strong>13. Realiza consultas al diccionario de datos en MySQL para averiguar qué usuarios pueden consultar una tabla concreta.</strong></p>
 </blockquote>
 <p>En la tabla de concesión tables_priv podemos ver los privilegios de cada usuario sobre qué tabla.</p>
