@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Celia García Márquez </title>
+    <title> Celia García Márquez | Gestión de usuarios. Gestores Bases de datos </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <meta name="description" content="Blog sobre informática">
+    <meta name="description" content="Gestión de usuarios. BBDD">
     
     <link rel="stylesheet"
           href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
@@ -52,8 +52,8 @@
     <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
 
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="(ORACLE, Postgres, MySQL) Crea un usuario llamado Becario y, sin usar los roles de ORACLE, dale los siguientes privilegios:"/>
+<meta name="twitter:title" content="Gestión de usuarios. Gestores Bases de datos"/>
+<meta name="twitter:description" content="Gestión de usuarios. BBDD"/>
 
 
     
@@ -138,50 +138,626 @@
     <div class="post  animated fadeInDown ">
         <div class="post-content">
             
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/usuarios/banner.png" alt="Thumbnail image">
+            
             <div class="post-title">
-                <h3></h3>
+                <h3>Gestión de usuarios. Gestores Bases de datos</h3>
                 
                     <div class="info">
                         <em class="fas fa-calendar-day"></em>
-                        <span class="date"> Mon, Jan 1, 0001 
+                        <span class="date"> Sun, May 16, 2021 
                                            </span>
                         <em class="fas fa-stopwatch"></em>
-                        <span class="reading-time">One-minute read</span>
+                        <span class="reading-time">16-minute read</span>
                     </div>
                 
             </div>
 
-            <ol>
-<li>
-<p>(ORACLE, Postgres, MySQL) Crea un usuario llamado Becario y, sin usar los roles de ORACLE, dale los siguientes privilegios:</p>
-<pre><code> ◦ Conectarse a la base de datos.
- ◦ Modificar el número de errores en la introducción de la contraseña de cualquier usuario.
- ◦ Modificar índices en cualquier esquema (este privilegio podrá pasarlo a quien quiera)
- ◦ Insertar filas en scott.emp (este privilegio podrá pasarlo a quien quiera)
- ◦ Crear objetos en cualquier tablespace.
- ◦ Gestión completa de usuarios, privilegios y roles.
-</code></pre>
-</li>
-</ol>
-<h2 id="oracle">Oracle</h2>
+            <p>En este post veremos como gestionar los usuarios en los distintos gestores de bases de datos.</p>
+<h2 id="ejercicio-1">Ejercicio 1</h2>
+<blockquote>
+<p><strong>1. (ORACLE, Postgres, MySQL) Crea un usuario llamado Becario y, sin usar los roles de ORACLE, dale los siguientes privilegios</strong>:
+◦ Conectarse a la base de datos.
+◦ Modificar el número de errores en la introducción de la contraseña de cualquier usuario.
+◦ Modificar índices en cualquier esquema (este privilegio podrá pasarlo a quien quiera)
+◦ Insertar filas en scott.emp (este privilegio podrá pasarlo a quien quiera)
+◦ Crear objetos en cualquier tablespace.
+◦ Gestión completa de usuarios, privilegios y roles.</p>
+</blockquote>
+<h3 id="11-oracle">1.1. Oracle</h3>
+<p><strong>Entorno de trabajo con vagrant</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
+    config.vm.define <span class="s2">&#34;orcl3&#34;</span> <span class="k">do</span> <span class="p">|</span>orcl3<span class="p">|</span>
+        config.vm.provider <span class="s2">&#34;virtualbox&#34;</span> <span class="k">do</span> <span class="p">|</span>vb<span class="p">|</span>
+            vb.name <span class="o">=</span> <span class="s2">&#34;orcl3&#34;</span>
+            vb.memory <span class="o">=</span> <span class="m">2048</span>
+            vb.cpus <span class="o">=</span> <span class="m">1</span>
+        end
+        orcl3.vm.box <span class="o">=</span> <span class="s2">&#34;neko-neko/centos6-oracle-11g-XE&#34;</span>
+        orcl3.vm.hostname <span class="o">=</span> <span class="s2">&#34;orcl&#34;</span>
+        orcl3.vm.network <span class="s2">&#34;public_network&#34;</span>,
+            bridge: <span class="s2">&#34;br0&#34;</span>, 
+            use_dhcp_assigned_default_route: <span class="nb">true</span>
+    end
+end
+</code></pre></div><blockquote>
+<p>Recordamos para cambiar el idioma podemos exportar esta variable:
+<strong>export NLS_LANG=AMERICAN_AMERICA.WE8MSWIN1252</strong></p>
+</blockquote>
+<h4 id="conectarse-a-la-base-de-datos">Conectarse a la base de datos</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Crear el usuario becario
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">USER</span> <span class="n">becario</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="n">becario</span><span class="p">;</span>
+
+<span class="k">User</span> <span class="n">created</span><span class="p">.</span>
+
+<span class="c1">-- Conectar a la base de datos (sesion) 
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">SESSION</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+
+</code></pre></div><h4 id="modificar-el-número-de-errores-en-la-introducción-de-la-contraseña-de-cualquier-usuario">Modificar el número de errores en la introducción de la contraseña de cualquier usuario.</h4>
+<p>Para ello necesitamos ejecutar la opción CREATE PROFILE que sirve para crear un perfil y así disponer de los límites en los recursos de la base de datos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Creamos el perfil 
+</span><span class="c1"></span><span class="k">GRANT</span> <span class="k">CREATE</span> <span class="n">PROFILE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+
+<span class="c1">-- Creamos el perfil que defina los límites en este caso hasta 3 intentos.
+</span><span class="c1"></span><span class="k">CREATE</span> <span class="n">PROFILE</span> <span class="n">limitepass</span> <span class="k">LIMIT</span> <span class="n">FAILED_LOGIN_ATTEMPTS</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="c1">-- Ahora asignamos el perfil del usuario mediante ALTER USER para que use dicho perfil.
+</span><span class="c1"></span>
+<span class="k">ALTER</span> <span class="k">USER</span> <span class="n">becario</span> <span class="n">PROFILE</span> <span class="n">limitepass</span><span class="p">;</span>
+</code></pre></div><p>Podemos <strong>comprobar</strong> que el <strong>límite</strong> de intentos se cumple</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">-bash-4.1$ sqlplus becario
+
+SQL*Plus: Release 11.2.0.2.0 Production on Dom May <span class="m">16</span> 11:42:53 <span class="m">2021</span>
+
+Copyright <span class="o">(</span>c<span class="o">)</span> 1982, 2011, Oracle.  All rights reserved.
+
+Enter password: 
+ERROR:
+ORA-01017: invalid username/password<span class="p">;</span> logon denied
+
+
+Enter user-name: becario
+Enter password: 
+ERROR:
+ORA-01017: invalid username/password<span class="p">;</span> logon denied
+
+
+Enter user-name: becario
+Enter password: 
+SP2-0306: Invalid option.
+Usage: CONN<span class="o">[</span>ECT<span class="o">]</span> <span class="o">[{</span>logon<span class="p">|</span>/<span class="p">|</span>proxy<span class="o">}</span> <span class="o">[</span>AS <span class="o">{</span>SYSDBA<span class="p">|</span>SYSOPER<span class="p">|</span>SYSASM<span class="o">}]</span> <span class="o">[</span><span class="nv">edition</span><span class="o">=</span>value<span class="o">]]</span>
+where &lt;logon&gt; ::<span class="o">=</span> &lt;username&gt;<span class="o">[</span>/&lt;password&gt;<span class="o">][</span>@&lt;connect_identifier&gt;<span class="o">]</span>
+      &lt;proxy&gt; ::<span class="o">=</span> &lt;proxyuser&gt;<span class="o">[</span>&lt;username&gt;<span class="o">][</span>/&lt;password&gt;<span class="o">][</span>@&lt;connect_identifier&gt;<span class="o">]</span>
+SP2-0157: unable to CONNECT to ORACLE after <span class="m">3</span> attempts, exiting SQL*Plus
+
+</code></pre></div><h4 id="modificar-índices-en-cualquier-esquema-este-privilegio-podrá-pasarlo-a-quien-quiera">Modificar índices en cualquier esquema (este privilegio podrá pasarlo a quien quiera)</h4>
+<p>De esta forma podrá modificar los índices y pasarle mismo privilegio a otro usuario. Esto no es recomendable ya que pone a prueba la seguridad de la base de datos, lo lógico seria especificar una tabla o esquema en particular, pero como indica &lsquo;cualquier esquema&rsquo; he suspuesto que puede ser todos. Aunque recalco que lo mejor es especificar el esquema que necesitemos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">ALTER</span> <span class="k">ANY</span> <span class="k">INDEX</span> <span class="k">TO</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="k">ADMIN</span> <span class="k">OPTION</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+
+</code></pre></div><p>Creamos otro usuario llamado &lsquo;celia&rsquo; y nos conectamos como becario. Después le otorgamos ese mismo permiso al usuario &lsquo;celia&rsquo;. Ahora el usuario &lsquo;celia&rsquo; puede modificar cualquier índice.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">connect</span> <span class="n">becario</span><span class="o">/</span><span class="n">becario</span>
+<span class="n">Connected</span><span class="p">.</span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">ALTER</span> <span class="k">ANY</span> <span class="k">INDEX</span> <span class="k">TO</span> <span class="n">celia</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+</code></pre></div><h4 id="insertar-filas-en-scottemp-este-privilegio-podrá-pasarlo-a-quien-quiera">Insertar filas en scott.emp (este privilegio podrá pasarlo a quien quiera)</h4>
+<p>Para ello necesitaremos tener el usuario scott y su base de datos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">SCOTT</span><span class="p">.</span><span class="n">EMP</span> <span class="k">TO</span> <span class="n">becario</span> <span class="k">with</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+</code></pre></div><p>Podemos probar que puede pasar este privilegio al usuario &lsquo;celia&rsquo;</p>
+<p>Nos conectamos como becario :</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">connect</span> <span class="n">becario</span><span class="o">/</span><span class="n">becario</span><span class="p">;</span>
+<span class="n">Connected</span><span class="p">.</span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">SCOTT</span><span class="p">.</span><span class="n">EMP</span> <span class="k">TO</span> <span class="n">celia</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+
+
+</code></pre></div><h4 id="crear-objetos-en-cualquier-tablespace">Crear objetos en cualquier tablespace.</h4>
+<p>Le otorgamos privilegios a becario para crear objetos en cualquier tablespace</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="n">UNLIMITED</span> <span class="n">TABLESPACE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+
+<span class="k">Grant</span> <span class="n">succeeded</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> 
+
+</code></pre></div><h4 id="gestión-completa-de-usuarios-privilegios-y-roles">Gestión completa de usuarios, privilegios y roles</h4>
 <ul>
-<li>Conectarse a la base de datos</li>
+<li>Gestión completa de usuarios</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Crear el usuario Becario </span>
-Create user Becario identified by Becario<span class="p">;</span>
-<span class="c1"># Conectarse a la base de datos</span>
-grant create session to Becario<span class="p">;</span>
-<span class="c1"># Modificar el número de errores en la introducción de la contraseña de cualquier usuario.</span>
-grant create profile to Becario<span class="p">;</span>
-Create profile Limitepasswd LIMIT
-FAILED_LOGIN_ATTEMPTS 5<span class="p">;</span>
-<span class="c1"># Ahora le damos al usuario becarios la posibilidad de dar dicho perfil</span>
-grant alter user to Becario<span class="p">;</span>
-</code></pre></div></div>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="n">Usuarios</span>
+<span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">USER</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="n">BECOME</span> <span class="k">USER</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">DROP</span> <span class="k">USER</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+</code></pre></div><ul>
+<li>Gestión completa de privilegios</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="n">Privilegios</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+</code></pre></div><ul>
+<li>Gestión completa de roles</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="n">Roles</span>
+
+<span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ROLE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">DROP</span> <span class="k">ANY</span> <span class="k">ROLE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">GRANT</span> <span class="k">ANY</span> <span class="k">ROLE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALTER</span> <span class="k">ANY</span> <span class="k">ROLE</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+</code></pre></div><p><strong>Fuentes:</strong></p>
+<p>Perfiles Oracle:
+<a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm">https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm</a></p>
+<p>Privilegos Oracle:
+<a href="https://www.oracletutorial.com/oracle-administration/oracle-grant-all-privileges-to-a-user/">https://www.oracletutorial.com/oracle-administration/oracle-grant-all-privileges-to-a-user/</a></p>
+<h3 id="12-postgresql">1.2. Postgresql</h3>
+<p><strong>Entorno de trabajo con vagrant</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># -*- mode: ruby -*-</span>
+<span class="c1"># vi: set ft=ruby :</span>
+
+Vagrant.configure<span class="o">(</span><span class="s2">&#34;2&#34;</span><span class="o">)</span> <span class="k">do</span> <span class="p">|</span>config<span class="p">|</span>
+
+  config.vm.define :nodo1 <span class="k">do</span> <span class="p">|</span>nodo1<span class="p">|</span>
+    nodo1.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo1.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres1&#34;</span>
+    nodo1.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
+    nodo1.vm.network <span class="s2">&#34;private_network&#34;</span>, ip: <span class="s2">&#34;10.0.0.2&#34;</span>,
+      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>,
+      auto_config: <span class="nb">false</span>
+  end
+  config.vm.define :nodo2 <span class="k">do</span> <span class="p">|</span>nodo2<span class="p">|</span>
+    nodo2.vm.box <span class="o">=</span> <span class="s2">&#34;debian/buster64&#34;</span>
+    nodo2.vm.hostname <span class="o">=</span> <span class="s2">&#34;postgres2&#34;</span>
+    nodo2.vm.network :public_network, :bridge<span class="o">=</span>&gt;<span class="s2">&#34;br0&#34;</span>
+    nodo2.vm.network <span class="s2">&#34;private_network&#34;</span>,
+      virtualbox__intnet: <span class="s2">&#34;local&#34;</span>, ip: <span class="s2">&#34;10.0.0.3&#34;</span>,
+      auto_config: <span class="nb">false</span>
+  end
+end
+</code></pre></div><h4 id="conectarse-a-la-base-de-datos-1">Conectarse a la base de datos</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Creamos el usuario 
+</span><span class="c1"></span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">USER</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="n">PASSWORD</span> <span class="s1">&#39;becario&#39;</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">ROLE</span>
+
+<span class="c1">-- Creamos una base de datos de prueba 
+</span><span class="c1"></span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">dbprueba</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">GRANT</span> <span class="k">CONNECT</span> <span class="k">ON</span> <span class="k">database</span> <span class="n">dbprueba</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+<span class="k">GRANT</span>
+
+<span class="c1">-- Le damos el privilegio de conectarse a la base de datos 
+</span><span class="c1"></span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">ALTER</span> <span class="k">ROLE</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="n">LOGIN</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">ROLE</span>
+</code></pre></div><p>Comprobamos que becario puede conectarse a la base de datos que hemos creado</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">@</span><span class="n">postgres1</span><span class="p">:</span><span class="o">~</span><span class="err">$</span> <span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">becario</span> <span class="o">-</span><span class="n">d</span> <span class="n">dbprueba</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">W</span>
+<span class="n">Password</span><span class="p">:</span> 
+<span class="n">psql</span> <span class="p">(</span><span class="mi">11</span><span class="p">.</span><span class="mi">11</span> <span class="p">(</span><span class="n">Debian</span> <span class="mi">11</span><span class="p">.</span><span class="mi">11</span><span class="o">-</span><span class="mi">0</span><span class="o">+</span><span class="n">deb10u1</span><span class="p">))</span>
+<span class="n">SSL</span> <span class="k">connection</span> <span class="p">(</span><span class="n">protocol</span><span class="p">:</span> <span class="n">TLSv1</span><span class="p">.</span><span class="mi">3</span><span class="p">,</span> <span class="n">cipher</span><span class="p">:</span> <span class="n">TLS_AES_256_GCM_SHA384</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span> <span class="n">compression</span><span class="p">:</span> <span class="k">off</span><span class="p">)</span>
+<span class="k">Type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> <span class="n">help</span><span class="p">.</span>
+
+<span class="n">dbprueba</span><span class="o">=&gt;</span> 
+
+</code></pre></div><h4 id="modificar-el-número-de-errores-en-la-introducción-de-la-contraseña-de-cualquier-usuario-1">Modificar el número de errores en la introducción de la contraseña de cualquier usuario.</h4>
+<p>Esta opción como tal <strong>NO</strong> la tenemos en postgresql pero sí podemos hacer los siguiente:</p>
+<ul>
+<li>Modificar el usuario para que la conexión simultánea sea menor a 3</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">postgres</span><span class="o">=#</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="k">CONNECTION</span> <span class="k">LIMIT</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">ROLE</span>
+</code></pre></div><ul>
+<li>Crear roles con peridodos de validez de la contraseña</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">limit_time</span> <span class="k">WITH</span>
+<span class="n">LOGIN</span>
+<span class="n">PASSWORD</span> <span class="s1">&#39;becario&#39;</span>
+<span class="k">VALID</span> <span class="k">UNTIL</span> <span class="s1">&#39;2021-12-05&#39;</span><span class="p">;</span>
+</code></pre></div><ul>
+<li>O crear también roles con límite de conexión simultánea</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">limit_conexion</span>
+<span class="n">LOGIN</span>
+<span class="n">PASSWORD</span> <span class="s1">&#39;becario&#39;</span>
+<span class="k">CONNECTION</span> <span class="k">LIMIT</span> <span class="mi">5</span><span class="p">;</span>
+</code></pre></div><h4 id="modificar-índices-en-cualquier-esquema-este-privilegio-podrá-pasarlo-a-quien-quiera-1">Modificar índices en cualquier esquema (este privilegio podrá pasarlo a quien quiera)</h4>
+<p>Para ello el usuario becario tendría que tener el ROLE SUPERUSER que se otorga de esta forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">ROLE</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="n">SUPERUSER</span><span class="p">;</span>
+</code></pre></div><p>Pero este rol es muy arriesgado darselo a un usuario normal, por lo que si becario es propietario de tablas, tablespaces es propietario de los índices que están en ahí. La sintaxis sería</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">INDEX</span> <span class="o">&lt;</span><span class="n">nombre_indice</span><span class="o">&gt;</span> <span class="k">ON</span> <span class="o">&lt;</span><span class="n">nombretabla</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div><h4 id="insertar-filas-en-scottemp-este-privilegio-podrá-pasarlo-a-quien-quiera-1">Insertar filas en scott.emp (este privilegio podrá pasarlo a quien quiera)</h4>
+<p>En este caso no tenemos el esquema de scott pero tenemos una base de datos de prueba y podemos hacerlo de la siguiente forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">departamento</span> <span class="k">TO</span> <span class="n">BECARIO</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">prueba1</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span>
+           <span class="n">List</span> <span class="k">of</span> <span class="n">relations</span>
+ <span class="k">Schema</span> <span class="o">|</span>     <span class="n">Name</span>     <span class="o">|</span> <span class="k">Type</span>  <span class="o">|</span> <span class="k">Owner</span>  
+<span class="c1">--------+--------------+-------+--------
+</span><span class="c1"></span> <span class="k">public</span> <span class="o">|</span> <span class="n">departamento</span> <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">celia1</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">prueba1</span><span class="o">=#</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">departamento</span>
+<span class="n">prueba1</span><span class="o">-#</span> <span class="p">;</span>
+ <span class="n">dept_no</span> <span class="o">|</span>    <span class="n">dnombre</span>    <span class="o">|</span>    <span class="n">loc</span>    
+<span class="c1">---------+---------------+-----------
+</span><span class="c1"></span>      <span class="mi">10</span> <span class="o">|</span> <span class="n">CONTABILIDAD</span>  <span class="o">|</span> <span class="n">SEVILLA</span>
+      <span class="mi">20</span> <span class="o">|</span> <span class="n">INVESTIGACION</span> <span class="o">|</span> <span class="n">MADRID</span>
+      <span class="mi">30</span> <span class="o">|</span> <span class="n">VENTAS</span>        <span class="o">|</span> <span class="n">BARCELONA</span>
+      <span class="mi">40</span> <span class="o">|</span> <span class="n">PRODUCCION</span>    <span class="o">|</span> <span class="n">BILBAO</span>
+<span class="p">(</span><span class="mi">4</span> <span class="k">rows</span><span class="p">)</span>
+
+<span class="n">prueba1</span><span class="o">=#</span> <span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">departamento</span> <span class="k">TO</span> <span class="n">BECARIO</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+<span class="k">GRANT</span>
+<span class="n">prueba1</span><span class="o">=#</span> 
+
+</code></pre></div><h4 id="crear-objetos-en-cualquier-tablespace-1">Crear objetos en cualquier tablespace.</h4>
+<p>En postgresql tenemos que indicar el nombre del tablespace en concreto, si no tiene el role de superuser.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ON</span> <span class="n">TABLESPACE</span> <span class="o">&lt;</span><span class="n">nombre_tablespace</span><span class="o">&gt;</span> <span class="k">TO</span> <span class="n">becario</span><span class="p">;</span>
+</code></pre></div><h4 id="gestión-completa-de-usuarios-privilegios-y-roles-1">Gestión completa de usuarios, privilegios y roles</h4>
+<ul>
+<li>Gestión de usuarios y privilegios</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">ROLE</span> <span class="n">BECARIO</span> <span class="k">WITH</span> <span class="n">SUPERUSER</span><span class="p">;</span>
+
+</code></pre></div><ul>
+<li>Gestión de roles:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">ROLE</span> <span class="n">becario</span> <span class="k">WITH</span> <span class="n">CREATEROLE</span><span class="p">;</span>
+</code></pre></div><p><strong>Fuentes:</strong></p>
+<p><a href="https://www.postgresql.org/docs/9.1/sql-grant.html">https://www.postgresql.org/docs/9.1/sql-grant.html</a></p>
+<p><a href="https://www.postgresql.org/docs/9.0/sql-alterrole.html">https://www.postgresql.org/docs/9.0/sql-alterrole.html</a></p>
+<p><a href="https://www.w3resource.com/sql/creating-index/sql-alter-index.php#:~:text=Alter%20Index%20in%20PostgreSQL%2C%20Oracle%2C%20SQL%20Server&amp;text=In%20PostgreSQL%2C%20ALTER%20INDEX%20command,%5B%2C%20...%20%5D%20">https://www.w3resource.com/sql/creating-index/sql-alter-index.php#:~:text=Alter%20Index%20in%20PostgreSQL%2C%20Oracle%2C%20SQL%20Server&amp;text=In%20PostgreSQL%2C%20ALTER%20INDEX%20command,%5B%2C%20...%20%5D%20</a>)</p>
+<p><a href="https://www.postgresql.org/docs/13/sql-alterindex.html">https://www.postgresql.org/docs/13/sql-alterindex.html</a></p>
+<h3 id="13-mysql">1.3. MySQL</h3>
+<h4 id="conectarse-a-la-base-de-datos-2">Conectarse a la base de datos</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="c1">-- Crear el usuario.
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">USER</span> <span class="s1">&#39;becario&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;becario&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- Le damos el permiso para conectar a la base de datos. --(version 5.5)
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">USAGE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="n">localhost</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;becario&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><h4 id="modificar-el-número-de-errores-en-la-introducción-de-la-contraseña-de-cualquier-usuario-2">Modificar el número de errores en la introducción de la contraseña de cualquier usuario.</h4>
+<p>Según la versión de mysql tenemos dos opciones:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Version 8.0 de mysql. Número de fallos permitidos 4, la cuenta no se bloquea porque está marcada como intentos ilimitados.
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">USER</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span>
+  <span class="n">FAILED_LOGIN_ATTEMPTS</span> <span class="mi">4</span> <span class="n">PASSWORD_LOCK_TIME</span> <span class="n">UNBOUNDED</span><span class="p">;</span>
+
+<span class="c1">-- Para versiones anteriores de mysql como 5.5 habilitamos log_warning con un valor mayor que 1
+</span><span class="c1">--Edita el fichero /etc/my.cnf y añade:
+</span><span class="c1"></span>
+<span class="p">[</span><span class="n">mysqld</span><span class="p">]</span>
+<span class="n">log_error</span>        <span class="o">=</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">error</span><span class="p">.</span><span class="n">log</span>
+<span class="n">log_warnings</span>     <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1">-- Salida 
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">@@</span><span class="n">log_warnings</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="o">@@</span><span class="n">log_warnings</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+
+</span><span class="c1"></span><span class="o">|</span>              <span class="mi">2</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><h4 id="modificar-índices-en-cualquier-esquema-este-privilegio-podrá-pasarlo-a-quien-quiera-2">Modificar índices en cualquier esquema (este privilegio podrá pasarlo a quien quiera)</h4>
+<p>En mysql no existe un <strong>ALTER INDEX</strong> propiamente como tal. Pero podemos:</p>
+<ul>
+<li><strong>CREATE INDEX</strong></li>
+<li><strong>DROP INDEX</strong></li>
+<li>(v 5.7) <strong>ALTER TABLE</strong> nombretabla RENAME INDEX nombre_antiguo_indice TO nombre_nuevo_indice.</li>
+<li><strong>ALTER TABLE</strong> nombretabla <strong>DROP INDEX</strong> nombre_indice</li>
+<li><strong>ALTER TABLE</strong> nombretabla <strong>ADD INDEX</strong> nombre_indice_nuevo</li>
+</ul>
+<p>Por tanto para dar este privilegio:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Con esto podría modificar cualquier tabla y con ella renombrar por ejemplo el índice. Y con la opción WITH GRANT OPTION, puede pasar el privilegio a otro usuario.
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">ALTER</span>  <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+<span class="c1">-- Privilegio para crear 
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+<span class="c1">-- Privilegio para borrar
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">DROP</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></div><h4 id="insertar-filas-en-scottemp-este-privilegio-podrá-pasarlo-a-quien-quiera-2">Insertar filas en scott.emp (este privilegio podrá pasarlo a quien quiera)</h4>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">depart</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s2">&#34;becario&#34;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+</code></pre></div><p>Como no tenemos el esquema de scott en mysql, creamos una base de datos de prueba e indicamos otra tabla</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="n">tables</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Tables_in_prueba</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">depart</span>           <span class="o">|</span>
+<span class="o">|</span> <span class="n">emple</span>            <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">depart</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">---------+---------------+-----------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">dept_no</span> <span class="o">|</span> <span class="n">dnombre</span>       <span class="o">|</span> <span class="n">loc</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+---------------+-----------+
+</span><span class="c1"></span><span class="o">|</span>      <span class="mi">10</span> <span class="o">|</span> <span class="n">CONTABILIDAD</span>  <span class="o">|</span> <span class="n">SEVILLA</span>   <span class="o">|</span>
+<span class="o">|</span>      <span class="mi">20</span> <span class="o">|</span> <span class="n">INVESTIGACION</span> <span class="o">|</span> <span class="n">MADRID</span>    <span class="o">|</span>
+<span class="o">|</span>      <span class="mi">30</span> <span class="o">|</span> <span class="n">VENTAS</span>        <span class="o">|</span> <span class="n">BARCELONA</span> <span class="o">|</span>
+<span class="o">|</span>      <span class="mi">40</span> <span class="o">|</span> <span class="n">PRODUCCION</span>    <span class="o">|</span> <span class="n">BILBAO</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+---------------+-----------+
+</span><span class="c1"></span><span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">depart</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s2">&#34;becario&#34;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><p><strong>Comprobación</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Nos logueamos como becario, usando la base de datos de prueba y comprobamos la insercción.
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">use</span> <span class="n">prueba</span><span class="p">;</span>
+<span class="k">Database</span> <span class="n">changed</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">depart</span> <span class="k">values</span> <span class="p">(</span><span class="s1">&#39;50&#39;</span><span class="p">,</span><span class="s1">&#39;VENTAS&#39;</span><span class="p">,</span><span class="s1">&#39;DOS HERMANAS&#39;</span><span class="p">);</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- Como podemos comprobar podemos insertar datos pero no podemos verlos porque no tenemos ese permiso.
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">depart</span><span class="p">;</span>
+<span class="n">ERROR</span> <span class="mi">1142</span> <span class="p">(</span><span class="mi">42000</span><span class="p">):</span> <span class="k">SELECT</span> <span class="n">command</span> <span class="n">denied</span> <span class="k">to</span> <span class="k">user</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="k">for</span> <span class="k">table</span> <span class="s1">&#39;depart&#39;</span>
+</code></pre></div><h4 id="crear-objetos-en-cualquier-tablespace-2">Crear objetos en cualquier tablespace.</h4>
+<p>Aquí pasa igual que con modificar los índices, con el permiso de CREATE ya tendría suficiente.</p>
+<p>La sintaxis de modificar el tablespace es esta:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="n">TABLESPACE</span> <span class="n">nombre_tablespace</span> <span class="err">{</span><span class="k">ADD</span> <span class="o">|</span> <span class="k">DROP</span><span class="err">}</span> <span class="n">DATAFILE</span> <span class="s1">&#39;nombre_archivo&#39;</span><span class="p">;</span>
+</code></pre></div><p>Pero el permiso adecuado para esta tarea sería este:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Privilegio para crear 
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></div><h4 id="gestión-completa-de-usuarios-privilegios-y-roles-2">Gestión completa de usuarios, privilegios y roles</h4>
+<p>Con el siguiente comando podría tener todos lo permisos necesarios como si fuera un administrador.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><hr>
+<h2 id="ejercicio-5">Ejercicio 5</h2>
+<blockquote>
+<p><strong>5.Realiza un procedimiento llamado MostrarInfoPerfil que reciba el nombre de un perfil y muestre su composición y los usuarios que lo tienen asignado.</strong></p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- MOSTRAR LA INFORMACIÓN DEL PERFIL INDICADO
+</span><span class="c1"></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">PROCEDURE</span> <span class="n">MostrarInfoPerfil</span> <span class="p">(</span><span class="n">p_nombre_perfil</span> <span class="n">DBA_PROFILES</span><span class="p">.</span><span class="n">PROFILE</span><span class="o">%</span><span class="k">TYPE</span><span class="p">)</span>
+<span class="k">IS</span> 
+        <span class="k">CURSOR</span> <span class="n">c_info</span>
+        <span class="k">IS</span> 
+        <span class="k">SELECT</span> <span class="n">RESOURCE_NAME</span><span class="p">,</span> <span class="k">LIMIT</span>
+        <span class="k">FROM</span> <span class="n">DBA_PROFILES</span>
+        <span class="k">WHERE</span> <span class="n">PROFILE</span> <span class="o">=</span> <span class="n">p_nombre_perfil</span><span class="p">;</span>
+<span class="k">BEGIN</span> 
+        <span class="k">FOR</span> <span class="n">i</span> <span class="k">in</span> <span class="n">c_info</span> <span class="n">loop</span> 
+                <span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">PUT_LINE</span><span class="p">(</span><span class="s1">&#39;Nombre del recurso: &#39;</span><span class="o">||</span> <span class="n">i</span><span class="p">.</span><span class="n">RESOURCE_NAME</span> <span class="o">||</span> <span class="s1">&#39;Límite: &#39;</span><span class="o">||</span> <span class="n">i</span><span class="p">.</span><span class="k">LIMIT</span><span class="p">);</span>
+        <span class="k">end</span> <span class="n">loop</span><span class="p">;</span>
+<span class="k">end</span> <span class="n">MostrarInfoPerfil</span><span class="p">;</span>
+<span class="o">/</span>
+
+</code></pre></div><blockquote>
+<p>exec MostrarInfoPerfil(&lsquo;limitepass&rsquo;);</p>
+</blockquote>
+<hr>
+<h2 id="mysql">MySQL</h2>
+<blockquote>
+<p><strong>8. Averigua que privilegios de sistema hay en MySQL y como se asignan a un usuario.</strong></p>
+</blockquote>
+<p>Los privilegios determinan qué se puede hacer y que no. Estos se otorgan a los usuarios existentes en la base de datos.</p>
+<ul>
+<li>Privilegios administrativos. Estos permiten admistrar la base de datos. Son propios de usuarios administradores.</li>
+<li>Privilegios de base de datos y sus objetos. Estos son otorgados a los usuarios propietarios de la base de datos y con ella sus objetos.</li>
+<li>Privilegios de objetos de bases de datos (tablas, índices &hellip;). Estos se otorga para fines concretos a usuarios que necesiten o precisen de ellos.</li>
+</ul>
+<p>Una vez visto estos tres tipos de privilegios, debemos saber que están reflejados en una tabla de concesión de mysql.</p>
+<p>Para ver los privilegios de cada usuario ejecutamos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="n">grants</span><span class="p">;</span>
+<span class="k">show</span> <span class="n">grants</span> <span class="k">for</span> <span class="k">user</span><span class="p">;</span>
+</code></pre></div><p>Ejemplo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ysql</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="n">GRANTS</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Grants</span> <span class="k">for</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span>                                                                                                              <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="n">PASSWORD</span> <span class="s1">&#39;pasword&#39;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span> <span class="o">|</span>
+<span class="o">|</span> <span class="k">GRANT</span> <span class="n">PROXY</span> <span class="k">ON</span> <span class="s1">&#39;&#39;</span><span class="o">@</span><span class="s1">&#39;&#39;</span> <span class="k">TO</span> <span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span>                                                                           <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="n">GRANTS</span> <span class="k">FOR</span> <span class="s1">&#39;becario&#39;</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Grants</span> <span class="k">for</span> <span class="n">becario</span><span class="o">@%</span>                                                                                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">GRANT</span> <span class="k">USAGE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="n">PASSWORD</span> <span class="s1">&#39;password&#39;</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> 
+
+</code></pre></div><p><strong>La lista de privilegios</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">privileges</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-------------------------+---------------------------------------+-------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Privilege</span>               <span class="o">|</span> <span class="n">Context</span>                               <span class="o">|</span> <span class="k">Comment</span>                                               <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------+---------------------------------------+-------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">Alter</span>                   <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">alter</span> <span class="n">the</span> <span class="k">table</span>                                    <span class="o">|</span>
+<span class="o">|</span> <span class="k">Alter</span> <span class="k">routine</span>           <span class="o">|</span> <span class="n">Functions</span><span class="p">,</span><span class="n">Procedures</span>                  <span class="o">|</span> <span class="k">To</span> <span class="k">alter</span> <span class="k">or</span> <span class="k">drop</span> <span class="n">stored</span> <span class="n">functions</span><span class="o">/</span><span class="n">procedures</span>          <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span>                  <span class="o">|</span> <span class="n">Databases</span><span class="p">,</span><span class="n">Tables</span><span class="p">,</span><span class="n">Indexes</span>              <span class="o">|</span> <span class="k">To</span> <span class="k">create</span> <span class="k">new</span> <span class="n">databases</span> <span class="k">and</span> <span class="n">tables</span>                    <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span> <span class="k">routine</span>          <span class="o">|</span> <span class="n">Databases</span>                             <span class="o">|</span> <span class="k">To</span> <span class="n">use</span> <span class="k">CREATE</span> <span class="k">FUNCTION</span><span class="o">/</span><span class="k">PROCEDURE</span>                      <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span> <span class="k">temporary</span> <span class="n">tables</span> <span class="o">|</span> <span class="n">Databases</span>                             <span class="o">|</span> <span class="k">To</span> <span class="n">use</span> <span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span>                         <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span> <span class="k">view</span>             <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">create</span> <span class="k">new</span> <span class="n">views</span>                                   <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span> <span class="k">user</span>             <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="k">create</span> <span class="k">new</span> <span class="n">users</span>                                   <span class="o">|</span>
+<span class="o">|</span> <span class="k">Delete</span>                  <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">delete</span> <span class="k">existing</span> <span class="k">rows</span>                               <span class="o">|</span>
+<span class="o">|</span> <span class="k">Drop</span>                    <span class="o">|</span> <span class="n">Databases</span><span class="p">,</span><span class="n">Tables</span>                      <span class="o">|</span> <span class="k">To</span> <span class="k">drop</span> <span class="n">databases</span><span class="p">,</span> <span class="n">tables</span><span class="p">,</span> <span class="k">and</span> <span class="n">views</span>                  <span class="o">|</span>
+<span class="o">|</span> <span class="n">Event</span>                   <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="k">create</span><span class="p">,</span> <span class="k">alter</span><span class="p">,</span> <span class="k">drop</span> <span class="k">and</span> <span class="k">execute</span> <span class="n">events</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="k">Execute</span>                 <span class="o">|</span> <span class="n">Functions</span><span class="p">,</span><span class="n">Procedures</span>                  <span class="o">|</span> <span class="k">To</span> <span class="k">execute</span> <span class="n">stored</span> <span class="n">routines</span>                            <span class="o">|</span>
+<span class="o">|</span> <span class="n">File</span>                    <span class="o">|</span> <span class="n">File</span> <span class="k">access</span> <span class="k">on</span> <span class="n">server</span>                 <span class="o">|</span> <span class="k">To</span> <span class="k">read</span> <span class="k">and</span> <span class="k">write</span> <span class="n">files</span> <span class="k">on</span> <span class="n">the</span> <span class="n">server</span>                 <span class="o">|</span>
+<span class="o">|</span> <span class="k">Grant</span> <span class="k">option</span>            <span class="o">|</span> <span class="n">Databases</span><span class="p">,</span><span class="n">Tables</span><span class="p">,</span><span class="n">Functions</span><span class="p">,</span><span class="n">Procedures</span> <span class="o">|</span> <span class="k">To</span> <span class="n">give</span> <span class="k">to</span> <span class="n">other</span> <span class="n">users</span> <span class="n">those</span> <span class="k">privileges</span> <span class="n">you</span> <span class="n">possess</span>   <span class="o">|</span>
+<span class="o">|</span> <span class="k">Index</span>                   <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">create</span> <span class="k">or</span> <span class="k">drop</span> <span class="n">indexes</span>                             <span class="o">|</span>
+<span class="o">|</span> <span class="k">Insert</span>                  <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">insert</span> <span class="k">data</span> <span class="k">into</span> <span class="n">tables</span>                            <span class="o">|</span>
+<span class="o">|</span> <span class="k">Lock</span> <span class="n">tables</span>             <span class="o">|</span> <span class="n">Databases</span>                             <span class="o">|</span> <span class="k">To</span> <span class="n">use</span> <span class="k">LOCK</span> <span class="n">TABLES</span> <span class="p">(</span><span class="n">together</span> <span class="k">with</span> <span class="k">SELECT</span> <span class="n">privilege</span><span class="p">)</span>   <span class="o">|</span>
+<span class="o">|</span> <span class="n">Process</span>                 <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="k">view</span> <span class="n">the</span> <span class="n">plain</span> <span class="nb">text</span> <span class="k">of</span> <span class="n">currently</span> <span class="n">executing</span> <span class="n">queries</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">Proxy</span>                   <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">make</span> <span class="n">proxy</span> <span class="k">user</span> <span class="n">possible</span>                           <span class="o">|</span>
+<span class="o">|</span> <span class="k">References</span>              <span class="o">|</span> <span class="n">Databases</span><span class="p">,</span><span class="n">Tables</span>                      <span class="o">|</span> <span class="k">To</span> <span class="n">have</span> <span class="k">references</span> <span class="k">on</span> <span class="n">tables</span>                          <span class="o">|</span>
+<span class="o">|</span> <span class="n">Reload</span>                  <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">reload</span> <span class="k">or</span> <span class="n">refresh</span> <span class="n">tables</span><span class="p">,</span> <span class="n">logs</span> <span class="k">and</span> <span class="k">privileges</span>      <span class="o">|</span>
+<span class="o">|</span> <span class="n">Replication</span> <span class="n">client</span>      <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">ask</span> <span class="k">where</span> <span class="n">the</span> <span class="n">slave</span> <span class="k">or</span> <span class="n">master</span> <span class="n">servers</span> <span class="k">are</span>          <span class="o">|</span>
+<span class="o">|</span> <span class="n">Replication</span> <span class="n">slave</span>       <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="k">read</span> <span class="nb">binary</span> <span class="n">log</span> <span class="n">events</span> <span class="k">from</span> <span class="n">the</span> <span class="n">master</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="k">Select</span>                  <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="n">retrieve</span> <span class="k">rows</span> <span class="k">from</span> <span class="k">table</span>                           <span class="o">|</span>
+<span class="o">|</span> <span class="k">Show</span> <span class="n">databases</span>          <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">see</span> <span class="k">all</span> <span class="n">databases</span> <span class="k">with</span> <span class="k">SHOW</span> <span class="n">DATABASES</span>              <span class="o">|</span>
+<span class="o">|</span> <span class="k">Show</span> <span class="k">view</span>               <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="n">see</span> <span class="n">views</span> <span class="k">with</span> <span class="k">SHOW</span> <span class="k">CREATE</span> <span class="k">VIEW</span>                    <span class="o">|</span>
+<span class="o">|</span> <span class="n">Shutdown</span>                <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">shut</span> <span class="n">down</span> <span class="n">the</span> <span class="n">server</span>                               <span class="o">|</span>
+<span class="o">|</span> <span class="n">Super</span>                   <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="n">use</span> <span class="n">KILL</span> <span class="n">thread</span><span class="p">,</span> <span class="k">SET</span> <span class="k">GLOBAL</span><span class="p">,</span> <span class="n">CHANGE</span> <span class="n">MASTER</span><span class="p">,</span> <span class="n">etc</span><span class="p">.</span>   <span class="o">|</span>
+<span class="o">|</span> <span class="k">Trigger</span>                 <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="n">use</span> <span class="n">triggers</span>                                       <span class="o">|</span>
+<span class="o">|</span> <span class="k">Create</span> <span class="n">tablespace</span>       <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">To</span> <span class="k">create</span><span class="o">/</span><span class="k">alter</span><span class="o">/</span><span class="k">drop</span> <span class="n">tablespaces</span>                      <span class="o">|</span>
+<span class="o">|</span> <span class="k">Update</span>                  <span class="o">|</span> <span class="n">Tables</span>                                <span class="o">|</span> <span class="k">To</span> <span class="k">update</span> <span class="k">existing</span> <span class="k">rows</span>                               <span class="o">|</span>
+<span class="o">|</span> <span class="k">Usage</span>                   <span class="o">|</span> <span class="n">Server</span> <span class="k">Admin</span>                          <span class="o">|</span> <span class="k">No</span> <span class="k">privileges</span> <span class="o">-</span> <span class="n">allow</span> <span class="k">connect</span> <span class="k">only</span>                    <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------+---------------------------------------+-------------------------------------------------------+
+</span><span class="c1"></span><span class="mi">31</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><p>Asignar privilegios a un usuario</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="k">GRANT</span> <span class="o">&lt;</span><span class="n">privilegio</span><span class="o">&gt;</span> <span class="k">ON</span> <span class="o">&lt;</span><span class="n">tabla</span><span class="o">|</span><span class="n">bd</span><span class="o">|</span><span class="n">objeto</span><span class="o">&gt;</span> <span class="k">TO</span> <span class="o">&lt;</span><span class="n">usuario</span><span class="o">&gt;@&lt;</span><span class="k">host</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="o">&lt;</span><span class="n">contraseña</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">(</span><span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">);</span>
+
+<span class="c1">-- WITH GRANT OPTION (El usuario puede otorgar el permiso a otro usuario)
+</span><span class="c1"></span>
+<span class="c1">--Ejemplo:
+</span><span class="c1"></span>
+<span class="k">GRANT</span> <span class="k">CREATE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+</code></pre></div><p><strong>Fuente</strong></p>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/privileges-provided.html">https://dev.mysql.com/doc/refman/5.7/en/privileges-provided.html</a></p>
+<blockquote>
+<p><strong>9. Averigua cual es la forma de asignar y revocar privilegios sobre una tabla concreta en MySQL.</strong></p>
+</blockquote>
+<ul>
+<li>Asignar permisos sobre una tabla</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">GRANT</span> <span class="n">pivilegio</span> <span class="k">ON</span> <span class="n">tabla</span> <span class="k">TO</span> <span class="n">usuario</span> <span class="p">[</span><span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;contraseña&#39;</span><span class="p">]</span> <span class="p">[</span><span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span><span class="p">];</span>
+</code></pre></div><p>EJEMPLO:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- En la base de datos de prueba le damos permiso al usuario becario para insertar filas en la tabla emple.
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="n">tables</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Tables_in_prueba</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">depart</span>           <span class="o">|</span>
+<span class="o">|</span> <span class="n">emple</span>            <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">emple</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><ul>
+<li>Revocar permisos sobre una tabla</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">REVOKE</span> <span class="n">privilegio</span> <span class="k">ON</span> <span class="n">tabla</span> <span class="k">FROM</span> <span class="n">usuario</span><span class="p">;</span>
+</code></pre></div><p>Ejemplo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">---Quitar el permiso de insertar filas
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">REVOKE</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">prueba</span><span class="p">.</span><span class="n">emple</span> <span class="k">FROM</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> 
+
+</code></pre></div><p>De esta forma quitaríamos todos los permisos a un usuario</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">REVOKE</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="n">BD</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">usuario</span><span class="o">@</span><span class="n">localhost</span>
+</code></pre></div><blockquote>
+<p><strong>10. Averigua si existe el concepto de rol en MySQL y señala las diferencias con los roles de ORACLE.</strong></p>
+</blockquote>
+<p>Antes de nada aclarar el <strong>concepto de rol</strong></p>
+<p>Un <strong>rol</strong> es usado para gestionar los privilegios de los grupos de usuarios más fácilmente.</p>
+<p>A un rol se le otorgan privilegios y ese mismo rol se le puede otorgar a una cuenta de usuario, por lo que el usuario tendrá los privilegios que estén en ese rol.</p>
+<p>En <strong>MySQL</strong>, el concepto rol aparece a partir de la versión 8. Podemos:</p>
+<ul>
+<li>CREATE ROLE: Crear un rol</li>
+<li>DROP ROLE: Eliminar un rol</li>
+<li>SET DEFAULT ROLE: especifica qué roles están activos de la cuenta.</li>
+<li>SET ROLE: Cambia los roles activos en la sesión.</li>
+<li>CURRENT_ROLE(): Es una función que muestra los roles activos dentro de la sesión.</li>
+</ul>
+<p>Podemos ver mas información <a href="https://dev.mysql.com/doc/refman/8.0/en/roles.html#roles-creating-granting">aquí</a> para crear roles</p>
+<p>En <strong>ORACLE</strong>, Un rol agrupa varios privilegios y roles, estos se pueden otorgar y revocar a los usuarios simultáneamente, el rol debe estar habilitado para un usuario antes de ser utilizado.</p>
+<p>En ORACLE tenemos más profundizado el tema de los roles. Podemos:</p>
+<ul>
+<li>CREATE ROLE nombrerol IDENTIFIED BY passwd: (Crear un rol)</li>
+</ul>
+<p>La contraseña es para especificar que se debe autorizar al usuario antes de que el rol lo pueda utilizar el usuario.</p>
+<p>En oracle tenemos la autorización de funciones por aplicaciones</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">admin_role</span> <span class="n">IDENTIFIED</span> <span class="k">USING</span> <span class="n">hr</span><span class="p">.</span><span class="k">admin</span><span class="p">;</span>
+</code></pre></div><p>Esto no lo tenemos en mysql. Como muchas mas funciones que no me voy a extender ya que el post llegaría a ser muy extenso.</p>
+<p><strong>Fuente:</strong></p>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/roles.html#:~:text=A%20MySQL%20role%20is%20a,privileges%20associated%20with%20each%20role">https://dev.mysql.com/doc/refman/8.0/en/roles.html#:~:text=A%20MySQL%20role%20is%20a,privileges%20associated%20with%20each%20role</a>.</p>
+<p><a href="https://docs.oracle.com/cd/A97630_01/server.920/a96521/privs.htm#:~:text=A%20role%20groups%20several%20privileges,to%20help%20in%20database%20administration">https://docs.oracle.com/cd/A97630_01/server.920/a96521/privs.htm#:~:text=A%20role%20groups%20several%20privileges,to%20help%20in%20database%20administration</a>.</p>
+<blockquote>
+<p><strong>11. Averigua si existe el concepto de perfil como conjunto de límites sobre el uso de recursos osobre la contraseña en MySQL y señala las diferencias con los perfiles de ORACLE.</strong></p>
+</blockquote>
+<p>En <strong>MySQL</strong> se restringe el uso de recursos de forma diferente a lo que lo hace ORACLE.</p>
+<p>Utiliza una variable <code>max_user_connections</code> que limita el número de conexiones simultáneas que pueden realizar en una cuenta concreta.</p>
+<p>Tiene como limitaciones en el <strong>uso de recursos</strong> los siguientes:</p>
+<ul>
+<li>La consultas que emita una cuenta por hora.</li>
+<li>La cantidad de actualizaciones por hora.</li>
+<li>La cantidad de veces que se puede conectar al servidor tambien por hora.</li>
+<li>El número de conexiones simultáneas al servidor por hora.</li>
+</ul>
+<blockquote>
+<p>Hablamos de cuenta refiriendonos a cuenta de usuario.</p>
+</blockquote>
+<p>En cuanto a la <strong>contraseña</strong> las limitaciones son las siguientes:</p>
+<ul>
+<li>Caducidad de la contraseña (así se cambian periodicamente)</li>
+<li>Restricciones de reutilización de contraseñas.</li>
+<li>Verificacion de contraseña.</li>
+<li>Usar dos contraseñas (contraseñas duales, primaria y secundaria)</li>
+<li>Evaluación de la fuerza de la contraseña</li>
+<li>Permite generar contraseñas aleatorias.</li>
+<li>Habilitar el bloqueo temporal de la cuenta a partir de x errores mediante el parámetro &lsquo;validate_password&rsquo;.</li>
+</ul>
+<p>En <strong>ORACLE</strong> para este tipo de limitaciones utiliza los perfiles.</p>
+<p><strong>CREATE PROFILE</strong>, lo que hace es crear un conjunto de límites en los recursos de la base de datos. Este perfil si se asigna a un usuario en concreto tendrá las limitaciones declaradas en dicho perfil.</p>
+<p>Presenta prácticamente casi las mismas opciones de limitación que mysql pero de forma más clara y efectiva.</p>
+<p>Por ejemplo utliza <strong>FAILED_LOGIN_ATTEMPTS</strong>para limitar los intentos fallidos de introducir contraseña para entrar en la cuenta de un usuario.</p>
+<p>Utiliza <strong>UNLIMITED</strong> para abordar el concepto de ilimitado, mientras que MySQL utiliza <strong>UNBOUNDED</strong></p>
+<p><strong>Fuente:</strong></p>
+<p><a href="https://dev.mysql.com/doc/mysql-security-excerpt/8.0/en/password-management.html">https://dev.mysql.com/doc/mysql-security-excerpt/8.0/en/password-management.html</a>
+<a href="https://dev.mysql.com/doc/refman/8.0/en/user-resources.html">https://dev.mysql.com/doc/refman/8.0/en/user-resources.html</a></p>
+<p><a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm">https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6010.htm</a></p>
+<blockquote>
+<p><strong>12. Realiza consultas al diccionario de datos de MySQL para averiguar todos los privilegios que tiene un usuario concreto.</strong></p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="c1">-- En este caso tenemos el usuario becario:
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="n">grants</span> <span class="k">for</span> <span class="s1">&#39;becario&#39;</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Grants</span> <span class="k">for</span> <span class="n">becario</span><span class="o">@%</span>                                                                                   <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">GRANT</span> <span class="k">USAGE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;becario&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="n">PASSWORD</span> <span class="s1">&#39;*289FA4B539971D43DB630F60B1C72F8335DF1245&#39;</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><blockquote>
+<p><strong>13. Realiza consultas al diccionario de datos en MySQL para averiguar qué usuarios pueden consultar una tabla concreta.</strong></p>
+</blockquote>
+<p>En la tabla de concesión tables_priv podemos ver los privilegios de cada usuario sobre qué tabla.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="n">tables_priv</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-----------+--------+---------+------------+----------------+---------------------+--------------+-------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">Host</span>      <span class="o">|</span> <span class="n">Db</span>     <span class="o">|</span> <span class="k">User</span>    <span class="o">|</span> <span class="k">Table_name</span> <span class="o">|</span> <span class="n">Grantor</span>        <span class="o">|</span> <span class="k">Timestamp</span>           <span class="o">|</span> <span class="n">Table_priv</span>   <span class="o">|</span> <span class="n">Column_priv</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------+--------+---------+------------+----------------+---------------------+--------------+-------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span> <span class="n">prueba</span> <span class="o">|</span> <span class="n">becario</span> <span class="o">|</span> <span class="n">depart</span>     <span class="o">|</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">17</span> <span class="mi">14</span><span class="p">:</span><span class="mi">19</span><span class="p">:</span><span class="mi">31</span> <span class="o">|</span> <span class="k">Insert</span><span class="p">,</span><span class="k">Grant</span> <span class="o">|</span>             <span class="o">|</span>
+<span class="o">+</span><span class="c1">-----------+--------+---------+------------+----------------+---------------------+--------------+-------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><p>Fuente:</p>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/grant-tables.html#grant-tables-tables-priv-columns-priv">https://dev.mysql.com/doc/refman/8.0/en/grant-tables.html#grant-tables-tables-priv-columns-priv</a></p>
+</div>
         <div class="post-footer">
             <div class="info">
                 
-                
+                <span class="separator"><a class="tag" href="/tags/bbdd/">bbdd</a><a class="tag" href="/tags/usuarios/">usuarios</a></span>
+
             </div>
         </div>
 
