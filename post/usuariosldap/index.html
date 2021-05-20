@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Usuarios, grupos y ACLs en LDAP </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Usuarios en LDAP">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/usuariosldap/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Usuarios, grupos y ACLs en LDAP"/>
+<meta name="twitter:description" content="Usuarios en LDAP"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/ldap/banner.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Usuarios, grupos y ACLs en LDAP</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Tue, May 18, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">10-minute read</span>
+                    </div>
+                
+            </div>
+
+            <h3 id="crear-usuarios">Crear usuarios</h3>
+<blockquote>
+<p><strong>Crea 10 usuarios con los nombres que prefieras en LDAP, esos usuarios deben ser objetos de los tipos posixAccount e inetOrgPerson. Estos usuarios tendrán un atributo userPassword.</strong></p>
+</blockquote>
+<ul>
+<li>
+<p>El atributo <strong>posixAccount</strong> implica tener:</p>
+<ul>
+<li>cn (Nombre completo del usuario)</li>
+<li>uid (identificador único de nombre) &gt; 1000</li>
+<li>gidNumber (Identificador de grupo) &gt; 1000</li>
+</ul>
+</li>
+<li>
+<p>El atributo <strong>inetOrgPerson</strong> es un atributo que no requiere adicionales.</p>
+</li>
+<li>
+<p>El atributo <strong>userPassword</strong> lo obtenemos con el siguiente comando, especificando la contraseña del usuario, en mi caso lo he ejecutado manualmente ya que no son muchos usuarios pero podríamos hacerlo con un script.</p>
+</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo slappasswd -h <span class="o">{</span>SSHA<span class="o">}</span>
+New password: 
+Re-enter new password: 
+<span class="o">{</span>SSHA<span class="o">}</span>IWO9oVgji7cI/p/0hz2q/yt/c9mZDWX8
+</code></pre></div><p>Creamos el fichero <code>usuarios.ldif</code> con el siguiente contenido:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">
+dn: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Celia Garcia
+gidNumber: <span class="m">2001</span>
+homeDirectory: /home/celia
+loginShell: /bin/bash
+sn: celia
+uid: celia
+uidNumber: <span class="m">2001</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>IWO9oVgji7cI/p/0hz2q/yt/c9mZDWX8
+
+dn: <span class="nv">uid</span><span class="o">=</span>maria,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Maria Jesus
+gidNumber: <span class="m">2002</span>
+homeDirectory: /home/maria
+loginShell: /bin/bash
+sn: maria
+uid: maria
+uidNumber: <span class="m">2002</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>aL6P65hiTDxWxRD1++7e/baB+hi7DQon
+
+dn: <span class="nv">uid</span><span class="o">=</span>mario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Mario Garcia
+gidNumber: <span class="m">2003</span>
+homeDirectory: /home/mario
+loginShell: /bin/bash
+sn: mario
+uid: mario
+uidNumber: <span class="m">2003</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>crEyszzAYZ34MwDgShygZpbQ0ouXR03p
+
+dn: <span class="nv">uid</span><span class="o">=</span>joni,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Jonathan Marquez
+gidNumber: <span class="m">2004</span>
+homeDirectory: /home/joni
+loginShell: /bin/bash
+sn: joni
+uid: joni
+uidNumber: <span class="m">2004</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>fIj8uX/5620PtKXj6txJWRE1sfwIC7sW
+
+dn: <span class="nv">uid</span><span class="o">=</span>adrian,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Adrian Garcia
+gidNumber: <span class="m">2005</span>
+homeDirectory: /home/adrian
+loginShell: /bin/bash
+sn: adri
+uid: adrian
+uidNumber: <span class="m">2005</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>0zmtwpE0l/LPP66t86OlA4HZrXIShlVr
+
+dn: <span class="nv">uid</span><span class="o">=</span>ana,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Ana Rodriguez
+gidNumber: <span class="m">2006</span>
+homeDirectory: /home/ana
+loginShell: /bin/bash
+sn: ana
+uid: ana
+uidNumber: <span class="m">2006</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>d1oN9Uk36cp5xJ53Dbe8hHQhl4504+xY
+
+dn: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Lorena Garcia
+gidNumber: <span class="m">2007</span>
+homeDirectory: /home/lorena
+loginShell: /bin/bash
+sn: lorena
+uid: lorena
+uidNumber: <span class="m">2007</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>+itrewH/UYWCVoQDnXcvcr2fT3IO55t2
+
+dn: <span class="nv">uid</span><span class="o">=</span>sara,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Sara Gonzalez
+gidNumber: <span class="m">2008</span>
+homeDirectory: /home/sara
+loginShell: /bin/bash
+sn: sara
+uid: sara
+uidNumber: <span class="m">2008</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>Yapb6M5GYjhUpyNSKpdWAI0lDzzaJ+rP
+
+dn: <span class="nv">uid</span><span class="o">=</span>rosario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Rosario Jadilla
+gidNumber: <span class="m">2009</span>
+homeDirectory: /home/rosario
+loginShell: /bin/bash
+sn: rosario
+uid: rosario
+uidNumber: <span class="m">2009</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>fdbK+kMk5BjZUyyy4SAi9KNOrExHZxkS
+
+dn: <span class="nv">uid</span><span class="o">=</span>antonio,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: top
+cn: Antonio Lainez
+gidNumber: <span class="m">2010</span>
+homeDirectory: /home/antonio
+loginShell: /bin/bash
+sn: antonio
+uid: antonio
+uidNumber: <span class="m">2010</span>
+userPassword: <span class="o">{</span>SSHA<span class="o">}</span>XxOFWtmpAfaCY0fxF6JKuhZ69cq5iRkS
+
+</code></pre></div><p>Ya creado el fichero ejecutamos el siguiente comando para agregar todos los usuarios:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapadd -x -D <span class="s1">&#39;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W -f usuarios.ldif
+</code></pre></div><p>Vemos como se añaden los usuarios:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapadd -x -D <span class="s1">&#39;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W -f usuarios.ldif
+Enter LDAP Password: 
+
+adding new entry <span class="s2">&#34;uid=celia,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=maria,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=mario,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=joni,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=adrian,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=ana,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=lorena,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=sara,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=rosario,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;uid=antonio,ou=People,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+</code></pre></div><h3 id="crear-grupos">Crear grupos</h3>
+<blockquote>
+<p><strong>Crea 3 grupos en LDAP dentro de una unidad organizativa diferente que sean objetos del tipo groupOfNames. Estos grupos serán: comercial, almacen y admin</strong></p>
+</blockquote>
+<p>Creamos otro fichero pero esta vez para los grupos</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: comercial
+member:
+
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: almacen
+member:
+
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: admin
+member:
+</code></pre></div><p>Los añadimos:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapadd -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f grupos1.ldif
+</code></pre></div><p>Vemos como se añaden:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapadd -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f grupos1.ldif
+Enter LDAP Password: 
+adding new entry <span class="s2">&#34;cn=comercial,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;cn=almacen,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;cn=admin,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+</code></pre></div><h3 id="añadir-usuarios">Añadir usuarios</h3>
+<blockquote>
+<p><strong>Añade usuarios que pertenezcan a:</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Solo al grupo comercial</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Solo al grupo almacen</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Al grupo comercial y almacen</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Al grupo admin y comercial</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>Solo al grupo admin</strong></li>
+</ul>
+</blockquote>
+<p>Creamos el fichero nuevo para mover los usuario a los grupos indicados.</p>
+<p><strong><code>modificargrupos.ldif</code></strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Solo al grupo comercial</span>
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>joni,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>sara,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># Solo al grupo almacen </span>
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>maria,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>ana,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># Al grupo comercial y almacen</span>
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>mario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>mario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>rosario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>rosario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># Al grupo admin y al comercial</span>
+
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+ 
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># Solo al grupo admin </span>
+
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>antonio,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+changetype:modify
+add: member
+member: <span class="nv">uid</span><span class="o">=</span>adrian,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+</code></pre></div><p>Ejecutamos el siguiente comando para <strong>añadirlos</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapmodify -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f modificargrupos.ldif
+</code></pre></div><p><strong>Comprobamos</strong> que se han modificado:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapsearch -x -h freston -b <span class="nv">ou</span><span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+<span class="c1"># extended LDIF</span>
+<span class="c1">#</span>
+<span class="c1"># LDAPv3</span>
+<span class="c1"># base &lt;ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&gt; with scope subtree</span>
+<span class="c1"># filter: (objectclass=*)</span>
+<span class="c1"># requesting: ALL</span>
+<span class="c1">#</span>
+
+<span class="c1"># Group, freston.celia.gonzalonazareno.org</span>
+dn: <span class="nv">ou</span><span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: organizationalUnit
+ou: Group
+
+<span class="c1"># admin, Group, freston.celia.gonzalonazareno.org</span>
+dn: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: admin
+member:
+member: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>antonio,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>adrian,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># almacen, Group, freston.celia.gonzalonazareno.org</span>
+dn: <span class="nv">cn</span><span class="o">=</span>almacen,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: almacen
+member:
+member: <span class="nv">uid</span><span class="o">=</span>maria,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>ana,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>mario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>rosario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># comercial, Group, freston.celia.gonzalonazareno.org</span>
+dn: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+objectClass: top
+objectClass: groupOfNames
+cn: comercial
+member:
+member: <span class="nv">uid</span><span class="o">=</span>joni,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>sara,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>mario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>rosario,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+member: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+<span class="c1"># search result</span>
+search: <span class="m">2</span>
+result: <span class="m">0</span> Success
+
+<span class="c1"># numResponses: 5</span>
+<span class="c1"># numEntries: 4</span>
+
+</code></pre></div><h3 id="atributo-memberof">Atributo &lsquo;memberOf&rsquo;</h3>
+<p>Es un atributo que se refiere al &lsquo;ser miembro y pertenencia&rsquo; de un grupo.</p>
+<blockquote>
+<p><strong>Modifica OpenLDAP apropiadamente para que se pueda obtener los grupos a los que pertenece cada usuario a través del atributo &ldquo;memberOf&rdquo;.</strong></p>
+</blockquote>
+<p>Lo primero que tenemos que hacer es crear una serie de ficheros .ldif para esta configuración.</p>
+<h4 id="ficheros-de-configuración-ldap-memberof">Ficheros de configuración ldap: memberOf</h4>
+<p>Estos ficheros cargan el atributo memberOf.</p>
+<p>Creamos los ficheros con el siguiente <strong>contenido</strong>:</p>
+<p><code>memberof_config.ldif</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">cn</span><span class="o">=</span>module,cn<span class="o">=</span>config
+cn: module
+objectClass: olcModuleList
+objectclass: top
+olcModuleLoad: memberof.la
+olcModulePath: /usr/lib/ldap
+</code></pre></div><p><code>memberof_config2.ldif</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">olcOverlay</span><span class="o">={</span>0<span class="o">}</span>memberof,olcDatabase<span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+objectClass: olcConfig
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+objectClass: top
+olcOverlay: memberof
+olcMemberOfDangling: ignore
+olcMemberOfRefInt: TRUE
+olcMemberOfGroupOC: groupOfNames
+olcMemberOfMemberAD: member
+olcMemberOfMemberOfAD: memberOf
+</code></pre></div><p><code>memberof_config3.ldif</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">cn</span><span class="o">=</span>module,cn<span class="o">=</span>config
+cn: module
+objectclass: olcModuleList
+objectclass: top
+olcmoduleload: refint.la
+olcmodulepath: /usr/lib/ldap
+
+dn: <span class="nv">olcOverlay</span><span class="o">={</span>1<span class="o">}</span>refint,olcDatabase<span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+objectClass: olcConfig
+objectClass: olcOverlayConfig
+objectClass: olcRefintConfig
+objectClass: top
+olcOverlay: <span class="o">{</span>1<span class="o">}</span>refint
+olcRefintAttribute: memberof member manager owner
+</code></pre></div><p>Cargamos la <strong>configuración</strong> de la siguiente manera:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f memberof_config.ldif 
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+adding new entry <span class="s2">&#34;cn=module,cn=config&#34;</span>
+
+debian@freston:~$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f memberof_config2.ldif 
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+adding new entry <span class="s2">&#34;olcOverlay={0}memberof,olcDatabase={1}mdb,cn=config&#34;</span>
+
+debian@freston:~$ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f memberof_config3.ldif 
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+adding new entry <span class="s2">&#34;cn=module,cn=config&#34;</span>
+
+adding new entry <span class="s2">&#34;olcOverlay={1}refint,olcDatabase={1}mdb,cn=config&#34;</span>
+
+</code></pre></div><h4 id="actualizar-grupos-y-usuarios-para-memberof">Actualizar grupos y usuarios para memberOf</h4>
+<p>Para comprobar que funciona esto, necesitamos eliminar todos los grupos que hemos creado anteriormente, y después volver a crearlos para que se cargue adecuadamente el atributo.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># Borrar los grupos</span>
+ldapdelete -x -D <span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="s1">&#39;cn=nombredelgrupo,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapdelete -x -D <span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="s1">&#39;cn=comercial,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W
+Enter LDAP Password: 
+debian@freston:~$ ldapdelete -x -D <span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="s1">&#39;cn=almacen,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W
+Enter LDAP Password: 
+debian@freston:~$ ldapdelete -x -D <span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="s1">&#39;cn=admin,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#39;</span> -W
+Enter LDAP Password: 
+
+</code></pre></div><p>Los agregamos de nuevo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapadd -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f grupos1.ldif
+</code></pre></div><p>Comprobamos que se han agregado:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapadd -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f grupos1.ldif
+Enter LDAP Password: 
+adding new entry <span class="s2">&#34;cn=comercial,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;cn=almacen,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+adding new entry <span class="s2">&#34;cn=admin,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span>
+
+</code></pre></div><p>Modificamos los usuarios a los grupos de nuevo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapmodify -x -D <span class="nv">cn</span><span class="o">=</span>admin,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org -W -f modificargrupos.ldif
+</code></pre></div><p>Y ahora hacemos una consulta externa , indicando el nombre identificador para ver si realmente se ha habilitado el atributo memberOf .</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">ldapsearch -LL -Y EXTERNAL -H ldapi:/// <span class="s2">&#34;(uid=lorena)&#34;</span> -b <span class="nv">dc</span><span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org memberOf
+</code></pre></div><h4 id="comprobación-memberof">Comprobación memberOf</h4>
+<p>Como podemos comprobar efectivamente aparece de qué grupo es cada usuario.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ ldapsearch -LL -Y EXTERNAL -H ldapi:/// <span class="s2">&#34;(uid=lorena)&#34;</span> -b <span class="nv">dc</span><span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org memberOf
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>1000+uidNumber<span class="o">=</span>1000,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+version: <span class="m">1</span>
+
+dn: <span class="nv">uid</span><span class="o">=</span>lorena,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+memberOf: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+memberOf: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+debian@freston:~$ ldapsearch -LL -Y EXTERNAL -H ldapi:/// <span class="s2">&#34;(uid=celia)&#34;</span> -b <span class="nv">dc</span><span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org memberOf
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>1000+uidNumber<span class="o">=</span>1000,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+version: <span class="m">1</span>
+
+dn: <span class="nv">uid</span><span class="o">=</span>celia,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+memberOf: <span class="nv">cn</span><span class="o">=</span>admin,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+memberOf: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+debian@freston:~$ ldapsearch -LL -Y EXTERNAL -H ldapi:/// <span class="s2">&#34;(uid=joni)&#34;</span> -b <span class="nv">dc</span><span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org memberOf
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>1000+uidNumber<span class="o">=</span>1000,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+version: <span class="m">1</span>
+
+dn: <span class="nv">uid</span><span class="o">=</span>joni,ou<span class="o">=</span>People,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+memberOf: <span class="nv">cn</span><span class="o">=</span>comercial,ou<span class="o">=</span>Group,dc<span class="o">=</span>freston,dc<span class="o">=</span>celia,dc<span class="o">=</span>gonzalonazareno,dc<span class="o">=</span>org
+
+</code></pre></div><h3 id="acls">ACLs</h3>
+<p>Para crear y actualizar ACL podemos usar la herramienta <strong>ldapmodify</strong>. Esta herramienta permite la creación, modificación y eliminación de cualquier conjunto de atributos asociados con una entrada en el directorio activo. Así pudiendo administrar y controlar el acceso a la información.</p>
+<p>Las <strong>ACL</strong> actuales las podemos ver de la siguiente manera:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapsearch -LLLQ -Y EXTERNAL -H ldapi:/// -b <span class="nv">cn</span><span class="o">=</span>config -s one olcAccess
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>0<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>1<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>2<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>schema,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcBackend</span><span class="o">={</span>0<span class="o">}</span>mdb,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to dn.exact<span class="o">=</span><span class="s2">&#34;&#34;</span> by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;cn=Subschema&#34;</span> by * <span class="nb">read</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>0<span class="o">}</span>config,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>userPassword by self write by anonymous auth by * none
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>shadowLastChange by self write by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to * by * <span class="nb">read</span>
+
+</code></pre></div><blockquote>
+<p><strong>Crea las ACLs necesarias para que los usuarios del grupo almacen puedan ver todos los atributos de todos los usuarios pero solo puedan modificar las suyas.</strong></p>
+</blockquote>
+<p>Agregar a un grupo a la información de control de acceso</p>
+<p>Creamos el fichero .ldif, podemos darle los permisos de dos formas:</p>
+<ul>
+<li>Contenido del fichero .ldif</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+changetype: modify
+add: olcAccess
+olcAccess: to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> by self write
+olcAccess: to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="nb">read</span>
+olcAccess: to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> search
+</code></pre></div><ul>
+<li>Contenido del fichero 2</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+changetype: modify
+add: olcAccess
+olcAccess: to dn.subtree<span class="o">=</span><span class="s2">&#34;ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> 
+  by group.exact<span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Group,ou=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> <span class="nb">read</span>
+  by self write
+  by * search
+</code></pre></div><ul>
+<li>Así agregamos la ACL</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f acl1.ldif 
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+modifying entry <span class="s2">&#34;olcDatabase={1}mdb,cn=config&#34;</span>
+</code></pre></div><ul>
+<li>Comprobamos que se han añadido las ACL correctamente.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapsearch -LLLQ -Y EXTERNAL -H ldapi:/// -b <span class="nv">cn</span><span class="o">=</span>config -s one olcAccess
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>0<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>1<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>2<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>schema,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcBackend</span><span class="o">={</span>0<span class="o">}</span>mdb,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to dn.exact<span class="o">=</span><span class="s2">&#34;&#34;</span> by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;cn=Subschema&#34;</span> by * <span class="nb">read</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>0<span class="o">}</span>config,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>userPassword by self write by anonymous auth by * none
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>shadowLastChange by self write by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to * by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>3<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> <span class="nb">read</span>
+olcAccess: <span class="o">{</span>4<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> search
+olcAccess: <span class="o">{</span>5<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> by self write
+olcAccess: <span class="o">{</span>6<span class="o">}</span>to dn.subtree<span class="o">=</span><span class="s2">&#34;ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,d
+</span><span class="s2"> c=org&#34;</span>  by group.exact<span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Group,ou=freston,dc=celia,dc=gonzalonaz
+</span><span class="s2"> areno,dc=org&#34;</span> <span class="nb">read</span> by self write by * search
+
+</code></pre></div><blockquote>
+<p><strong>Crea las ACLs necesarias para que los usuarios del grupo admin puedan ver y modificar cualquier atributo de cualquier objeto.</strong></p>
+</blockquote>
+<ul>
+<li>Le damos el permiso al grupo admin a modificar cualquier atributo.</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+changetype: modify
+add: olcAccess
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to * by <span class="nv">dn</span><span class="o">=</span><span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> write by group.exact<span class="o">=</span><span class="s2">&#34;cn=admin,ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,dc=org&#34;</span> write
+</code></pre></div><ul>
+<li>Lo aplicamos</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f acl3.ldif 
+SASL/EXTERNAL authentication started
+SASL username: <span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external,cn<span class="o">=</span>auth
+SASL SSF: <span class="m">0</span>
+modifying entry <span class="s2">&#34;olcDatabase={1}mdb,cn=config&#34;</span>
+</code></pre></div><ul>
+<li>Comprobamos que se ha añadido</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">debian@freston:~$ sudo ldapsearch -LLLQ -Y EXTERNAL -H ldapi:/// -b <span class="nv">cn</span><span class="o">=</span>config -s one olcAccess
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>0<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>1<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>module<span class="o">{</span>2<span class="o">}</span>,cn<span class="o">=</span>config
+
+dn: <span class="nv">cn</span><span class="o">=</span>schema,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcBackend</span><span class="o">={</span>0<span class="o">}</span>mdb,cn<span class="o">=</span>config
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to dn.exact<span class="o">=</span><span class="s2">&#34;&#34;</span> by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;cn=Subschema&#34;</span> by * <span class="nb">read</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>0<span class="o">}</span>config,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to * by dn.exact<span class="o">=</span><span class="nv">gidNumber</span><span class="o">=</span>0+uidNumber<span class="o">=</span>0,cn<span class="o">=</span>peercred,cn<span class="o">=</span>external
+ ,cn<span class="o">=</span>auth manage by * <span class="nb">break</span>
+
+dn: <span class="nv">olcDatabase</span><span class="o">={</span>1<span class="o">}</span>mdb,cn<span class="o">=</span>config
+olcAccess: <span class="o">{</span>0<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>userPassword by self write by anonymous auth by * none
+olcAccess: <span class="o">{</span>1<span class="o">}</span>to * by <span class="nv">dn</span><span class="o">=</span><span class="s2">&#34;cn=admin,dc=freston,dc=celia,dc=gonzalonazareno,dc=o
+</span><span class="s2"> rg&#34;</span> write by group.exact<span class="o">=</span><span class="s2">&#34;cn=admin,ou=Group,dc=freston,dc=celia,dc=gonzalonaz
+</span><span class="s2"> areno,dc=org&#34;</span> write
+olcAccess: <span class="o">{</span>2<span class="o">}</span>to <span class="nv">attrs</span><span class="o">=</span>shadowLastChange by self write by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>3<span class="o">}</span>to * by * <span class="nb">read</span>
+olcAccess: <span class="o">{</span>4<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> <span class="nb">read</span>
+olcAccess: <span class="o">{</span>5<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> search
+olcAccess: <span class="o">{</span>6<span class="o">}</span>to dn.base<span class="o">=</span><span class="s2">&#34;&#34;</span> by <span class="nv">group</span><span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Groups,dc=freston,dc=celia
+</span><span class="s2"> ,dc=gonzalonazareno,dc=org&#34;</span> by self write
+olcAccess: <span class="o">{</span>7<span class="o">}</span>to dn.subtree<span class="o">=</span><span class="s2">&#34;ou=Group,dc=freston,dc=celia,dc=gonzalonazareno,d
+</span><span class="s2"> c=org&#34;</span>  by group.exact<span class="o">=</span><span class="s2">&#34;cn=almacen,ou=Group,ou=freston,dc=celia,dc=gonzalonaz
+</span><span class="s2"> areno,dc=org&#34;</span> <span class="nb">read</span> by self write by * search
+
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">Fuentes:
+
+https://syspass-doc.readthedocs.io/en/3.1/configuration/ldap.html
+
+https://www.openldap.org/lists/openldap-technical/201511/msg00154.html
+
+https://wiki.debian.org/LDAP/OpenLDAPSetup#Access_Control_Lists
+
+https://tldp.org/HOWTO/LDAP-HOWTO/accesscontrol.html
+
+https://www.openldap.org/doc/admin24/access-control.html
+
+http://www.zytrax.com/books/ldap/ch6/slapd-config.html#use-security
+
+https://tldp.org/HOWTO/LDAP-HOWTO/accesscontrol.html
+</code></pre></div></div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/ldap/">LDAP</a><a class="tag" href="/tags/usuarios/">usuarios</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
