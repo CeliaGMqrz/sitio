@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Celia García Márquez | Auditorías. Gestión de Bases de datos. </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.80.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Auditorias en BBDD">
+    
+    <link rel="stylesheet"
+          href="https://www.celiagm.es/css/style.min.93ab6bdd416e6acc85a43e3a7629dda51ac58cbb8d193f5e62dc5d448bc2b385.css"
+          integrity="sha256-k6tr3UFuasyFpD46dindpRrFjLuNGT9eYtxdRIvCs4U="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="https://www.celiagm.es/css/markupHighlight.min.4ac4c94828876abc926f5563ef81e319b441b25cad2c96842d2b87fd204a0de6.css"
+        integrity="sha256-SsTJSCiHarySb1Vj74HjGbRBslytLJaELSuH/SBKDeY="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="https://www.celiagm.es/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.celiagm.es/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://www.celiagm.es/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://www.celiagm.es/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="https://www.celiagm.es/post/auditoriasbd/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="https://www.celiagm.es/js/anatole-header.min.d8599ee07b7d3f11bafbac30657ccc591e8d7fd36a9f580cd4c09e24e0e4a971.js"
+            integrity="sha256-2Fme4Ht9PxG6&#43;6wwZXzMWR6Nf9Nqn1gM1MCeJODkqXE="
+            crossorigin="anonymous"></script>
+
+
+    
+        
+        
+        <script type="text/javascript"
+                src="https://www.celiagm.es/js/anatole-theme-switcher.min.e289e9ebb2a4e7a7f895859c8a2b0da2de1ec73f22cea58d8475aa0597023837.js"
+                integrity="sha256-4onp67Kk56f4lYWciisNot4exz8izqWNhHWqBZcCODc="
+                crossorigin="anonymous"></script>
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.celiagm.es/images/avatar_red.jpg"/>
+
+<meta name="twitter:title" content="Auditorías. Gestión de Bases de datos."/>
+<meta name="twitter:description" content="Auditorias en BBDD"/>
+
+
+    
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="https://www.celiagm.es/images/avatar_red.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Un bit de información cada día</a></h3>
+            <div class="description">
+                <p>Blog sobre informática</p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/cgmarquez/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/CeliaGMqrz" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:cg.marquez95@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Celia García Márquez  2020-2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Inicio</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">Sobre mí</a></li>
+        
+        
+        
+            <li class="theme-switch-item">
+                <a class="theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            
+            <img class="post-thumbnail" src="https://www.celiagm.es/images/auditorias/banner.png" alt="Thumbnail image">
+            
+            <div class="post-title">
+                <h3>Auditorías. Gestión de Bases de datos.</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date"> Mon, May 24, 2021 
+                                           </span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">18-minute read</span>
+                    </div>
+                
+            </div>
+
+            <p>En esta entrada vamos a hablar sobre la importancia que tiene <strong>proteger la información</strong>, en este caso la que guarda una base de datos y cómo <strong>controlar</strong> dicha información mediante <strong>auditorías</strong>. Este es un papel muy importante para un <strong>administrador de base de datos</strong>.</p>
+<h2 id="concepto-auditoría">Concepto: Auditoría.</h2>
+<p>Se trata de un <strong>estudio</strong> que analiza los distintos procesos de gestión, los evalúa un <em>auditor</em> bajo una serie de criterios establecidos. El <strong>auditor</strong> es el que se encarga propiamente de observar la situación y la considera adecuada o no según los resultados.</p>
+<p><strong>Auditoría de base de datos: Oracle</strong></p>
+<p>En <strong>Oracle</strong> la auditoría la componen ciertas características que ofrece el gestor que permiten al administrador y a los usuarios a hacer un <strong>seguimiento</strong> del uso de la base de datos. Estos datos se almacenan en el <strong>diccionario de datos</strong> concretamente en la tabla <strong>SYS.AUD$</strong>, además hay una serie de <strong>vistas</strong> que muestran estos datos según lo que queramos obtener.</p>
+<p>El principal objetivo es proteger los datos mediante un seguimiento. Este seguimiento se aplica de forma en que se controla:</p>
+<ul>
+<li><strong>Los intentos de inicio de sesión</strong> (éxitos o fallidos)</li>
+<li><strong>El acceso a los objetos</strong></li>
+<li><strong>Todas y cada una de las acciones que tomen en la BD.</strong></li>
+</ul>
+<h2 id="tarea-teoricapráctica">Tarea teorica/práctica</h2>
+<p>Ahora vamos a ir explicando de forma teorico/práctica las configuración, características y funcionalidades de las auditorías.</p>
+<h2 id="1-activación-de-auditoría-de-la-base-de-datos">1. Activación de auditoría de la base de datos</h2>
+<p>El ejercicio práctico planteado es:</p>
+<blockquote>
+<p><strong>1. Activa desde SQL*Plus la auditoría de los intentos de acceso fallidos al sistema. Comprueba su funcionamiento.</strong></p>
+</blockquote>
+<p>Para empezar debemos de saber que la activación de la auditoría depende del <strong>parámetro</strong> <strong><a href="https://docs.oracle.com/cd/E11882_01/server.112/e40402/initparams017.htm#REFRN10006">AUDIT_TRAIL</a></strong>. Es el que habilita o deshabilita la auditoría de la base de datos.</p>
+<p>Este parámetro alojado en el diccionario de datos podemos verlo de la siguiente forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SHOW</span> <span class="k">PARAMETER</span> <span class="n">AUDIT</span>
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; SHOW PARAMETER AUDIT
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+audit_file_dest 		     string	 /u01/app/oracle/admin/XE/adump
+audit_syslog_level		     string
+audit_sys_operations		     boolean	 FALSE
+audit_trail			     string	 NONE
+
+</code></pre></div><p>Para activarlo podemos modificar el fichero <strong>init.ora</strong> pero en mi caso vamos a ejecutar el siguiente comando:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">audit_trail</span> <span class="o">=</span> <span class="s2">&#34;DB&#34;</span> <span class="k">SCOPE</span><span class="o">=</span><span class="n">SPFILE</span><span class="p">;</span>
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; ALTER SYSTEM SET <span class="nv">audit_trail</span> <span class="o">=</span> <span class="s2">&#34;DB&#34;</span> <span class="nv">SCOPE</span><span class="o">=</span>SPFILE<span class="p">;</span>
+
+System altered.
+
+</code></pre></div><p>Si lo quisieramos desactivar, en vez de &ldquo;DB&rdquo;, podemos especificar &ldquo;NONE&rdquo;.</p>
+<p>Debemos de tener en cuenta la <strong>versión</strong> de oracle ya que en algunas versiones viene activada por defecto. En cualquier caso si la hemos activado siempre tenemos que reiniciar Oracle.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">SHUTDOWN</span>
+<span class="n">STARTUP</span>
+</code></pre></div><p>Ahora comprobamos que la auditoría está activada haciendo la siguiente consulta, de forma que según el <strong>valor</strong> especificado vemos si está activa o no.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="k">as</span> <span class="n">Valor</span> <span class="k">from</span> <span class="n">v$parameter</span> <span class="k">where</span> <span class="n">name</span> <span class="k">like</span> <span class="s1">&#39;audit_trail&#39;</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="k">as</span> <span class="n">Valor</span> <span class="k">from</span> <span class="n">v$parameter</span> <span class="k">where</span> <span class="n">name</span> <span class="k">like</span> <span class="s1">&#39;audit_trail&#39;</span><span class="p">;</span>
+
+<span class="n">NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">VALOR</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">audit_trail</span>
+<span class="n">DB</span>
+
+</code></pre></div><p>Una vez activada tenemos que activar la auditoría de <strong>intentos fallidos al sistema</strong>.</p>
+<p>Esto podemos hacerlo de forma general para todos los usuarios o para algún caso en concreto (un usuario o una sesión).</p>
+<p>En este caso como no queremos que se aplique para todos los usuarios utilizaremos una auditoría de <strong>sesión</strong> para un <strong>usuario</strong> en concreto. El usuario se llamará <code>becario</code> y habilitaremos la <strong>auditoría de inicio de sesión</strong> para intentos <strong>fallidos</strong>.</p>
+<p>El comando a ejecutar sería el siguiente, desde el adminsitrador <code>sys</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">audit</span> <span class="k">session</span> <span class="k">whenever</span> <span class="k">not</span> <span class="n">successful</span><span class="p">;</span>
+<span class="n">audit</span> <span class="k">session</span> <span class="k">by</span> <span class="n">becario</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="n">audit</span> <span class="k">session</span> <span class="k">whenever</span> <span class="k">not</span> <span class="n">successful</span><span class="p">;</span>
+
+<span class="n">Audit</span> <span class="n">succeeded</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="n">audit</span> <span class="k">session</span> <span class="k">by</span> <span class="n">becario</span><span class="p">;</span>
+
+<span class="n">Audit</span> <span class="n">succeeded</span><span class="p">.</span>
+
+</code></pre></div><p>Supongamos que intentamos entrar a la base de datos con el usuario BECARIO y fallamos dos intentos, y al tercero entramos.</p>
+<p>Con el usuario sys hacemos la siguiente consulta para comprobar el resultado:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">USERNAME</span><span class="p">,</span> <span class="n">OS_USERNAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span><span class="p">,</span> <span class="n">ACTION_NAME</span> <span class="k">FROM</span> <span class="n">DBA_AUDIT_SESSION</span> <span class="k">WHERE</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;BECARIO&#39;</span><span class="p">;</span>
+</code></pre></div><p>Salida:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">USERNAME</span><span class="p">,</span> <span class="n">OS_USERNAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span><span class="p">,</span> <span class="n">ACTION_NAME</span><span class="p">,</span> <span class="n">RETURNCODE</span> <span class="k">FROM</span> <span class="n">DBA_AUDIT_SESSION</span> <span class="k">WHERE</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;BECARIO&#39;</span><span class="p">;</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">TIMESTAMP</span>	    <span class="n">ACTION_NAME</span> 		 <span class="n">RETURNCODE</span>
+<span class="c1">------------------- ---------------------------- ----------
+</span><span class="c1"></span><span class="n">BECARIO</span>
+<span class="n">oracle</span>
+<span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mi">11</span> <span class="n">LOGON</span>				  <span class="mi">0</span>
+
+<span class="n">BECARIO</span>
+<span class="n">oracle</span>
+<span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mi">57</span> <span class="n">LOGOFF</span>				  <span class="mi">0</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">TIMESTAMP</span>	    <span class="n">ACTION_NAME</span> 		 <span class="n">RETURNCODE</span>
+<span class="c1">------------------- ---------------------------- ----------
+</span><span class="c1"></span>
+<span class="n">BECARIO</span>
+<span class="n">oracle</span>
+<span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">14</span> <span class="n">LOGON</span>			       <span class="mi">1017</span>
+
+<span class="n">BECARIO</span>
+<span class="n">oracle</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">TIMESTAMP</span>	    <span class="n">ACTION_NAME</span> 		 <span class="n">RETURNCODE</span>
+<span class="c1">------------------- ---------------------------- ----------
+</span><span class="c1"></span><span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">21</span> <span class="n">LOGON</span>			       <span class="mi">1017</span>
+
+<span class="n">BECARIO</span>
+<span class="n">oracle</span>
+<span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">39</span> <span class="n">LOGON</span>				  <span class="mi">0</span>
+
+<span class="n">BECARIO</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">TIMESTAMP</span>	    <span class="n">ACTION_NAME</span> 		 <span class="n">RETURNCODE</span>
+<span class="c1">------------------- ---------------------------- ----------
+</span><span class="c1"></span><span class="n">oracle</span>
+<span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">48</span> <span class="n">LOGOFF</span>				  <span class="mi">0</span>
+
+
+</code></pre></div><p><strong>Como hemos podido comprobar podemos visualizar la fecha y la hora en la que se ha intentado entrar en el sistema de forma fallida, Además del codigo que devuelve que en este caso es el 1017 (usuario o contraseña incorrecta (credenciales incorrectas)).</strong></p>
+<h2 id="2-procedimiento-plsql">2. Procedimiento PLSQL</h2>
+<blockquote>
+<p><strong>2. Realiza un procedimiento en PL/SQL que te muestre los accesos fallidos junto con el motivo de los mismos, transformando el código de error almacenado en un mensaje de texto comprensible.</strong></p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- Funcion: Devolver un mensaje según el codigo de error 
+</span><span class="c1"></span><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">ImprimirMensaje</span> <span class="p">(</span><span class="n">p_codigo</span> <span class="n">VARCHAR2</span><span class="p">)</span>
+<span class="k">RETURN</span> <span class="n">VARCHAR2</span>
+<span class="k">IS</span> 
+        <span class="n">mensaje</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+        <span class="k">BEGIN</span> 
+            <span class="k">IF</span> <span class="n">p_codigo</span> <span class="o">=</span> <span class="s1">&#39;1017&#39;</span> <span class="k">THEN</span> 
+                <span class="n">mensaje</span><span class="p">:</span><span class="o">=</span><span class="s1">&#39;Credenciales incorrectas&#39;</span><span class="p">;</span>
+            <span class="k">ELSIF</span> <span class="n">p_codigo</span> <span class="o">=</span> <span class="s1">&#39;1045&#39;</span> <span class="k">THEN</span>
+                <span class="n">mensaje</span><span class="p">:</span><span class="o">=</span><span class="s1">&#39;Carece de privilegio para Crear Sesión&#39;</span><span class="p">;</span>
+            <span class="k">ELSIF</span> <span class="n">p_codigo</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="k">THEN</span>
+                <span class="n">mensaje</span><span class="p">:</span><span class="o">=</span><span class="s1">&#39;Login correcto&#39;</span><span class="p">;</span>
+            <span class="k">ELSE</span> 
+                <span class="n">mensaje</span><span class="p">:</span><span class="o">=</span><span class="s1">&#39;Consulta el error en la documentacion oficial de oracle&#39;</span><span class="p">;</span>
+            <span class="k">END</span> <span class="k">IF</span><span class="p">;</span>
+        <span class="k">RETURN</span> <span class="n">mensaje</span><span class="p">;</span>
+<span class="k">END</span> <span class="n">ImprimirMensaje</span><span class="p">;</span>
+<span class="o">/</span>
+
+<span class="c1">-- Procedimiento MostrarMensaje
+</span><span class="c1"></span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">PROCEDURE</span> <span class="n">MostrarMensaje</span>
+<span class="k">IS</span> 
+    <span class="n">v_mensaje</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="k">CURSOR</span> <span class="n">c_fallidos</span>
+    <span class="k">IS</span> 
+    <span class="k">SELECT</span> <span class="n">RETURNCODE</span><span class="p">,</span> <span class="n">USERNAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span>
+    <span class="k">FROM</span> <span class="n">DBA_AUDIT_SESSION</span>
+    <span class="k">WHERE</span> <span class="n">ACTION_NAME</span><span class="o">=</span><span class="s1">&#39;LOGON&#39;</span><span class="p">;</span>
+<span class="k">BEGIN</span> 
+    <span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">PUT_LINE</span><span class="p">(</span><span class="s1">&#39;ACCESOS FALLIDOS&#39;</span><span class="p">);</span>
+    <span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">PUT_LINE</span><span class="p">(</span><span class="s1">&#39;________________&#39;</span><span class="p">);</span>
+    <span class="k">FOR</span> <span class="n">linea</span> <span class="k">IN</span> <span class="n">c_fallidos</span> <span class="n">LOOP</span> 
+        <span class="n">v_mensaje</span><span class="p">:</span><span class="o">=</span><span class="n">ImprimirMensaje</span><span class="p">(</span><span class="n">linea</span><span class="p">.</span><span class="n">RETURNCODE</span><span class="p">);</span>
+        <span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">PUT_LINE</span><span class="p">(</span><span class="s1">&#39;-Usuario: &#39;</span><span class="o">||</span><span class="n">linea</span><span class="p">.</span><span class="n">USERNAME</span><span class="o">||</span><span class="s1">&#39; -Fecha: &#39;</span><span class="o">||</span><span class="n">linea</span><span class="p">.</span><span class="k">TIMESTAMP</span><span class="o">||</span><span class="s1">&#39; - &#39;</span><span class="o">||</span><span class="n">linea</span><span class="p">.</span><span class="n">RETURNCODE</span><span class="o">||</span><span class="s1">&#39;: &#39;</span><span class="o">||</span><span class="n">v_mensaje</span><span class="p">);</span>
+        <span class="n">DBMS_OUTPUT</span><span class="p">.</span><span class="n">PUT_LINE</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="k">END</span> <span class="n">LOOP</span><span class="p">;</span>
+<span class="k">END</span> <span class="n">MostrarMensaje</span><span class="p">;</span>
+<span class="o">/</span>
+
+</code></pre></div><ul>
+<li>Ejecutamos el procedimiento y comprobamos la salida:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">exec</span> <span class="n">MostrarMensaje</span>
+</code></pre></div><h4 id="comprobación-procedimiento">Comprobación procedimiento</h4>
+<p><strong>Version XE</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">exec</span> <span class="n">MostrarMensaje</span>
+<span class="n">ACCESOS</span> <span class="n">FALLIDOS</span>
+<span class="n">________________</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">CELIA</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">27</span><span class="p">:</span><span class="mi">50</span> <span class="o">-</span> <span class="mi">1045</span><span class="p">:</span> <span class="n">Carece</span> <span class="n">de</span> <span class="n">privilegio</span> <span class="n">para</span>
+<span class="n">Crear</span> <span class="n">Sesión</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">BECARIO</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mi">11</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">BECARIO</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">14</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">BECARIO</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">BECARIO</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">22</span> <span class="mi">13</span><span class="p">:</span><span class="mi">32</span><span class="p">:</span><span class="mi">39</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">BECARIO</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">23</span> <span class="mi">07</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mi">12</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+
+<span class="n">PL</span><span class="o">/</span><span class="k">SQL</span> <span class="k">procedure</span> <span class="n">successfully</span> <span class="n">completed</span><span class="p">.</span>
+
+</code></pre></div><h2 id="3-auditoría-de-operaciones-dml">3. Auditoría de operaciones DML</h2>
+<p>Las operaciones DML son:</p>
+<ul>
+<li>Insert: Para añadir registros</li>
+<li>Update: Modificar o actualizar registros</li>
+<li>Delete: Eliminar registros</li>
+</ul>
+<blockquote>
+<p><strong>3.Activa la auditoría de las operaciones DML realizadas por SCOTT. Comprueba su funcionamiento.</strong></p>
+</blockquote>
+<p>Activamos la auditoria de las acciones mencionadas anteriormente al usuario SCOTT. Especificamos <strong>by access</strong> que mostrará un registro por cada acción realizada.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="n">AUDIT</span> <span class="k">INSERT</span> <span class="k">TABLE</span><span class="p">,</span> <span class="k">UPDATE</span> <span class="k">TABLE</span><span class="p">,</span> <span class="k">DELETE</span> <span class="k">TABLE</span> <span class="k">BY</span> <span class="n">SCOTT</span> <span class="k">BY</span> <span class="k">ACCESS</span><span class="p">;</span>
+
+<span class="n">Audit</span> <span class="n">succeeded</span><span class="p">.</span>
+</code></pre></div><h4 id="comprobación">Comprobación</h4>
+<p>Acciones del usuario <strong>SCOTT</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">DEPT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="s1">&#39;recursos&#39;</span><span class="p">,</span> <span class="s1">&#39;MADRID&#39;</span><span class="p">);</span>
+<span class="k">UPDATE</span> <span class="n">EMP</span> <span class="k">SET</span> <span class="n">ENAME</span> <span class="o">=</span> <span class="s1">&#39;BENITO&#39;</span> <span class="k">WHERE</span> <span class="n">EMPNO</span> <span class="o">=</span> <span class="s1">&#39;7499&#39;</span><span class="p">;</span>
+<span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">DEPT</span> <span class="k">WHERE</span> <span class="n">DNAME</span> <span class="o">=</span> <span class="s1">&#39;RESOURCES&#39;</span><span class="p">;</span>
+</code></pre></div><p>Hacemos la siguiente consulta con el usuario <strong>SYS</strong> para ver que efectivamente registra todas las operaciones DML.</p>
+<div class="highlight"><pre class="chroma"><code class="language-SQL" data-lang="SQL"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">OBJ_NAME</span><span class="p">,</span> <span class="n">ACTION_NAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span> <span class="k">FROM</span> <span class="n">DBA_AUDIT_OBJECT</span> <span class="k">WHERE</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;SCOTT&#39;</span><span class="p">;</span>
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="k">TIMESTAMP</span>
+<span class="c1">---------------------------- -------------------
+</span><span class="c1"></span><span class="n">DEPT</span>
+<span class="k">INSERT</span>			     <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">23</span> <span class="mi">08</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">34</span>
+
+<span class="n">DEPT</span>
+<span class="k">INSERT</span>			     <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">23</span> <span class="mi">08</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">50</span>
+
+<span class="n">EMP</span>
+<span class="k">UPDATE</span>			     <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">23</span> <span class="mi">08</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mi">16</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="k">TIMESTAMP</span>
+<span class="c1">---------------------------- -------------------
+</span><span class="c1"></span><span class="n">DEPT</span>
+<span class="k">DELETE</span>			     <span class="mi">2021</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">23</span> <span class="mi">08</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">55</span>
+
+</code></pre></div><h3 id="4-auditoría-de-grano-fino">4. Auditoría de grano fino</h3>
+<p><strong>Un poco de teoría&hellip;</strong></p>
+<p>La <strong>auditoría de grano fino</strong> (FGA) es como una versión extendida de la auditoría estándar. Registra los cambios en datos muy concretos a <strong>nivel de columna</strong>.</p>
+<p>Este tipo de auditoría permite crear registros de auditorías basados en una <strong>consulta exacta.</strong> Además permite establecer <strong>condiciones</strong> de auditoría y especificar la columna a auditar.</p>
+<p>La diferencia que tiene con respecto a la auditoría estándar es que da la información sobre el cambio que ha sucedido en el registro o dato, mientras que la estándar se graban los detalles mas simples.</p>
+<p>Este tipo de auditoría es muy útil si se desea saber que ha pasado de forma <strong>específica</strong> en una tabla o esquema, aunque tenerla activada conlleva una carga mayor y con ella <strong>disminución del rendimiento</strong> de la base de datos, por lo que se debe utilizar para cosas puntuales.</p>
+<p>Tarea planteada:</p>
+<blockquote>
+<p><strong>4.Realiza una auditoría de grano fino para almacenar información sobre la inserción de empleados del departamento 10 en la tabla emp de scott.</strong></p>
+</blockquote>
+<p>Esto no es compatible con la versión <strong>Oracle Database 11g Express Edition Release 11.2.0.2.0</strong> , así que lo haremos en <strong>Oracle Database 19c Enterprise Edition</strong>.</p>
+<p>Creamos un procedimiento para auditar de forma específica un objeto de una tabla.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span>
+<span class="n">DBMS_FGA</span><span class="p">.</span><span class="n">ADD_POLICY</span> <span class="p">(</span>
+<span class="n">object_schema</span> <span class="o">=&gt;</span> <span class="s1">&#39;c##SCOTT&#39;</span><span class="p">,</span>
+<span class="n">object_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;EMP&#39;</span><span class="p">,</span>
+<span class="n">policy_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;politica1&#39;</span><span class="p">,</span>
+<span class="n">audit_condition</span> <span class="o">=&gt;</span> <span class="s1">&#39;DEPTNO = 10&#39;</span><span class="p">,</span>
+<span class="n">statement_types</span> <span class="o">=&gt;</span> <span class="s1">&#39;INSERT&#39;</span><span class="p">);</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="o">/</span>
+</code></pre></div><p><strong>Salida (version 19c)</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">SQL&gt; BEGIN
+DBMS_FGA.ADD_POLICY <span class="o">(</span>
+<span class="nv">object_schema</span> <span class="o">=</span>&gt; <span class="s1">&#39;c##SCOTT&#39;</span>,
+<span class="nv">object_name</span> <span class="o">=</span>&gt; <span class="s1">&#39;EMP&#39;</span>,
+<span class="nv">policy_name</span> <span class="o">=</span>&gt; <span class="s1">&#39;politica1&#39;</span>,
+<span class="nv">audit_condition</span> <span class="o">=</span>&gt; <span class="s1">&#39;DEPTNO = 10&#39;</span>,
+<span class="nv">statement_types</span> <span class="o">=</span>&gt; <span class="s1">&#39;INSERT&#39;</span><span class="o">)</span><span class="p">;</span>
+END<span class="p">;</span>
+/  <span class="m">2</span>    <span class="m">3</span>    <span class="m">4</span>    <span class="m">5</span>    <span class="m">6</span>    <span class="m">7</span>    <span class="m">8</span>    <span class="m">9</span>  
+
+Procedimiento PL/SQL terminado correctamente.
+
+</code></pre></div><p>Insertamos los empleados nuevos con el usuario <strong>SCOTT</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">7888</span><span class="p">,</span> <span class="s1">&#39;ANA&#39;</span><span class="p">,</span> <span class="s1">&#39;CLERK&#39;</span><span class="p">,</span> <span class="mi">7902</span><span class="p">,</span>
+<span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-OCT-1995&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>  <span class="mi">2</span>    <span class="mi">3</span>  
+
+<span class="mi">1</span> <span class="n">fila</span> <span class="n">creada</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">8777</span><span class="p">,</span> <span class="s1">&#39;CLARA&#39;</span><span class="p">,</span> <span class="s1">&#39;SALESMAN&#39;</span><span class="p">,</span> <span class="mi">7839</span><span class="p">,</span>
+<span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-DIC-1993&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>  <span class="mi">2</span>    <span class="mi">3</span>  
+
+<span class="mi">1</span> <span class="n">fila</span> <span class="n">creada</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">6663</span><span class="p">,</span> <span class="s1">&#39;RAFA&#39;</span><span class="p">,</span> <span class="s1">&#39;MANAGER&#39;</span><span class="p">,</span> <span class="mi">7835</span><span class="p">,</span>
+<span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-FEB-1980&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>  <span class="mi">2</span>    <span class="mi">3</span>  
+
+<span class="mi">1</span> <span class="n">fila</span> <span class="n">creada</span><span class="p">.</span>
+</code></pre></div><p>Nos salimos del usuario Scott y volvemos al usuario <strong>SYS</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-SQL" data-lang="SQL"><span class="k">SELECT</span> <span class="n">sql_text</span><span class="p">,</span> <span class="k">CURRENT_USER</span><span class="p">,</span><span class="k">TIMESTAMP</span> <span class="k">FROM</span> <span class="n">dba_fga_audit_trail</span> <span class="k">WHERE</span> <span class="n">POLICY_NAME</span><span class="o">=</span><span class="s1">&#39;POLITICA1&#39;</span><span class="p">;</span>
+</code></pre></div><p>Comprobamos que aparece reflejados los <strong>INSERT</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">sql_text</span><span class="p">,</span> <span class="k">CURRENT_USER</span><span class="p">,</span><span class="k">TIMESTAMP</span> <span class="k">FROM</span> <span class="n">dba_fga_audit_trail</span> <span class="k">WHERE</span> <span class="n">POLICY_NAME</span><span class="o">=</span><span class="s1">&#39;POLITICA1&#39;</span><span class="p">;</span>
+
+<span class="n">SQL_TEXT</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">CURRENT_USER</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span>
+<span class="c1">--------
+</span><span class="c1"></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">7888</span><span class="p">,</span> <span class="s1">&#39;ANA&#39;</span><span class="p">,</span> <span class="s1">&#39;CLERK&#39;</span><span class="p">,</span> <span class="mi">7902</span><span class="p">,</span>
+<span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-OCT-1995&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+
+<span class="n">SQL_TEXT</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">CURRENT_USER</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span>
+<span class="c1">--------
+</span><span class="c1"></span><span class="p">(</span><span class="mi">8777</span><span class="p">,</span> <span class="s1">&#39;CLARA&#39;</span><span class="p">,</span> <span class="s1">&#39;SALESMAN&#39;</span><span class="p">,</span> <span class="mi">7839</span><span class="p">,</span>
+<span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-DIC-1993&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">EMP</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">6663</span><span class="p">,</span> <span class="s1">&#39;RAFA&#39;</span><span class="p">,</span> <span class="s1">&#39;MANAGER&#39;</span><span class="p">,</span> <span class="mi">7835</span><span class="p">,</span>
+
+<span class="n">SQL_TEXT</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">CURRENT_USER</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span>
+<span class="c1">--------
+</span><span class="c1"></span><span class="n">TO_DATE</span><span class="p">(</span><span class="s1">&#39;04-FEB-1980&#39;</span><span class="p">,</span> <span class="s1">&#39;DD-MON-YYYY&#39;</span><span class="p">),</span> <span class="mi">800</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+</code></pre></div><h2 id="5-diferencia-entre-auditar-by-access--by-session">5. Diferencia entre auditar (by access / by session)</h2>
+<blockquote>
+<p><strong>5.Explica la diferencia entre auditar una operación by access o by session.</strong></p>
+</blockquote>
+<p>Es posible auditar <strong>operaciones</strong> (select,insert,update,delete) sobre las tablas. Se puede hacer por medio del comando <strong>AUDIT</strong>, indicando la operación, la tabla y el tipo de seguimiento (by access o by session).</p>
+<p>La diferencia principal es que <strong>by access</strong> registra una entrada de auditoría por cada operación realizada y <strong>by session</strong> solo registra una entrada de auditoría por sesión iniciada, por lo que <strong>by access</strong> crea un registro más al detalle pero tambíen baja el <strong>rendimiento</strong> de la base de datos, mientras que <strong>by session</strong> crea un registro más simple y es mucho más ligero y rápido.</p>
+<p>Por ejemplo podemos activar la auditoría para las insercciones en la tabla <strong>DEPT</strong> por sesión.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="n">AUDIT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">DEPT</span> <span class="k">BY</span> <span class="k">SESSION</span><span class="p">;</span>         
+
+<span class="n">Auditoria</span> <span class="n">terminada</span> <span class="n">correctamente</span><span class="p">.</span>
+
+</code></pre></div><p>Insertamos dos nuevos departamentos</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">DEPT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;VENTAS1&#39;</span><span class="p">,</span> <span class="s1">&#39;BARCELONA&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">DEPT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;VENTAS2&#39;</span><span class="p">,</span> <span class="s1">&#39;SEVILLA&#39;</span><span class="p">);</span>
+</code></pre></div><p>Desde el usuario <strong>sys</strong> hacemos la siguiente consulta de la tabla DBA_AUDIT_OBJECT</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">USERNAME</span><span class="p">,</span><span class="n">ACTION_NAME</span><span class="p">,</span><span class="k">TIMESTAMP</span><span class="p">,</span> <span class="n">obj_name</span> <span class="k">from</span> <span class="n">DBA_AUDIT_OBJECT</span> <span class="k">where</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;C##SCOTT&#39;</span><span class="p">;</span>
+</code></pre></div><p>La salida es algo extensa así que no la voy a mostrar entera porque muestra todos los cambios de las operaciones realizadas en la sesión.</p>
+<div class="highlight"><pre class="chroma"><code class="language-SQL" data-lang="SQL">
+<span class="p">...</span>
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+<span class="n">DEPT</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+<span class="n">DEPT</span>
+<span class="p">...</span>
+
+</code></pre></div><p>Si quisieramos hacerla <strong>by access</strong> sería de la siguiente forma y crearía una entrada por cada operación realizada como hicimos al principio.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">AUDIT</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">EMP</span> <span class="k">BY</span> <span class="k">ACCESS</span><span class="p">;</span>   
+</code></pre></div><p>Nos mostraría lo siguiente:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">USERNAME</span><span class="p">,</span><span class="n">ACTION_NAME</span><span class="p">,</span><span class="k">TIMESTAMP</span><span class="p">,</span> <span class="n">obj_name</span> <span class="k">from</span> <span class="n">DBA_AUDIT_OBJECT</span> <span class="k">where</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;C##SCOTT&#39;</span><span class="p">;</span>
+
+<span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">EMP</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+<span class="n">EMP</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">EMP</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+<span class="n">EMP</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+</code></pre></div><h2 id="6-valores-del-parámetro-audit_trail">6. Valores del parámetro AUDIT_TRAIL</h2>
+<blockquote>
+<p><strong>6. Documenta las diferencias entre los valores db y db_extended del parámetro audit_trail de ORACLE. Demuéstralas poniendo un ejemplo de la información sobre una operación concreta recopilada con cada uno de ellos.</strong></p>
+</blockquote>
+<p>El parámetro <strong>AUDIT_TRAIL</strong> consta de una serie de valores. Entre ellos tenemos estos dos:</p>
+<ul>
+<li>
+<p><strong>VALOR DB</strong>: Este valor activa la auditoría almacenando los datos en la tabla SYS.AUD$ de Oracle. Lo que equivale a 1, o TRUE.</p>
+</li>
+<li>
+<p><strong>VALOR DB_EXTENDED</strong>: Este valor activa también la auditoría y los datos se almacenan en la misma tabla (SYS.AUD$). Pero tambien se escriben los datos en las columnas SQLBIND y SQLTEXT de la misma tabla.</p>
+</li>
+</ul>
+<p>Vamos a ver un ejemplo:</p>
+<p>Activamos la auditoría con el valor <strong>db, extended</strong>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-SQL" data-lang="SQL"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">audit_trail</span> <span class="o">=</span> <span class="n">DB</span><span class="p">,</span> <span class="n">EXTENDED</span> <span class="k">SCOPE</span><span class="o">=</span><span class="n">SPFILE</span><span class="p">;</span>
+
+<span class="k">System</span> <span class="n">altered</span><span class="p">.</span>
+</code></pre></div><p>Recordad que tenemos que apagar y encender la base de datos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="k">PARAMETER</span> <span class="n">AUDIT</span><span class="p">;</span>
+
+<span class="n">NAME</span>				     <span class="k">TYPE</span>	 <span class="n">VALUE</span>
+<span class="c1">------------------------------------ ----------- ------------------------------
+</span><span class="c1"></span><span class="n">audit_file_dest</span> 		     <span class="n">string</span>	 <span class="o">/</span><span class="n">u01</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="k">admin</span><span class="o">/</span><span class="n">XE</span><span class="o">/</span><span class="n">adump</span>
+<span class="n">audit_syslog_level</span>		     <span class="n">string</span>
+<span class="n">audit_sys_operations</span>		     <span class="nb">boolean</span>	 <span class="k">FALSE</span>
+<span class="n">audit_trail</span>			     <span class="n">string</span>	 <span class="n">DB</span><span class="p">,</span> <span class="n">EXTENDED</span>
+<span class="k">SQL</span><span class="o">&gt;</span> 
+
+</code></pre></div><p><img src="/images/oracle/dbext.png" alt="dbext.png"></p>
+<h2 id="7-version-enterprise-manager">7. Version Enterprise Manager</h2>
+<blockquote>
+<p><strong>Localiza en Enterprise Manager las posibilidades para realizar una auditoría e intenta repetir con dicha herramienta los apartados 1, 3 y 4.</strong></p>
+</blockquote>
+<p>La versión de oracle a utilizar es <strong>Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production Version 19.3.0.0.0</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="c1">--- Nos conectamos como usuario SYS 
+</span><span class="c1"></span>
+<span class="p">[</span><span class="n">oracle</span><span class="o">@</span><span class="n">bd</span> <span class="o">~</span><span class="p">]</span><span class="err">$</span> <span class="n">sqlplus</span> <span class="o">/</span> <span class="k">as</span> <span class="n">sysdba</span>
+
+<span class="k">SQL</span><span class="o">*</span><span class="n">Plus</span><span class="p">:</span> <span class="n">Release</span> <span class="mi">19</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">Production</span> <span class="k">on</span> <span class="n">Sun</span> <span class="n">May</span> <span class="mi">23</span> <span class="mi">14</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">43</span> <span class="mi">2021</span>
+<span class="k">Version</span> <span class="mi">19</span><span class="p">.</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span>
+
+<span class="n">Copyright</span> <span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="mi">1982</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="n">Oracle</span><span class="p">.</span>  <span class="k">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="p">.</span>
+
+
+<span class="n">Conectado</span> <span class="n">a</span><span class="p">:</span>
+<span class="n">Oracle</span> <span class="k">Database</span> <span class="mi">19</span><span class="k">c</span> <span class="n">Enterprise</span> <span class="n">Edition</span> <span class="n">Release</span> <span class="mi">19</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span> <span class="o">-</span> <span class="n">Production</span>
+<span class="k">Version</span> <span class="mi">19</span><span class="p">.</span><span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span>
+
+<span class="c1">--- Activa desde SQL*Plus la auditoría de los intentos de acceso fallidos al sistema. Comprueba su funcionamiento. 
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">audit_trail</span> <span class="o">=</span> <span class="s2">&#34;DB&#34;</span> <span class="k">SCOPE</span><span class="o">=</span><span class="n">SPFILE</span><span class="p">;</span>
+
+<span class="n">Sistema</span> <span class="n">modificado</span><span class="p">.</span>
+
+<span class="c1">--- Apagamos y encendemos la base de datos (SHUTDOWN, STARTUP)
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="k">PARAMETER</span> <span class="n">AUDIT</span>
+
+<span class="n">NAME</span>				     <span class="k">TYPE</span>	 <span class="n">VALUE</span>
+<span class="c1">------------------------------------ ----------- ------------------------------
+</span><span class="c1"></span><span class="n">audit_file_dest</span> 		     <span class="n">string</span>	 <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="k">admin</span><span class="o">/</span><span class="n">ORCLCDB</span><span class="o">/</span><span class="n">adum</span>
+						 <span class="n">p</span>
+<span class="n">audit_syslog_level</span>		     <span class="n">string</span>
+<span class="n">audit_sys_operations</span>		     <span class="nb">boolean</span>	 <span class="k">TRUE</span>
+<span class="n">audit_trail</span>			     <span class="n">string</span>	 <span class="n">DB</span>
+<span class="n">unified_audit_common_systemlog</span>	     <span class="n">string</span>
+<span class="n">unified_audit_sga_queue_size</span>	     <span class="nb">integer</span>	 <span class="mi">1048576</span>
+<span class="n">unified_audit_systemlog</span> 	     <span class="n">string</span>
+
+
+<span class="c1">-- Activamos la auditoria 
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">ALTER</span> <span class="k">SYSTEM</span> <span class="k">SET</span> <span class="n">audit_trail</span> <span class="o">=</span> <span class="s2">&#34;DB&#34;</span> <span class="k">SCOPE</span><span class="o">=</span><span class="n">SPFILE</span><span class="p">;</span>
+
+<span class="n">Sistema</span> <span class="n">modificado</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="n">audit</span> <span class="k">session</span> <span class="k">whenever</span> <span class="k">not</span> <span class="n">successful</span><span class="p">;</span>
+
+<span class="n">Auditoria</span> <span class="n">terminada</span> <span class="n">correctamente</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="n">audit</span> <span class="k">session</span> <span class="k">by</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span><span class="p">;</span>
+
+<span class="n">Auditoria</span> <span class="n">terminada</span> <span class="n">correctamente</span><span class="p">.</span>
+
+<span class="c1">-- Hacemos la consulta 
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">USERNAME</span><span class="p">,</span> <span class="n">OS_USERNAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span><span class="p">,</span> <span class="n">ACTION_NAME</span> <span class="k">FROM</span> <span class="n">DBA_AUDIT_SESSION</span> <span class="k">WHERE</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;C##SCOTT&#39;</span><span class="p">;</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span>
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span>
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGON</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span><span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+<span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span>
+<span class="n">oracle</span>
+<span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="n">LOGOFF</span>
+
+<span class="n">USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">OS_USERNAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">TIMESTAM</span> <span class="n">ACTION_NAME</span>
+<span class="c1">-------- ----------------------------
+</span><span class="c1"></span>
+
+<span class="mi">16</span> <span class="n">filas</span> <span class="n">seleccionadas</span><span class="p">.</span>
+
+<span class="c1">--- Podemos incluso crear el procedimiento y ver los intentos fallidos 
+</span><span class="c1"></span>
+<span class="n">Procedimiento</span> <span class="n">creado</span><span class="p">.</span>
+
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">exec</span> <span class="n">MostrarMensaje</span>
+<span class="n">ACCESOS</span> <span class="n">FALLIDOS</span>
+<span class="n">________________</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Login</span> <span class="n">correcto</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+<span class="o">-</span><span class="n">Usuario</span><span class="p">:</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="o">-</span><span class="n">Fecha</span><span class="p">:</span> <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span> <span class="o">-</span> <span class="mi">1017</span><span class="p">:</span> <span class="n">Credenciales</span> <span class="n">incorrectas</span>
+
+<span class="n">Procedimiento</span> <span class="n">PL</span><span class="o">/</span><span class="k">SQL</span> <span class="n">terminado</span> <span class="n">correctamente</span><span class="p">.</span>
+
+
+<span class="c1">--- Activa la auditoría de las operaciones DML realizadas por SCOTT. Comprueba su funcionamiento.
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="n">AUDIT</span> <span class="k">INSERT</span> <span class="k">TABLE</span><span class="p">,</span> <span class="k">UPDATE</span> <span class="k">TABLE</span><span class="p">,</span> <span class="k">DELETE</span> <span class="k">TABLE</span> <span class="k">BY</span> <span class="k">C</span><span class="o">##</span><span class="n">SCOTT</span> <span class="k">BY</span> <span class="k">ACCESS</span><span class="p">;</span>
+
+<span class="n">Auditoria</span> <span class="n">terminada</span> <span class="n">correctamente</span><span class="p">.</span>
+
+<span class="c1">-- INSERTAMOS LOS DATOS CON EL USUARIO SCOTT
+</span><span class="c1"></span>
+<span class="c1">-- HACEMOS LA CONSULTA PARA VER EL FUNCIONAMIENTO
+</span><span class="c1"></span>
+<span class="k">SQL</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="n">OBJ_NAME</span><span class="p">,</span> <span class="n">ACTION_NAME</span><span class="p">,</span> <span class="k">TIMESTAMP</span> <span class="k">FROM</span> <span class="n">DBA_AUDIT_OBJECT</span> <span class="k">WHERE</span> <span class="n">USERNAME</span><span class="o">=</span><span class="s1">&#39;C##SCOTT&#39;</span><span class="p">;</span>
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">DEPT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">DEPT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">DEPT</span>
+<span class="k">INSERT</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+<span class="n">EMP</span>
+<span class="k">UPDATE</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="n">OBJ_NAME</span>
+<span class="c1">--------------------------------------------------------------------------------
+</span><span class="c1"></span><span class="n">ACTION_NAME</span>		     <span class="n">TIMESTAM</span>
+<span class="c1">---------------------------- --------
+</span><span class="c1"></span><span class="n">DEPT</span>
+<span class="k">DELETE</span>			     <span class="mi">23</span><span class="o">/</span><span class="mi">05</span><span class="o">/</span><span class="mi">21</span>
+
+
+<span class="mi">16</span> <span class="n">filas</span> <span class="n">seleccionadas</span><span class="p">.</span>
+
+
+<span class="c1">--- Realiza una auditoría de grano fino para almacenar información sobre la inserción de empleados del departamento 10 en la tabla emp de scott.
+</span><span class="c1"></span><span class="o">*!!!!</span>
+</code></pre></div><p>*!!!!
+Esta parte no se puede hacer en la version Oracle Database 11g Express Edition Release 11.2.0.2.0 pero si en Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 como hemos visto anteriormente, por lo que no voy a repetir los mismos pasos.</p>
+<h2 id="8-postgresql-134">8. Postgresql (1,3,4)</h2>
+<blockquote>
+<ol start="8">
+<li><strong>Averigua si en Postgres se pueden realizar los apartados 1, 3 y 4. Si es así, documenta el proceso adecuadamente.</strong></li>
+</ol>
+</blockquote>
+<p>En PostgreSQL no existen medios para hacer auditorías de forma similar a Oracle.</p>
+<p><strong>Hay diversas herramientas</strong> que se han desarrollado para solventar este problema y es que es habitual que salgan ya que es muy importante tener un control sobre la base de datos.</p>
+<p>En el mismo <a href="https://www.postgresql.org/docs/8.2/plpgsql-trigger.html#PLPGSQL-TRIGGER-AUDIT-EXAMPLE">manual de PostgreSQL</a> nos muestra un procedimiento de activacion PL /pgSQL para auditorías.</p>
+<p>Este <strong>ejemplo</strong> registra la hora y el nombre del usuario que hace INSERT, UPDATE Y DELETE.</p>
+<div class="highlight"><pre class="chroma"><code class="language-SQL" data-lang="SQL"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">emp</span> <span class="p">(</span>
+    <span class="n">empname</span>           <span class="nb">text</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">salary</span>            <span class="nb">integer</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">emp_audit</span><span class="p">(</span> 
+    <span class="k">operation</span>         <span class="nb">char</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">stamp</span>             <span class="k">timestamp</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">userid</span>            <span class="nb">text</span>      <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">empname</span>           <span class="nb">text</span>      <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">salary</span> <span class="nb">integer</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">process_emp_audit</span><span class="p">()</span> <span class="k">RETURNS</span> <span class="k">TRIGGER</span> <span class="k">AS</span> <span class="err">$</span><span class="n">emp_audit$</span>
+    <span class="k">BEGIN</span>
+        <span class="c1">--
+</span><span class="c1"></span>        <span class="c1">-- Create a row in emp_audit to reflect the operation performed on emp,
+</span><span class="c1"></span>        <span class="c1">-- make use of the special variable TG_OP to work out the operation.
+</span><span class="c1"></span>        <span class="c1">--
+</span><span class="c1"></span>        <span class="k">IF</span> <span class="p">(</span><span class="n">TG_OP</span> <span class="o">=</span> <span class="s1">&#39;DELETE&#39;</span><span class="p">)</span> <span class="k">THEN</span>
+            <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">emp_audit</span> <span class="k">SELECT</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="k">user</span><span class="p">,</span> <span class="k">OLD</span><span class="p">.</span><span class="o">*</span><span class="p">;</span>
+            <span class="k">RETURN</span> <span class="k">OLD</span><span class="p">;</span>
+        <span class="k">ELSIF</span> <span class="p">(</span><span class="n">TG_OP</span> <span class="o">=</span> <span class="s1">&#39;UPDATE&#39;</span><span class="p">)</span> <span class="k">THEN</span>
+            <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">emp_audit</span> <span class="k">SELECT</span> <span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="k">user</span><span class="p">,</span> <span class="k">NEW</span><span class="p">.</span><span class="o">*</span><span class="p">;</span>
+            <span class="k">RETURN</span> <span class="k">NEW</span><span class="p">;</span>
+        <span class="k">ELSIF</span> <span class="p">(</span><span class="n">TG_OP</span> <span class="o">=</span> <span class="s1">&#39;INSERT&#39;</span><span class="p">)</span> <span class="k">THEN</span>
+            <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">emp_audit</span> <span class="k">SELECT</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="k">user</span><span class="p">,</span> <span class="k">NEW</span><span class="p">.</span><span class="o">*</span><span class="p">;</span>
+            <span class="k">RETURN</span> <span class="k">NEW</span><span class="p">;</span>
+        <span class="k">END</span> <span class="k">IF</span><span class="p">;</span>
+        <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span> <span class="c1">-- result is ignored since this is an AFTER trigger
+</span><span class="c1"></span>    <span class="k">END</span><span class="p">;</span>
+<span class="err">$</span><span class="n">emp_audit$</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">emp_audit</span>
+<span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">OR</span> <span class="k">UPDATE</span> <span class="k">OR</span> <span class="k">DELETE</span> <span class="k">ON</span> <span class="n">emp</span>
+    <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="n">process_emp_audit</span><span class="p">();</span>
+</code></pre></div><p>La idea es almacenar los cambios en un único registro como si se tratara del <strong>by session</strong> de Oracle.</p>
+<p>La estructura de la tabla para auditorías sería así:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">audit_table</span> <span class="p">(</span>
+  <span class="n">ts</span> <span class="k">TIMESTAMP</span> <span class="k">WITH</span> <span class="n">TIME</span> <span class="k">ZONE</span><span class="p">,</span>
+  <span class="n">usr</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+  <span class="n">tbl</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+  <span class="n">fld</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+  <span class="n">pk_name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+  <span class="n">pk_value</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+  <span class="n">mod_type</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span>
+  <span class="n">old_val</span> <span class="nb">TEXT</span><span class="p">,</span>
+  <span class="n">new_val</span> <span class="nb">TEXT</span><span class="p">,</span>
+<span class="p">);</span>
+</code></pre></div><p>Para comprobar su funcionamiento lo que haremos es crear dos tablas que van a ser de ayuda para monitorear:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">prueba1</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">somename</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="n">somevalue</span> <span class="nb">INTEGER</span><span class="p">,</span>
+  <span class="n">somets</span> <span class="k">TIMESTAMP</span>
+<span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">prueba2</span> <span class="p">(</span>
+  <span class="n">pkid</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">testname</span> <span class="nb">TEXT</span><span class="p">,</span>
+  <span class="n">testvalue</span> <span class="nb">REAL</span><span class="p">,</span>
+  <span class="n">testdate</span> <span class="nb">DATE</span>
+<span class="p">);</span>
+</code></pre></div><p>Creariamos una función que es el motor de la auditoría en cuestión, creamos dos TRIGGER para cada tabla y probaríamos el funcionamiento de la auditoría.</p>
+<p><strong>Todo está reflejado en el siguiente <a href="https://alberton.info/postgresql_table_audit.html">enlace</a></strong></p>
+<p>De forma que podríamos hacer todos los apartados mencionados.</p>
+<h2 id="9-mysql-134">9. MySQL (1,3,4)</h2>
+<blockquote>
+<ol start="9">
+<li><strong>Averigua si en MySQL se pueden realizar los apartados 1, 3 y 4. Si es así, documenta el proceso adecuadamente.</strong></li>
+</ol>
+</blockquote>
+<p>Necesitamos dos bases de datos, una que es la que vamos a auditar y la otra auxiliar va ser la que se encargue de la auditoría.</p>
+<p><strong>Creamos la base de datos</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">database</span> <span class="n">escuela</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">escuela</span><span class="p">;</span>
+</code></pre></div><p>Creamos la <strong>tabla</strong> alumnos de ejemplo:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">alumnos</span> <span class="p">(</span>
+    <span class="n">codigo</span>  <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">nombre</span>  <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span>
+    <span class="n">apellidos</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">),</span>
+    <span class="k">CONSTRAINT</span> <span class="n">pk_codigo</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">codigo</span><span class="p">)</span>   
+<span class="p">);</span>
+</code></pre></div><p>Creamos la base de datos <strong>adicional</strong>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">database</span> <span class="n">auditorias</span><span class="p">;</span>
+<span class="n">use</span> <span class="n">auditorias</span>
+</code></pre></div><p>Ahora necesitamos una tabla donde registrar las <strong>operaciones</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">operaciones</span> <span class="p">(</span>
+    <span class="n">codigo</span>  <span class="nb">INT</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="n">usuario</span>  <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+    <span class="n">fecha</span>   <span class="n">DATETIME</span><span class="p">,</span>
+    <span class="k">CONSTRAINT</span> <span class="n">pk_codigo_AUD</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">codigo</span><span class="p">)</span>   
+<span class="p">);</span>
+
+</code></pre></div><p>Una vez creada la tabla necesitamos un <strong>Trigger</strong> para auditar las operaciones, en este caso los <strong>INSERT</strong> de la tabla alumnos.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">use</span> <span class="n">escuela</span>
+
+<span class="k">DELIMITER</span> <span class="err">$$</span>
+<span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">audit_insert</span> 
+    <span class="k">BEFORE</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">escuela</span><span class="p">.</span><span class="n">alumnos</span>
+    <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span>
+    <span class="k">BEGIN</span>
+        <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">auditorias</span><span class="p">.</span><span class="n">operaciones</span> <span class="p">(</span><span class="n">usuario</span><span class="p">,</span> <span class="n">fecha</span><span class="p">)</span>
+        <span class="k">values</span> <span class="p">(</span><span class="k">CURRENT_USER</span><span class="p">(),</span> <span class="n">NOW</span><span class="p">());</span>
+    <span class="k">END</span><span class="err">$$</span>
+</code></pre></div><p>Hacemos un <strong>insert</strong> en la tabla alumnos</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;256&#39;</span><span class="p">,</span><span class="s1">&#39;Celia&#39;</span><span class="p">,</span><span class="s1">&#39;Garcia Marquez&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;236&#39;</span><span class="p">,</span><span class="s1">&#39;Lorena&#39;</span><span class="p">,</span><span class="s1">&#39;Garcia Fernandez&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">alumnos</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">&#39;246&#39;</span><span class="p">,</span><span class="s1">&#39;Julio&#39;</span><span class="p">,</span><span class="s1">&#39;Gonzalez Fernandez&#39;</span><span class="p">);</span>
+</code></pre></div><p>Vemos que se han creado correctamente</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">alumnos</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">--------+--------+--------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">codigo</span> <span class="o">|</span> <span class="n">nombre</span> <span class="o">|</span> <span class="n">apellidos</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------+--------+--------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="mi">236</span>    <span class="o">|</span> <span class="n">Lorena</span> <span class="o">|</span> <span class="n">Garcia</span> <span class="n">Fernandez</span>   <span class="o">|</span>
+<span class="o">|</span> <span class="mi">246</span>    <span class="o">|</span> <span class="n">Julio</span>  <span class="o">|</span> <span class="n">Gonzalez</span> <span class="n">Fernandez</span> <span class="o">|</span>
+<span class="o">|</span> <span class="mi">256</span>    <span class="o">|</span> <span class="n">Celia</span>  <span class="o">|</span> <span class="n">Garcia</span> <span class="n">Marquez</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------+--------+--------------------+
+</span><span class="c1"></span><span class="mi">3</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><p>En la base de datos <code>auditorias</code> hacemos la siguiente consulta para ver los registros , como si se tratara de la auditoría en cuestión.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">use</span> <span class="n">auditorias</span><span class="p">;</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">operaciones</span><span class="p">;</span>
+</code></pre></div><p><strong>Comprobación:</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">operaciones</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">--------+----------------+---------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">codigo</span> <span class="o">|</span> <span class="n">usuario</span>        <span class="o">|</span> <span class="n">fecha</span>               <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------+----------------+---------------------+
+</span><span class="c1"></span><span class="o">|</span>      <span class="mi">1</span> <span class="o">|</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span> <span class="mi">18</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">42</span> <span class="o">|</span>
+<span class="o">|</span>      <span class="mi">2</span> <span class="o">|</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span> <span class="mi">18</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">42</span> <span class="o">|</span>
+<span class="o">|</span>      <span class="mi">3</span> <span class="o">|</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="o">|</span> <span class="mi">2021</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">23</span> <span class="mi">18</span><span class="p">:</span><span class="mi">26</span><span class="p">:</span><span class="mi">43</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------+----------------+---------------------+
+</span><span class="c1"></span><span class="mi">3</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></div><h2 id="10-mongodb">10. MongoDB</h2>
+<blockquote>
+<p><strong>10. Averigua las posibilidades que ofrece MongoDB para auditar los cambios que va sufriendo un documento..</strong></p>
+</blockquote>
+<p><strong>MongoDB</strong> incluye la capacidad de auditar instancias. La función de auditoría permite a los administradores y usuarios llevar un seguimiento del sistema, como hemos estado comentando a lo largo de todo el post.</p>
+<p>La función de auditoría puede grabar los eventos en:</p>
+<ul>
+<li>syslog</li>
+<li>un fichero JSON o BSON</li>
+<li>Directamente en la consola</li>
+</ul>
+<p>Se usa el parámetro <strong>&ndash;auditDestination</strong> para habilitar la auditoría y especificar donde vamos a guardar el seguimiento.</p>
+<ul>
+<li>Para guardar en el <strong>syslog</strong>:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /var/lib/mongodb --auditDestination syslog
+</code></pre></div><ul>
+<li>Salida en la <strong>consola</strong>:</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /var/lib/mongodb --auditDestination console
+</code></pre></div><ul>
+<li>Salida en un <strong>fichero JSON</strong></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /var/lib/mongodb --auditDestination file --auditFormat JSON --auditPath /var/log/mongodb/auditLog.json
+</code></pre></div><p>También se puede especificar en el <strong>fichero de configuración de mongodb</strong> de esta forma:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span> <span class="n">mongod</span><span class="p">.</span><span class="n">conf</span>
+
+<span class="o">#</span> <span class="k">for</span> <span class="n">documentation</span> <span class="k">of</span> <span class="k">all</span> <span class="k">options</span><span class="p">,</span> <span class="n">see</span><span class="p">:</span>
+<span class="o">#</span>   <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">docs</span><span class="p">.</span><span class="n">mongodb</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="n">manual</span><span class="o">/</span><span class="n">reference</span><span class="o">/</span><span class="n">configuration</span><span class="o">-</span><span class="k">options</span><span class="o">/</span>
+
+<span class="o">#</span> <span class="k">Where</span> <span class="k">and</span> <span class="n">how</span> <span class="k">to</span> <span class="n">store</span> <span class="k">data</span><span class="p">.</span>
+<span class="k">storage</span><span class="p">:</span>
+  <span class="n">dbPath</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mongodb</span>
+  <span class="n">journal</span><span class="p">:</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="k">true</span>
+<span class="n">auditLog</span><span class="p">:</span>
+   <span class="n">destination</span><span class="p">:</span> <span class="n">file</span>
+   <span class="n">format</span><span class="p">:</span> <span class="n">JSON</span>
+   <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">mongodb</span><span class="o">/</span><span class="n">auditLog</span><span class="p">.</span><span class="n">json</span>
+
+
+</code></pre></div><blockquote>
+<p><strong>11. Averigua si en MongoDB se pueden auditar los accesos al sistema.</strong></p>
+</blockquote>
+<p>Podríamos auditar los accesos al sistema bajo las mismas opciones anteriores, ademas de que se puede usar un parámetro <strong>&ndash;auditFilter</strong> como en el siguiente comando.</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /var/lib/mongodb --auth --auditDestination file --auditFilter <span class="s1">&#39;{ atype: &#34;authenticate&#34;, &#34;param.db&#34;: &#34;test&#34; }&#39;</span> --auditFormat JSON --auditPath /var/log/mongodb/auditLog.json
+</code></pre></div><p>Fuentes:</p>
+<p><a href="https://docs.oracle.com/cd/B19306_01/server.102/b14237/initparams016.htm#REFRN10006">https://docs.oracle.com/cd/B19306_01/server.102/b14237/initparams016.htm#REFRN10006</a></p>
+<p><a href="https://alberton.info/postgresql_table_audit.html">https://alberton.info/postgresql_table_audit.html</a></p>
+<p><a href="https://costaricamakers.com/?p=2149">https://costaricamakers.com/?p=2149</a></p>
+<p><a href="https://docs.mongodb.com/manual/tutorial/configure-audit-filters/">https://docs.mongodb.com/manual/tutorial/configure-audit-filters/</a></p>
+<p><a href="https://docs.mongodb.com/manual/tutorial/configure-auditing/">https://docs.mongodb.com/manual/tutorial/configure-auditing/</a></p>
+<p><a href="https://www.percona.com/blog/2017/03/03/mongodb-audit-log-why-and-how/">https://www.percona.com/blog/2017/03/03/mongodb-audit-log-why-and-how/</a></p>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                <span class="separator"><a class="tag" href="/tags/oracle/">oracle</a><a class="tag" href="/tags/auditoria/">auditoria</a><a class="tag" href="/tags/mysql/">mysql</a><a class="tag" href="/tags/postgres/">postgres</a><a class="tag" href="/tags/mongodb/">mongodb</a></span>
+
+            </div>
+        </div>
+
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://www.celiagm.es/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script></body>
+
+</html>
